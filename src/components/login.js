@@ -1,16 +1,9 @@
 import React from "react"
 import { navigate } from "gatsby"
 import { handleLogin, isLoggedIn } from "../services/auth"
-import App from "./App";
 
-import netlifyIdentity from 'netlify-identity-widget';
 
-// Make netlifyIdentity accessible in the browser console
-window.netlifyIdentity = netlifyIdentity;
 
-netlifyIdentity.init();
-
-ReactDOM.render(<App />, document.getElementById('application'));
 
 class Login extends React.Component {
   state = {

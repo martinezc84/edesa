@@ -1,11 +1,16 @@
 import React from "react"
 import { navigate } from "gatsby"
 import { handleLogin, isLoggedIn } from "../services/auth"
-
+const netlifyIdentity = require('netlify-identity-widget');
 
 
 
 class Login extends React.Component {
+
+  componentDidMount() {
+    netlifyIdentity.init()
+  }
+  
   state = {
     username: ``,
     password: ``,
@@ -30,7 +35,8 @@ class Login extends React.Component {
     return (
       <>
         <h1>Log in</h1>
-       
+      
+        
       </>
     )
   }

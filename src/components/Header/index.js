@@ -5,6 +5,7 @@ const netlifyIdentity = require('netlify-identity-widget')
 export default class Header extends React.Component {
   componentDidMount() {
     netlifyIdentity.init()
+    console.log(netlifyIdentity)
   }
 
   render() {
@@ -32,7 +33,7 @@ export default class Header extends React.Component {
                 textDecoration: 'none'
               }}
             >
-              Gatsby
+              Turnos Semana Santa 2019
             </Link>
           </h1>
           <div data-netlify-identity-menu />

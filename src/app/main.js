@@ -5,7 +5,7 @@ class Main extends React.Component {
   state = { loading: false, json: null }
 
   componentDidMount (){
-    
+    console.log(process.env.ZAURU_TOKEN);
     const fetchTurnos =  () =>  axios({method:'GET',url:process.env.ZAURU_TURNOS, headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',

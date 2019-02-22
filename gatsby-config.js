@@ -22,6 +22,14 @@ module.exports = {
   },
 
   plugins: [
+    {
+      resolve: `gatsby-plugin-netlify`,
+      options: {
+        headers: {'/*': [
+          'Accept : application/json','Content-Type: application/json','X-User-Email: api@hermandadtrespotencias.com','X-User-Token:9exrqgKSyK4y8PHDrQRD']},                                  // option to add more headers. `Link` headers are transformed by the below criteria
+       
+      }
+    },
     `gatsby-plugin-react-helmet`,
     {
       resolve: `gatsby-source-zauru`,

@@ -21,8 +21,8 @@ class Main extends React.Component {
     var myHeaders = new Headers({
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Origin': '',
-        'Host': 'api.producthunt.com'
+        'X-User-Email': 'api@hermandadtrespotencias.com',        
+        'X-User-Token': '9exrqgKSyK4y8PHDrQRD'
       }
     )
 

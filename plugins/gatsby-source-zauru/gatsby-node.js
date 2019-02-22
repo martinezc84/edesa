@@ -21,8 +21,8 @@ exports.sourceNodes = async ({ boundActionCreators }) => {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'X-User-Email': procces.env.ZAURU_USER,
-      'X-User-Token':procces.env.ZAURU_TOKEN,
+      'X-User-Email': procces.env.GATSBY_ZAURU_USER,
+      'X-User-Token':procces.env.GATSBY_ZAURU_TOKEN,
     }
   });
  
@@ -33,8 +33,8 @@ exports.sourceNodes = async ({ boundActionCreators }) => {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'X-User-Email': procces.env.ZAURU_USER,
-      'X-User-Token':procces.env.ZAURU_TOKEN,
+      'X-User-Email': procces.env.GATSBY_ZAURU_USER,
+      'X-User-Token':procces.env.ZAURU_TOGATSBY_KEN,
     }
   });
    // await for results

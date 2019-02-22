@@ -6,11 +6,11 @@ class Main extends React.Component {
 
   componentDidMount (){
     console.log(process.env.ZAURU_TOKEN);
-    const fetchTurnos =  () =>  axios({method:'GET',url:process.env.ZAURU_TURNOS, headers: {
+    const fetchTurnos =  () =>  axios({method:'GET',url:process.env.GATSBY_ZAURU_TURNOS, headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'X-User-Email': process.env.ZAURU_USER,
-      'X-User-Token': process.env.ZAURU_TOKEN,
+      'X-User-Email': process.env.GATSBY_ZAURU_USER,
+      'X-User-Token': process.env.GATSBY_ZAURU_TOKEN,
     }});
 
     const turnos =   fetchTurnos();

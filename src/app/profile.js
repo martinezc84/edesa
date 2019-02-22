@@ -1,8 +1,9 @@
 import React from 'react'
 import { getUser } from './services/auth'
 
-const Profile = () => {
+const Profile = (data) => {
   const user = getUser()
+  console.log(data)
   return (
     <>
       <h1>Your profile</h1>
@@ -15,3 +16,16 @@ const Profile = () => {
 }
 
 export default Profile
+
+export const query = graphql`
+  query RandomUserQuery {
+    allRandomUser {
+      edges {
+        node {
+         id
+         name
+        }
+      }
+    }
+  }
+`;

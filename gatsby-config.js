@@ -2,9 +2,9 @@ var proxy = require('http-proxy-middleware')
 
 module.exports = {
   siteMetadata: {
-    title: 'JAMstack Hackathon Starter',
-    description: `Kick off your next, great Gatsby app.`,
-    author: `@swyx`,
+    title: 'Turnos SS 2019',
+    description: `Control de turnos`,
+    author: `@chuby`,
   },
 
   // for avoiding CORS while developing Netlify Functions locally
@@ -23,6 +23,9 @@ module.exports = {
 
   plugins: [
     `gatsby-plugin-react-helmet`,
+    {
+      resolve: `gatsby-source-zauru`,
+    },
     {
       resolve: `gatsby-plugin-create-client-paths`,
       options: { prefixes: [`/app/*`] },

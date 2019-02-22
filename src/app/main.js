@@ -17,7 +17,19 @@ class Main extends React.Component {
       .then(response => response.json())
       .then(json => this.setState({ loading: false, json }))
   }
-
+  componentDidMount(){
+    fetch('https://zauru.herokuapp.com/settings/agencies.json', {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'X-User-Email': 'api@hermandadtrespotencias.com',
+        'X-User-Token':'9exrqgKSyK4y8PHDrQRD',       
+      },
+    })
+      .then(response => response.json())
+      .then(json => console.log(json))
+  
+  }
   render() {
     const { loading, json } = this.state
     const user = getUser()

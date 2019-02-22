@@ -32,74 +32,27 @@ class IndexPage extends React.Component {
         >
           <div>
             <p>
-              Welcome to your new Gatsby + Netlify Functions + Netlify Identity
-              site
+              Bienvenido a las SS 2019
             </p>
             <ul>
+              
               <li>
-                This site has statically generated marketing pages like this one
-                and <Link to="/page-2/">page 2.</Link>{' '}
-              </li>
-              <li>
-                It also has a dynamically generated clientside app guarded by
-                authentication:
+               Control de turnos
                 <ul>
                   <li>
                     <Link to="/app/">
-                      <b>Go to App (with Netlify Identity)</b>
+                      <b>Admin</b>
                     </Link>{' '}
                   </li>
                 </ul>
               </li>
-              <li>
-                You can{' '}
-                <a href="https://github.com/sw-yx/jamstack-hackathon-starter">
-                  view source here
-                </a>
-              </li>
-              <li>
-                or see{' '}
-                <a href="https://youtu.be/bueXJInQt2c">
-                  the Youtube walkthrough
-                </a>
-              </li>
-              <li>
-                or
-                <a href="https://app.netlify.com/start/deploy?repository=https://github.com/sw-yx/jamstack-hackathon-starter&stack=cms">
-                  <img
-                    src="https://www.netlify.com/img/deploy/button.svg"
-                    alt="Deploy to Netlify"
-                  />
-                </a>
-              </li>
+          
+              
             </ul>
             <hr />
-            <p>
-              You can still access Netlify functions even on static "marketing
-              pages":{' '}
-            </p>
-            <button onClick={this.handleClick}>
-              {loading ? 'Loading...' : 'Call Lambda Function'}
-            </button>
-            <br />
-            <pre>
-              {msg
-                ? 'Here is the response: ' + msg
-                : 'click the button and watch this!'}
-            </pre>
+          
           </div>
-          <div
-            style={{
-              borderLeft: 'brown',
-              borderLeftStyle: 'dashed',
-              paddingLeft: '3rem',
-            }}
-          >
-            <p>Now go build something great.</p>
-            <div style={{ maxWidth: '300px', marginBottom: '1.45rem' }}>
-              <Image />
-            </div>
-          </div>
+        
         </div>
       </Layout>
     )

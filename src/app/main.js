@@ -18,17 +18,14 @@ class Main extends React.Component {
       .then(json => this.setState({ loading: false, json }))
   }
   componentDidMount(){
-    var myHeaders = new Headers({
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'X-User-Email': 'api@hermandadtrespotencias.com',        
-        'X-User-Token': '9exrqgKSyK4y8PHDrQRD'
-      }
-    )
-
-    var myInit = { method: 'GET',
-               headers: myHeaders,
-               mode: 'cors' };
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "text/plain");
+    myHeaders.append("Content-Type", "text/plain");
+    myHeaders.append("X-User-Email","api@hermandadtrespotencias.com");
+    myHeaders.append("X-User-Token", "9exrqgKSyK4y8PHDrQRD");
+       
+    const myInit = { method: 'GET',
+               headers: myHeaders };
 
     fetch('https://zauru.herokuapp.com/settings/agencies.json', myInit)
       .then(response => response.json())

@@ -18,14 +18,19 @@ class Main extends React.Component {
       .then(json => this.setState({ loading: false, json }))
   }
   componentDidMount(){
-    fetch('https://zauru.herokuapp.com/settings/agencies.json', {
-      headers: {
-        Accept: 'application/json',
+    var myHeaders = new Headers({
+        'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'X-User-Email': 'api@hermandadtrespotencias.com',
-        'X-User-Token': '9exrqgKSyK4y8PHDrQRD'
-      }, mode: 'no-cors' , method:'GET'
-    })
+        'Origin': '',
+        'Host': 'api.producthunt.com'
+      }
+    )
+
+    var myInit = { method: 'GET',
+               headers: myHeaders,
+               mode: 'cors' };
+
+    fetch('https://zauru.herokuapp.com/settings/agencies.json', myInit)
       .then(response => response.json())
       .then(json => console.log(json))
   

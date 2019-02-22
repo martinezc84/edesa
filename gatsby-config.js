@@ -22,19 +22,7 @@ module.exports = {
   },
 
   plugins: [
-    {
-      resolve: `gatsby-plugin-netlify`,
-      options: {
-        headers: {'/*': [
-          'Accept : application/json','Content-Type: application/json','X-User-Email: api@hermandadtrespotencias.com','X-User-Token:9exrqgKSyK4y8PHDrQRD']},                                  // option to add more headers. `Link` headers are transformed by the below criteria
-       
-      },
-      allPageHeaders: [],                           // option to add headers for all pages. `Link` headers are transformed by the below criteria
-      mergeSecurityHeaders: true,                   // boolean to turn off the default security headers
-      mergeLinkHeaders: true,                      // boolean to turn off the default gatsby js headers (disabled by default, until gzip is fixed for server push)
-      mergeCachingHeaders: true,                    // boolean to turn off the default caching headers
-      transformHeaders: (headers, path) => headers,
-    },
+   
     `gatsby-plugin-react-helmet`,
     {
       resolve: `gatsby-source-zauru`,

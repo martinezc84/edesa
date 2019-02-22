@@ -24,7 +24,7 @@ class Main extends React.Component {
         'Content-Type': 'application/json',
         'X-User-Email': 'api@hermandadtrespotencias.com',
         'X-User-Token':'9exrqgKSyK4y8PHDrQRD',       
-      },
+      }, mode: 'no-cors' 
     })
       .then(response => response.json())
       .then(json => console.log(json))

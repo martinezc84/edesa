@@ -6,12 +6,13 @@ export const turnos = async () => {
         'Content-Type': 'application/json',
         'X-User-Email': process.env.GATSBY_ZAURU_USER,
         'X-User-Token': process.env.GATSBY_ZAURU_TOKEN,} });
-        console.error(turnos);
+        console.log(turnos);
 		return {
 			statusCode: 200,
 			body: JSON.stringify(turnos)
 		};
-	} catch (error) {		
+	} catch (error) {	
+        console.log(error);	
 		return {
 			statusCode: 502,
 			body: JSON.stringify(error)

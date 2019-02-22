@@ -21,8 +21,8 @@ exports.sourceNodes = async ({ boundActionCreators }) => {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'X-User-Email': 'api@hermandadtrespotencias.com',
-      'X-User-Token':'9exrqgKSyK4y8PHDrQRD',
+      'X-User-Email': procces.env.ZAURU_USER,
+      'X-User-Token':procces.env.ZAURU_TOKEN,
     }
   });
  
@@ -33,8 +33,8 @@ exports.sourceNodes = async ({ boundActionCreators }) => {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'X-User-Email': 'api@hermandadtrespotencias.com',
-      'X-User-Token':'9exrqgKSyK4y8PHDrQRD',
+      'X-User-Email': procces.env.ZAURU_USER,
+      'X-User-Token':procces.env.ZAURU_TOKEN,
     }
   });
    // await for results

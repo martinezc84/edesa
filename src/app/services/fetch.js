@@ -9,7 +9,7 @@ export const turnos = async () => {
         'X-User-Token': process.env.GATSBY_ZAURU_TOKEN,} });
 		return {
 			statusCode: 200,
-			body: JSON.stringify(data)
+			body: JSON.stringify(turnos)
 		};
 	} catch (error) {
 		console.error(error);

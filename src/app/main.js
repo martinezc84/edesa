@@ -3,6 +3,7 @@ import { getUser } from './services/auth'
 import { turnos } from './services/fetch'
 const axios = require('axios');
 
+
 class Main extends React.Component {
   state = { loading: false, json: null }
 
@@ -13,7 +14,7 @@ class Main extends React.Component {
     const user = getUser()
     const turnosdata = turnos()
 
-    console.log(turnos);
+    console.log(turnosdata);
     return (
       <>
         <h1>Your Main App</h1>

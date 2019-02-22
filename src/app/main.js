@@ -1,26 +1,19 @@
 import React from 'react'
 import { getUser } from './services/auth'
+import { turnos } from './services/fetch'
 const axios = require('axios');
+
 class Main extends React.Component {
   state = { loading: false, json: null }
 
-  componentDidMount (){
-    console.log(process.env.ZAURU_TOKEN);
-    const fetchTurnos =  () =>  axios({method:'GET',url:process.env.GATSBY_ZAURU_TURNOS, headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'X-User-Email': process.env.GATSBY_ZAURU_USER,
-      'X-User-Token': process.env.GATSBY_ZAURU_TOKEN,
-    }});
-
-    const turnos =   fetchTurnos();
-
-    console.log(turnos);
   
-  }
+
   render() {
     const { loading, json } = this.state
     const user = getUser()
+    const turnosdata = turnos()
+
+    console.log(turnos);
     return (
       <>
         <h1>Your Main App</h1>

@@ -16,16 +16,3 @@ const Profile = (data) => {
 }
 
 export default Profile
-
-export const query = graphql`
-  query RandomUserQuery {
-    allRandomUser {
-      edges {
-        node {
-         id
-         name
-        }
-      }
-    }
-  }
-`;

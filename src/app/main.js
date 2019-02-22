@@ -6,7 +6,12 @@ class Main extends React.Component {
 
   componentDidMount (){
     
-    const fetchTurnos =  () => axios.get('https://zauru.herokuapp.com/sales/reports/sold_active_items_with_clients.json?point_of_sale_id=2505');
+    const fetchTurnos =  () => axios({method:'GET',url:'https://zauru.herokuapp.com/sales/reports/sold_active_items_with_clients.json?point_of_sale_id=2505',headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'X-User-Email': 'api@hermandadtrespotencias.com',
+      'X-User-Token':'9exrqgKSyK4y8PHDrQRD',
+    }});
 
     const turnos =   fetchTurnos();
 

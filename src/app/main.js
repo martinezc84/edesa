@@ -20,11 +20,11 @@ class Main extends React.Component {
   componentDidMount(){
     fetch('https://zauru.herokuapp.com/settings/agencies.json', {
       headers: {
-        'Accept': 'application/json',
+        Accept: 'application/json',
         'Content-Type': 'application/json',
         'X-User-Email': 'api@hermandadtrespotencias.com',
-        'X-User-Token':'9exrqgKSyK4y8PHDrQRD',       
-      }, mode: 'no-cors' 
+        'X-User-Token': '9exrqgKSyK4y8PHDrQRD'
+      }, mode: 'no-cors' , method:'GET'
     })
       .then(response => response.json())
       .then(json => console.log(json))

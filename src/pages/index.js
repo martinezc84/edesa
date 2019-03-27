@@ -1,62 +1,24 @@
-import React from 'react'
-import { Link } from 'gatsby'
+import React, { Component } from 'react';
+import netlifyIdentity from 'netlify-identity-widget';
+import { navigate } from 'gatsby';
+import { Layout } from '../components/Layout';
+import gatsbyConfig from '../../gatsby-config';
+import '../css/style.css';
 
-import Layout from '../components/layout'
-import Image from '../components/image'
-import SEO from '../components/seo'
+export default class Index extends Component {
+	componentDidMount() {
+		let user = netlifyIdentity.currentUser();
 
-import { initAuth } from '../app/services/auth'
-initAuth()
-
-class IndexPage extends React.Component {
-  state = { loading: false, msg: null }
-  handleClick = e => {
-    e.preventDefault()
-
-    this.setState({ loading: true })
-    fetch('/.netlify/functions/hello')
-      .then(response => response.json())
-      .then(json => this.setState({ loading: false, msg: json.msg }))
-  }
-
-  render() {
-    const { loading, msg } = this.state
-    return (
-      <Layout>
-        <SEO title="Home" keywords={[`gatsby`, `application`, `react`]} />
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-          }}
-        >
-          <div>
-            <p>
-              Bienvenido a las SS 2019
-            </p>
-            <ul>
-              
-              <li>
-               Control de turnos
-                <ul>
-                  <li>
-                    <Link to="/app/">
-                      <b>Admin</b>
-                    </Link>{' '}
-                  </li>
-                </ul>
-              </li>
-          
-              
-            </ul>
-            <hr />
-          
-          </div>
-        
-        </div>
-      </Layout>
-    )
-  }
+		if (user !== null) navigate('/app');
+	}
+	render() {
+		let TituloPrincipal = gatsbyConfig.siteMetadata.titulos.app;
+		return (
+			<Layout>
+				<div className="pt-8">
+					<h1>{TituloPrincipal}</h1>
+				</div>
+			</Layout>
+		);
+	}
 }
-
-export default IndexPage

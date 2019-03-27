@@ -1,0 +1,53 @@
+[build]
+  command = "npm run build" 
+  publish = "./public" 
+  functions = "./server" 
+
+[build.environment]
+  # Dominio del sitio de producción (Frontend)
+	#GATSBY_NFUNC_URL_PREFIX= 'https://nombre_del_sitio.netlify.com'
+	
+	# Locations de las netlify functions (Backend) 
+	# Son los mismos nombres de los archivos que hay en la carpeta /src/service
+  GATSBY_URL_TIPOS_DE_TURNO= '/.netlify/functions/tiposDeTurno'
+	GATSBY_URL_TURNOS_NO_VENDIDOS= '/.netlify/functions/turnosNoVendidos'
+	GATSBY_URL_TURNOS_VENDIDOS= '/.netlify/functions/turnosVendidos'
+	GATSBY_URL_REASIGNAR= '/.netlify/functions/reasignar'
+	GATSBY_URL_UNO= '/.netlify/functions/final1'
+	GATSBY_URL_DOS= '/.netlify/functions/final2'
+	GATSBY_URL_TRES= '/.netlify/functions/final3'
+	GATSBY_URL_CUATRO= '/.netlify/functions/final4'
+	GATSBY_URL_CINCO= '/.netlify/functions/final5'
+
+	# Dominio del sitio de las APIs (Backend)
+	#GATSBY_ZAURU_PREFIX='https://dominiobackend.com'
+
+	# Locations de los enpoints GET de información a mostrar en los pasos de la app
+  GATSBY_ENDPOINT_TIPOS_DE_TURNO='/settings/agencies.json'
+	GATSBY_ENDPOINT_TURNOS_NO_VENDIDOS='/inventories/stocks.json?warehouse='
+	GATSBY_ENDPOINT_TURNOS_VENDIDOS='/sales/reports/sold_active_items_with_clients.json?point_of_sale_id='
+
+
+	# Locations para la reasignación de turnos
+	GATSBY_ENDPOINT_UNO='/inventories/bookings.json'
+
+	# 1 y 2 construyen https://dominiobackend.com/inventories/bookings/****ID****/deliver.json
+	GATSBY_ENDPOINT_DOS_1='/inventories/bookings/'
+	GATSBY_ENDPOINT_DOS_2='/deliver.json'
+
+	GATSBY_ENDPOINT_TRES='/inventories/bookings.json'
+
+	# 1 y 2 construyen https://dominiobackend.com/inventories/bookings/****ID****/deliver.json
+	GATSBY_ENDPOINT_CUATRO_1='/inventories/bookings/'
+	GATSBY_ENDPOINT_CUATRO_2='/deliver.json'
+
+	# 1 y 2 construyen https://dominiobackend.com/sales/unpaid_invoices/****ID****.json
+	GATSBY_ENDPOINT_CINCO_1='/sales/unpaid_invoices/'
+	GATSBY_ENDPOINT_CINCO_2='.json'
+
+	# Email y token de autenticación para utilizar las APIs 
+  #GATSBY_EMAIL='email@email.com'
+  #GATSBY_TOKEN='TOKENTOKENTOKENTOKENTOKEN'
+
+	# Variable de entorno para ver los botones de debug. 
+	GATSBY_MODO='PROD' # PROD / DEBUG 

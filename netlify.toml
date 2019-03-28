@@ -50,4 +50,4 @@
   #GATSBY_TOKEN='TOKENTOKENTOKENTOKENTOKEN'
 
 	# Variable de entorno para ver los botones de debug. 
-	GATSBY_MODO='DEBUG' # PROD / DEBUG 
+	GATSBY_MODO='PROD' # PROD / DEBUG 

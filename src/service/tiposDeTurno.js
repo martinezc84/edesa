@@ -16,8 +16,8 @@ exports.handler = async (event, context) => {
 		console.error(error);
 		console.log(URL);
 		return {
-			statusCode: 502,
-			body: JSON.stringify(daya)
+			statusCode: 503,
+			body: JSON.stringify(data)
 		};
 	}
 };

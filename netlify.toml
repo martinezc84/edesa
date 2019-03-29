@@ -1,7 +1,7 @@
 [build]
   command = "npm run build" 
   publish = "./public" 
-  functions = "service" 
+  functions = "src/service" 
 
 [build.environment]
   # Dominio del sitio de producción (Frontend)

@@ -1,7 +1,6 @@
+import axios from 'axios';
 import { headers, URLS } from '../utils/utils';
 const URL = URLS.tiposDeTurno;
-
-//@ts-ignore
 exports.handler = async (event, context) => {
 	try {
 		//@ts-ignore

@@ -1,5 +1,3 @@
-//@ts-check
-import axios from 'axios';
 import { headers, URLS } from '../utils/utils';
 const URL = URLS.tiposDeTurno;
 

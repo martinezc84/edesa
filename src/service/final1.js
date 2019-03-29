@@ -1,5 +1,3 @@
-// //@ts-check
-import axios from 'axios';
 import { headers, URLS } from '../utils/utils';
 import format from 'date-fns/format';
 import subHours from 'date-fns/sub_hours';

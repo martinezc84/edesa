@@ -13,7 +13,7 @@ exports.handler = async (event, context) => {
 			body: JSON.stringify(data)
 		};
 	} catch (error) {
-		console.error(error);
+		console.log(error);
 		console.log(URL);
 		return {
 			statusCode: 503,

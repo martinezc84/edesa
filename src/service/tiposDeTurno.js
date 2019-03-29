@@ -14,9 +14,10 @@ exports.handler = async (event, context) => {
 		};
 	} catch (error) {
 		console.error(error);
+		console.log(URL);
 		return {
-			statusCode: 502,
-			body: JSON.stringify(error)
+			statusCode: 503,
+			body: JSON.stringify(data)
 		};
 	}
 };

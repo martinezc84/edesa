@@ -32,7 +32,7 @@ export default class TiposDeTurno extends Component {
 					loading: true,
 					tipoSeleccionado
 				});
-
+				console.log(ENDPOINTS.tiposDeTurno)
 				axios.get(ENDPOINTS.tiposDeTurno)
 					.then(({ data }) => {
 						let tiposDeTurno = data.filter((d) => d.virtual === false);

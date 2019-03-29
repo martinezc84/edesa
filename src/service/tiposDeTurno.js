@@ -17,7 +17,7 @@ exports.handler = async (event, context) => {
 		console.log(URL);
 		return {
 			statusCode: 503,
-			body: JSON.stringify(data)
+			body: JSON.stringify(error)
 		};
 	}
 };

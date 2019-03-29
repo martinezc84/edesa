@@ -1,5 +1,6 @@
-import axios from 'axios';
-import { headers, URLS } from '../utils/utils';
+const axios = require('axios');
+const headers = require('../utils/utils');
+const URLS = require('../utils/utils');
 const URL = URLS.tiposDeTurno;
 exports.handler = async (event, context) => {
 	try {

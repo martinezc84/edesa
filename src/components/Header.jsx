@@ -27,8 +27,8 @@ class Header extends Component {
 			<div>
 				<SEO
 					description="app"
-					title="Gatsby-turnos"
-					keywords={[ `gatsby`, `turnos`, `react`, `tailwindcss` ]}
+					title="Control de Mandados"
+					keywords={[ `zauru`, `mandados`, `react`, `tailwindcss` ]}
 				/>
 
 				<Menu>

@@ -9,7 +9,7 @@
 	
 	# Locations de las netlify functions (Backend) 
 	# Son los mismos nombres de los archivos que hay en la carpeta /src/service
-  GATSBY_URL_TIPOS_DE_TURNO= '/.netlify/functions/tiposDeTurno'
+  GATSBY_URL_TIPOS_DE_TURNO= '/.netlify/functions/tiposMandados'
 	GATSBY_URL_TURNOS_NO_VENDIDOS= '/.netlify/functions/turnosNoVendidos'
 	GATSBY_URL_TURNOS_VENDIDOS= '/.netlify/functions/turnosVendidos'
 	GATSBY_URL_REASIGNAR= '/.netlify/functions/reasignar'

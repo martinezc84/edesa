@@ -10,7 +10,7 @@ yarn-error.log
 # macOS
 .DS_Store
 hidden/
-server/
+#server/
 .env
 ori.netlify.toml
 dev/

@@ -4,7 +4,7 @@ exports.handler = async (event, context) => {
 		//let { data } = await axios.get(URL, { headers });
 		return {
 			statusCode: 200,
-			body: '{{"id":1000, "name":"Facturas"},{"id:"1001","name":"Cobros"},{"id":2,"name":"varios"}}'
+			body: '{{"id":1000, "name":"Facturas", "virtual":false},{"id:"1001","name":"Cobros", "virtual":false},{"id":2,"name":"varios", "virtual":false}}'
 		};
 	} catch (error) {
 		console.error(error);

@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import netlifyIdentity from 'netlify-identity-widget';
 import '../css/style.css';
-import axios from 'axios';
+import Axios from 'axios';
 import { ENDPOINTS } from '../utils/utils';
 import { Header, Loader, Dropdown, Container } from 'semantic-ui-react';
 
@@ -32,8 +32,8 @@ export default class TiposDeTurno extends Component {
 					loading: true,
 					tipoSeleccionado
 				});
-				console.log(ENDPOINTS.tiposDeTurno)
-				axios.get(ENDPOINTS.tiposDeTurno)
+
+				Axios.get(ENDPOINTS.tiposDeTurno)
 					.then(({ data }) => {
 						let tiposDeTurno = data.filter((d) => d.virtual === false);
 						guardar('tiposDeTurno', tiposDeTurno);

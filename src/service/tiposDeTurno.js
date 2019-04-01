@@ -1,7 +1,9 @@
-const axios = require('axios');
-const headers = require('../utils/utils');
-const URLS = require('../utils/utils');
+//@ts-check
+import axios from 'axios';
+import { headers, URLS } from '../utils/utils';
 const URL = URLS.tiposDeTurno;
+
+//@ts-ignore
 exports.handler = async (event, context) => {
 	try {
 		//@ts-ignore
@@ -11,10 +13,9 @@ exports.handler = async (event, context) => {
 			body: JSON.stringify(data)
 		};
 	} catch (error) {
-		console.log(error);
-		console.log(URL);
+		console.error(error);
 		return {
-			statusCode: 503,
+			statusCode: 502,
 			body: JSON.stringify(error)
 		};
 	}

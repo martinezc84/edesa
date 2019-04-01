@@ -1,7 +1,7 @@
 [build]
   command = "npm run build" 
   publish = "./public" 
-  functions = "src/service" 
+  functions = "./server" 
 
 [build.environment]
   # Dominio del sitio de producción (Frontend)
@@ -20,7 +20,7 @@
 	GATSBY_URL_CINCO= '/.netlify/functions/final5'
 
 	# Dominio del sitio de las APIs (Backend)
-	#GATSBY_ZAURU_PREFIX='https://dominiobackend.com'
+	GATSBY_ZAURU_PREFIX='https://app.zauru.com'
 
 	# Locations de los enpoints GET de información a mostrar en los pasos de la app
   GATSBY_ENDPOINT_TIPOS_DE_TURNO='/settings/agencies.json'
@@ -46,8 +46,8 @@
 	GATSBY_ENDPOINT_CINCO_2='.json'
 
 	# Email y token de autenticación para utilizar las APIs 
-  #GATSBY_EMAIL='email@email.com'
-  #GATSBY_TOKEN='TOKENTOKENTOKENTOKENTOKEN'
+        GATSBY_EMAIL='api@hermandadtrespotencias.com'
+        GATSBY_TOKEN='9exrqgKSyK4y8PHDrQRD'
 
 	# Variable de entorno para ver los botones de debug. 
 	GATSBY_MODO='PROD' # PROD / DEBUG 

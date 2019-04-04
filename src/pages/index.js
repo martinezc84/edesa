@@ -9,7 +9,7 @@ export default class Index extends Component {
 	componentDidMount() {
 		let user = netlifyIdentity.currentUser();
 
-		if (user !== null) navigate('/app');
+		
 	}
 	render() {
 		let TituloPrincipal = gatsbyConfig.siteMetadata.titulos.app;

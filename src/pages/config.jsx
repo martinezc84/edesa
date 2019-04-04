@@ -59,7 +59,7 @@ export default class Config extends Component {
 		});
 	};
 
-	tiposMandados = () => {
+	turnosVendidos = () => {
 		return (
 			<UnpaidInvoices
 				
@@ -68,13 +68,13 @@ export default class Config extends Component {
 			/>
 		);
 	};
-
-	turnosVendidos = () => {
+	
+	tiposMandados = () => {
 		let props = {
 			seleccionadosVendidosID: this.state.seleccionadosVendidosID,
 			tipo: this.state.tipoSeleccionado
 		};
-		return <TurnosVendidos valores={this.state.turnosVendidos} guardar={this.guardar} {...props} />;
+		return <UnpaidInvoices valores={this.state.turnosVendidos} guardar={this.guardar} {...props} />;
 	};
 
 

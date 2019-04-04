@@ -36,7 +36,7 @@ class Header extends Component {
 					{logged ? (
 						<React.Fragment>
 							<Menu.Item name="app" path="/app" onClick={this.onClick} />
-							<Menu.Item name="app" path="/Config" onClick={this.onClick} />
+							<Menu.Item name="config" path="/config" onClick={this.onClick} />
 						</React.Fragment>
 					) : null}
 

@@ -4,7 +4,7 @@ import netlifyIdentity from 'netlify-identity-widget';
 import { Layout } from '../components/Layout';
 import RutaPrivada from '../components/RutaPrivada';
 import TiposDeTurno from '../components/tipoDeTurno';
-import Steps from '../components/Steps';
+import StepsC from '../components/StepsC';
 import TurnosVendidos from '../components/TurnosVendidos';
 import UnpaidInvoices from '../components/UnpaidInvoices';
 import { navigate } from 'gatsby';
@@ -109,7 +109,7 @@ export default class Config extends Component {
 			<Layout>
 				<RutaPrivada>
 					<Container>
-						<Steps {...stepsProps} />
+						<StepsC {...stepsProps} />
 					</Container>
 					<div className="pt-6">
 						{step === 1 ? (

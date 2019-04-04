@@ -33,7 +33,7 @@ export default class TiposDeTurno extends Component {
 					tipoSeleccionado
 				});
 
-				Axios.get(ENDPOINTS.tiposMandado+'?id=1')
+				Axios.get(ENDPOINTS.tiposMandado+'1')
 					.then(({ data }) => {
 						let tiposDeTurno = data.filter((d) => d.virtual === false);
 						guardar('tiposDeTurno', tiposDeTurno);

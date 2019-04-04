@@ -19,8 +19,8 @@ export default class Steps extends Component {
 				>
 					<Icon name="map signs" />
 					<Step.Content>
-						<Step.Title>Tipo de turno</Step.Title>
-						<Step.Description>Elige el tipo de turno</Step.Description>
+						<Step.Title>Tipo de Mandado</Step.Title>
+						<Step.Description>Elige el tipo de mandado</Step.Description>
 					</Step.Content>
 				</Step>
 				<Step

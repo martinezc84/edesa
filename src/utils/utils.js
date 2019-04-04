@@ -20,6 +20,7 @@
 // };
 
 const URL_PREFIX = process.env.GATSBY_NFUNC_URL_PREFIX;
+const URL_PREFIX_API = process.env.GATSBY_URL_API;
 const ZAURU_PREFIX = process.env.GATSBY_ZAURU_PREFIX;
 
 const headers = {
@@ -27,6 +28,12 @@ const headers = {
 	'Content-type': 'application/json',
 	'X-User-Email': process.env.GATSBY_EMAIL,
 	'X-User-Token': process.env.GATSBY_TOKEN
+};
+
+const headersapi = {
+	Accept: 'application/json',
+	'Content-type': 'application/json',
+	'X-API-KEY':process.env.GATSBY_API_KEY
 };
 
 const NF_ENDPOINTS = {
@@ -38,11 +45,14 @@ const NF_ENDPOINTS = {
 	DOS: URL_PREFIX + process.env.GATSBY_URL_DOS,
 	TRES: URL_PREFIX + process.env.GATSBY_URL_TRES,
 	CUATRO: URL_PREFIX + process.env.GATSBY_URL_CUATRO,
-	CINCO: URL_PREFIX + process.env.GATSBY_URL_CINCO
+	CINCO: URL_PREFIX + process.env.GATSBY_URL_CINCO,
+	tiposMandado: URL_PREFIX + process.env.GATSBY_URL_MANDADOS,
+	
 };
 
 const ZAURU_URL = {
 	tiposDeTurno: ZAURU_PREFIX + process.env.GATSBY_ENDPOINT_TIPOS_DE_TURNO,
+	empleados: ZAURU_PREFIX + process.env.GATSBY_ENDPOINT_EMPLEADOS,
 	turnosNoVendidos: ZAURU_PREFIX + process.env.GATSBY_ENDPOINT_TURNOS_NO_VENDIDOS,
 	turnosVendidos: ZAURU_PREFIX + process.env.GATSBY_ENDPOINT_TURNOS_VENDIDOS,
 	UNO: ZAURU_PREFIX + process.env.GATSBY_ENDPOINT_UNO,
@@ -55,10 +65,15 @@ const ZAURU_URL = {
 	CINCO_2: process.env.GATSBY_ENDPOINT_CINCO_2
 };
 
+const API_URL = {
+	tiposMandado: URL_PREFIX_API+process.env.GATSBY_ENDPOINT_MANDADO,
+
+}
+
 //2 https://zauru.herokuapp.com/inventories/bookings/****ID****/deliver.json
 //4 https://zauru.herokuapp.com/inventories/bookings/****ID****/deliver.json
 //5 https://zauru.herokuapp.com/sales/unpaid_invoices/****ID****.json
 
 const ENV = process.env.GATSBY_ENV;
 
-export { headers, ZAURU_URL as URLS, NF_ENDPOINTS as ENDPOINTS, ENV };
+export { headers, headersapi, API_URL as API_URL, ZAURU_URL as URLS, NF_ENDPOINTS as ENDPOINTS, ENV };

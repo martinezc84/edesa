@@ -18,9 +18,11 @@
 	GATSBY_URL_TRES= '/.netlify/functions/final3'
 	GATSBY_URL_CUATRO= '/.netlify/functions/final4'
 	GATSBY_URL_CINCO= '/.netlify/functions/final5'
+	GATSBY_URL_MANDADOS='/.netlify/functions/tiposMandados?id='
 
 	# Dominio del sitio de las APIs (Backend)
 	GATSBY_ZAURU_PREFIX='https://app.zauru.com'
+	GATSBY_URL_API = 'https://dcgse.com/calendario_api/apical'
 
 	# Locations de los enpoints GET de información a mostrar en los pasos de la app
   GATSBY_ENDPOINT_TIPOS_DE_TURNO='/settings/agencies.json'
@@ -45,9 +47,16 @@
 	GATSBY_ENDPOINT_CINCO_1='/sales/unpaid_invoices/'
 	GATSBY_ENDPOINT_CINCO_2='.json'
 
+	GATSBY_ENDPOINT_MANDADO='/tipos_mandado?id='
+
+
+	
+	GATSBY_ENDPOINT_EMPLEADOS='/settings/employees/'
+
 	# Email y token de autenticación para utilizar las APIs 
         GATSBY_EMAIL='api@hermandadtrespotencias.com'
         GATSBY_TOKEN='9exrqgKSyK4y8PHDrQRD'
+				GATSBY_API_KEY='VMlEy011P4Cmmo5cQhsiXDJF8pC3ucXS'
 
 	# Variable de entorno para ver los botones de debug. 
 	GATSBY_MODO='PROD' # PROD / DEBUG 

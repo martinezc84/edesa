@@ -1,10 +1,17 @@
+import axios from 'axios';
+import { headersapi, API_URL } from '../utils/utils';
+const URL = API_URL.tiposMandado;
 exports.handler = async (event, context) => {
 	try {
 		//@ts-ignore
-		//let { data } = await axios.get(URL, { headers });
+		//let body = JSON.parse(event.body);
+		//console.log(event.queryStringParameters)
+		//const { id } = body;
+		console.log(URL)
+		let { data } = await axios.get(URL+"1", { headersapi });
 		return {
 			statusCode: 200,
-			body: '{{"id":1000, "name":"Facturas"},{"id:"1001","name":"Cobros"},{"id":2,"name":"varios"}}'
+			body: JSON.stringify(data)
 		};
 	} catch (error) {
 		console.error(error);

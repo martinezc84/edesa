@@ -31,9 +31,9 @@ const headers = {
 };
 
 const headersapi = {
-	Accept: 'application/json',
-	'Content-type': 'application/json',
-	'X-API-KEY':process.env.GATSBY_API_KEY
+	Accept:'application/json',
+'Content-type':'application/json',
+'X-User-Token':'VMlEy011P4Cmmo5cQhsiXDJF8pC3ucXS'
 };
 
 const NF_ENDPOINTS = {

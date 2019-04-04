@@ -30,12 +30,6 @@ const headers = {
 	'X-User-Token': process.env.GATSBY_TOKEN
 };
 
-const headersapi = {
-	Accept:'application/json',
-'Content-type':'application/json',
-'X-User-Token':'VMlEy011P4Cmmo5cQhsiXDJF8pC3ucXS'
-};
-
 const NF_ENDPOINTS = {
 	tiposDeTurno: URL_PREFIX + process.env.GATSBY_URL_TIPOS_DE_TURNO,
 	turnosNoVendidos: URL_PREFIX + process.env.GATSBY_URL_TURNOS_NO_VENDIDOS,
@@ -76,4 +70,4 @@ const API_URL = {
 
 const ENV = process.env.GATSBY_ENV;
 
-export { headers, headersapi, API_URL as API_URL, ZAURU_URL as URLS, NF_ENDPOINTS as ENDPOINTS, ENV };
+export { headers,  API_URL as API_URL, ZAURU_URL as URLS, NF_ENDPOINTS as ENDPOINTS, ENV };

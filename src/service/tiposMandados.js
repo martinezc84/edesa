@@ -1,15 +1,18 @@
 import axios from 'axios';
-import { headersapi, API_URL } from '../utils/utils';
+import { headers, API_URL } from '../utils/utils';
 const URL = API_URL.tiposMandado;
+
+//@ts-ignore
 exports.handler = async (event, context) => {
 	try {
 		//@ts-ignore
-		//let body = JSON.parse(event.body);
-		console.log(event.queryStringParameters)
+		//let body = JSON.parse(event.queryStringParameters.toString());
+		let id = event.queryStringParameters.id;
+		//console.log(event.queryStringParameters)
 		//const { id } = body;
-		console.log(URL)
-		console.log(headersapi)
-		let { data } = await axios.get(URL+"2", { headersapi });
+		//console.log(URL)
+		//console.log(headersapi)
+		let { data } = await axios.get(URL+id, { headers });
 		return {
 			statusCode: 200,
 			body: JSON.stringify(data)

@@ -7,7 +7,7 @@ exports.handler = async (event, context) => {
 		//let body = JSON.parse(event.body);
 		//console.log(event.queryStringParameters)
 		//const { id } = body;
-		console.log(URL)
+		//console.log(URL)
 		let { data } = await axios.get(URL+"1", { headersapi });
 		return {
 			statusCode: 200,

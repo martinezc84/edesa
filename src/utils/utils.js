@@ -41,11 +41,14 @@ const NF_ENDPOINTS = {
 	CUATRO: URL_PREFIX + process.env.GATSBY_URL_CUATRO,
 	CINCO: URL_PREFIX + process.env.GATSBY_URL_CINCO,
 	tiposMandado: URL_PREFIX + process.env.GATSBY_URL_MANDADOS,
+	UnpaidInvoices: URL_PREFIX + process.env.GATSBY_UNPAID_INVOICES,
 	
 };
 
 const ZAURU_URL = {
 	tiposDeTurno: ZAURU_PREFIX + process.env.GATSBY_ENDPOINT_TIPOS_DE_TURNO,
+	UnpaidInvoices: ZAURU_PREFIX + process.env.GATSBY_ENDPOINT_UNPAID_INVOICES,
+	PurchaseOrders: ZAURU_PREFIX + process.env.GATSBY_ENDPOINT_PURCHASES_ORDERS,
 	empleados: ZAURU_PREFIX + process.env.GATSBY_ENDPOINT_EMPLEADOS,
 	turnosNoVendidos: ZAURU_PREFIX + process.env.GATSBY_ENDPOINT_TURNOS_NO_VENDIDOS,
 	turnosVendidos: ZAURU_PREFIX + process.env.GATSBY_ENDPOINT_TURNOS_VENDIDOS,
@@ -57,6 +60,7 @@ const ZAURU_URL = {
 	CUATRO_2: process.env.GATSBY_ENDPOINT_CUATRO_2,
 	CINCO_1: ZAURU_PREFIX + process.env.GATSBY_ENDPOINT_CINCO_1,
 	CINCO_2: process.env.GATSBY_ENDPOINT_CINCO_2
+	
 };
 
 const API_URL = {

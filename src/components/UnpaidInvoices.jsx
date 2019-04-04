@@ -64,7 +64,7 @@ export default class UnpaidInvoices extends Component {
 
 				Axios.post(`${ENDPOINTS.UnpaidInvoices}`,'{"valor":""}')
 					.then(({ data }) => {
-						let turnosVendidos = sortBy(data, [ 'iid' ]);
+						let turnosVendidos = sortBy(data.data, [ 'iid' ]);
 						guardar('turnosVendidos', turnosVendidos);
 						this.setState({
 							turnosVendidos: turnosVendidos,

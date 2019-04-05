@@ -54,6 +54,13 @@ export default class UnpaidInvoices extends Component {
 			}
 		);
 	};
+
+	quitarlink(text){
+		const resp = text.split('>')
+		const textresp = resp[1].split('<');
+		return textresp[0];
+	}
+
 	componentDidMount() {
 		let user = netlifyIdentity.currentUser();
 		let { tipo } = this.props;
@@ -69,6 +76,13 @@ export default class UnpaidInvoices extends Component {
 					.then(({ data }) => {
 						//console.log(data)
 						let turnosVendidos = sortBy(data.data, [ 'iid' ]);
+						turnosVendidos.map((invoice, i)=> (
+							invoice.o = this.quitarlink(invoice.o)
+							
+				
+						));
+
+
 						guardar('turnosVendidos', turnosVendidos);
 						this.setState({
 							turnosVendidos: turnosVendidos,

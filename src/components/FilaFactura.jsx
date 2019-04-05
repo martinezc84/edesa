@@ -9,6 +9,8 @@ export default class FilaFactura extends Component {
 	}
 	render() {
 		let { seleccionar, seleccionado, turno, view } = this.props;
+
+		
 		if (view)
 			return (
 				<Table.Row>

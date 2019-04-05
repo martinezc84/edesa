@@ -150,36 +150,36 @@ export default class TipoMandado extends Component {
 								<Table sortable celled>
 									<Table.Header>
 																			
-										<Table.HeaderCell
+										<Table.Cell
 										
 										>
 											Nombre
-										</Table.HeaderCell>
-										<Table.HeaderCell
+										</Table.Cell>
+										<Table.Cell
 											
 										>
 											Tiempo
-										</Table.HeaderCell>
-										<Table.HeaderCell
+										</Table.Cell>
+										<Table.Cell
 											
 										>
 											Firma
-										</Table.HeaderCell>
-										<Table.HeaderCell
+										</Table.Cell>
+										<Table.Cell
 											
 										>
 											Geolocalizacion
-										</Table.HeaderCell>
-										<Table.HeaderCell
+										</Table.Cell>
+										<Table.Cell
 											
 										>
 											Correo
-										</Table.HeaderCell>
-										<Table.HeaderCell
+										</Table.Cell>
+										<Table.Cell
 										
 										>
 											SMS
-										</Table.HeaderCell>
+										</Table.Cell>
 										
 										
 									</Table.Header>

@@ -66,6 +66,7 @@ export default class App extends Component {
 				tipoSeleccionado={this.state.tipoSeleccionado ? this.state.tipoSeleccionado.key : null}
 				valores={this.state.tiposDeTurno}
 				guardar={this.guardar}
+				empleados={this.state.empleados ? this.state.empleados: null}
 			/>
 		);
 	};

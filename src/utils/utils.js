@@ -31,6 +31,7 @@ const headers = {
 };
 
 const NF_ENDPOINTS = {
+	empleados: URL_PREFIX + process.env.GATSBY_URL_EMPLEADOS,
 	tiposDeTurno: URL_PREFIX + process.env.GATSBY_URL_TIPOS_DE_TURNO,
 	turnosNoVendidos: URL_PREFIX + process.env.GATSBY_URL_TURNOS_NO_VENDIDOS,
 	turnosVendidos: URL_PREFIX + process.env.GATSBY_URL_TURNOS_VENDIDOS,

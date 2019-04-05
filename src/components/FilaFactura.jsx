@@ -1,19 +1,20 @@
 //@ts-check
 import React, { Component } from 'react';
-import { Table, Checkbox, Label } from 'semantic-ui-react';
+import { Table, Checkbox, Label, Dropdown } from 'semantic-ui-react';
 
 export default class FilaFactura extends Component {
 	// Evita re renders innecesarios al cambiar el state
 	shouldComponentUpdate(np) {
 		return np.seleccionado !== this.props.seleccionado || np.turno.statusOperacion;
+		
 	}
 	render() {
-		let { seleccionar, seleccionado, turno, view } = this.props;
+		let { seleccionar, seleccionado, empleadosel, seleccionaVendedor, turno, view, empleados } = this.props;
 
 		
 		if (view)
 			return (
-				<Table.Row>
+				<Table.Row><Table.Cell>
 					<Checkbox
 							onChange={() => {
 								seleccionar(turno);
@@ -23,7 +24,7 @@ export default class FilaFactura extends Component {
 						/>
 					
 					{/* <Table.Cell>{turno.order_number ? turno.order_number : ''}</Table.Cell> */}
-					
+					</Table.Cell>
 					<Table.Cell>{turno.o}</Table.Cell>
 					<Table.Cell>{turno.i}</Table.Cell>
 					<Table.Cell>{turno.ref}</Table.Cell>
@@ -34,12 +35,22 @@ export default class FilaFactura extends Component {
 					<Table.Cell>{turno.itms}</Table.Cell>
 					<Table.Cell>{turno.tot}</Table.Cell>
 					<Table.Cell>{turno.due}</Table.Cell>
+					<Table.Cell><Dropdown
+							value={empleadosel}
+							onChange={seleccionaVendedor}
+							placeholder="Selecciona Mensajero"
+							fluid
+							search
+							selection
+							options={empleados}
+						/></Table.Cell>
 					
 				</Table.Row>
 			);
 		else
 			return (
 				<Table.Row>
+					<Table.Cell>
 					<Checkbox
 							onChange={() => {
 								seleccionar(turno);
@@ -48,7 +59,7 @@ export default class FilaFactura extends Component {
 							checked={seleccionado}
 						/>
 					{/* <Table.Cell>{turno.order_number ? turno.order_number : ''}</Table.Cell> */}
-					
+					</Table.Cell>
 					<Table.Cell>{turno.o}</Table.Cell>
 					<Table.Cell>{turno.i}</Table.Cell>
 					<Table.Cell>{turno.ref}</Table.Cell>
@@ -59,6 +70,15 @@ export default class FilaFactura extends Component {
 					<Table.Cell>{turno.itms}</Table.Cell>
 					<Table.Cell>{turno.tot}</Table.Cell>
 					<Table.Cell>{turno.due}</Table.Cell>
+					<Table.Cell><Dropdown
+							value={empleadosel}
+							onChange={seleccionaVendedor}
+							placeholder="Selecciona Mensajero"
+							fluid
+							search
+							selection
+							options={empleados}
+						/></Table.Cell>
 				</Table.Row>
 			);
 	}

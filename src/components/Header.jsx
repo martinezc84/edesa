@@ -22,6 +22,7 @@ class Header extends Component {
 	
 	render() {
 		const user = netlifyIdentity.currentUser();
+		
 		let logged = !(user === null);
 		return (
 			<div>

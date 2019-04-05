@@ -18,9 +18,10 @@ export default class UnpaidInvoices extends Component {
 		first: 40,
 		offset: 0,
 		step: 40,
-
+		buscar:"",
 		column: null,
-		direction: null
+		direction: null,
+		empleados:[]
 	};
 
 	setStateAsync(state) {
@@ -61,23 +62,35 @@ export default class UnpaidInvoices extends Component {
 		return textresp[0];
 	}
 
+	trataEmpleados = (empleados) => {
+		return empleados.map((t) => ({
+			key: t.id,
+			value: t.id,
+			text: t.name,
+			todo: t
+		}));
+	};
+
 	componentDidMount() {
 		let user = netlifyIdentity.currentUser();
 		let { tipo } = this.props;
 
+		let { buscar } = this.state;
+
 		if (user !== null) {
-			let { guardar, valores, seleccionadosVendidosID } = this.props;
+			let { guardar, valores, seleccionadosVendidosID, empleados } = this.props;
 			if (valores.length === 0) {
 				this.setState({
 					loading: true
 				});
                 
-				Axios.post(`${ENDPOINTS.UnpaidInvoices}`,'{"valor":""}')
+				Axios.post(`${ENDPOINTS.UnpaidInvoices}`,'{"valor":"'+buscar+'"}')
 					.then(({ data }) => {
 						//console.log(data)
-						let turnosVendidos = data.data;
-						turnosVendidos = turnosVendidos.filter((d) => d.pt != 'contado');
-						turnosVendidos = sortBy(turnosVendidos [ 'iid' ]);
+						
+						let turnosVendidos = data.data.filter((d) => d.pt !== 'contado');
+						//console.log(turnosVendidos)
+						turnosVendidos = sortBy(turnosVendidos, [ 'iid' ]);
 						turnosVendidos.map((invoice, i)=> (
 							//console.log(invoice)
 							invoice.o != '' ? invoice.o = this.quitarlink(invoice.o) :''
@@ -118,8 +131,29 @@ export default class UnpaidInvoices extends Component {
 					.catch((error) => {
 						console.error(error);
 					});
+
+					Axios.get(`${ENDPOINTS.empleados}`)
+					.then(({ data }) => {
+						//console.log(data)
+						
+						let empleados = data.filter((d) => d.seller === true);
+						//console.log(empleados)
+						empleados = sortBy(empleados, [ 'name' ]);	
+						empleados = this.trataEmpleados(empleados)	
+
+
+						guardar('empleados', empleados);
+						this.setState({
+							empleados: empleados,
+							
+						});
+					})
+					.catch((error) => {
+						console.error(error);
+					});
 			} else {
 				this.setState({
+					empleados:empleados,
 					turnosVendidos: valores,
 					seleccionadosId: seleccionadosVendidosID,
 					cantidadPaginas: Math.floor(valores.length / this.state.first) + 1
@@ -133,6 +167,10 @@ export default class UnpaidInvoices extends Component {
 		let offset = (activePage - 1) * this.state.step;
 		let first = offset + this.state.step;
 		this.setState({ paginaSeleccionada: activePage, offset, first });
+	};
+
+	seleccionaVendedor = (e, item) => {
+		console.log(item)
 	};
 
 	handleSort = (clickedColumn) => () => {
@@ -154,9 +192,71 @@ export default class UnpaidInvoices extends Component {
 		});
 	};
 
-	handleChange(event) {
-		this.setState({value: event.target.value});
-		console.log(event.target.value)
+	handleChange=(event)=> {
+		
+		let {  seleccionadosVendidosID } = this.state;
+
+		let { guardar, } = this.props;
+		if (event.target.value.length>4){
+			
+		}
+		this.setState({
+				
+			buscar:event.target.value
+		});
+		
+			
+			Axios.post(`${ENDPOINTS.UnpaidInvoices}`,'{"valor":"'+event.target.value+'"}')
+				.then(({ data }) => {
+					//console.log(data)
+					
+					let turnosVendidos = data.data.filter((d) => d.seller === 'contado');
+					//console.log(turnosVendidos)
+					turnosVendidos = sortBy(turnosVendidos, [ 'iid' ]);
+					turnosVendidos.map((invoice, i)=> (
+						//console.log(invoice)
+						invoice.o != '' ? invoice.o = this.quitarlink(invoice.o) :''
+						
+			
+					));
+
+					turnosVendidos.map((invoice, i)=> (
+						//console.log(invoice)
+						invoice.i != '' ? invoice.i = this.quitarlink(invoice.i) :''
+						
+			
+					));
+
+					turnosVendidos.map((invoice, i)=> (
+						//console.log(invoice)
+						invoice.cli != '' ? invoice.cli = this.quitarlink(invoice.cli) :''
+						
+			
+					));
+
+					turnosVendidos.map((invoice, i)=> (
+						//console.log(invoice)
+						invoice.ref != '' ? invoice.ref = this.quitarlink(invoice.ref) :''
+						
+			
+					));
+
+
+					guardar('turnosVendidos', turnosVendidos);
+					this.setState({
+						turnosVendidos: turnosVendidos,
+						loading: false,
+						cantidadPaginas: Math.floor(data.recordsTotal / this.state.first) + 1,
+						
+					});
+				})
+				.catch((error) => {
+					console.error(error);
+				});
+		
+
+
+		
 	  }
 
 	render() {
@@ -206,77 +306,75 @@ export default class UnpaidInvoices extends Component {
 									/>
 
 <label>
-          Name:
-          <input type="text" value={this.state.value} onChange={this.handleChange} />
+          Buscar :
+          <input type="text" value={this.state.buscar} onChange={this.handleChange} />
         </label>
 								</div>
 								<Table sortable celled>
 									<Table.Header>
-										<Table.HeaderCell>Selector</Table.HeaderCell>
+										<Table.Cell>Selector</Table.Cell>
 										
-										<Table.HeaderCell
-											sorted={column === 'invoice_date' ? direction : null}
-											onClick={this.handleSort('invoice_date')}
+										<Table.Cell
+											sorted={column === 'o' ? direction : null}
+											onClick={this.handleSort('o')}
 										>
 											ORDEN
-										</Table.HeaderCell>
-										<Table.HeaderCell
-											sorted={column === 'item_code' ? direction : null}
-											onClick={this.handleSort('item_code')}
+										</Table.Cell>
+										<Table.Cell
+											sorted={column === 'i' ? direction : null}
+											onClick={this.handleSort('i')}
 										>
 											FACTURA
-										</Table.HeaderCell>
-										<Table.HeaderCell
-											sorted={column === 'item_name' ? direction : null}
-											onClick={this.handleSort('item_name')}
+										</Table.Cell>
+										<Table.Cell
+											sorted={column === 'ref' ? direction : null}
+											onClick={this.handleSort('ref')}
 										>
 											REFERENCIA
-										</Table.HeaderCell>
-										<Table.HeaderCell
-											sorted={column === 'quantity' ? direction : null}
-											onClick={this.handleSort('quantity')}
+										</Table.Cell>
+										<Table.Cell
+											sorted={column === 'dte' ? direction : null}
+											onClick={this.handleSort('dte')}
 										>
 											FECHA
-										</Table.HeaderCell>
-										<Table.HeaderCell
-											sorted={column === 'unit_price' ? direction : null}
-											onClick={this.handleSort('unit_price')}
+										</Table.Cell>
+										<Table.Cell
+											sorted={column === 'ag' ? direction : null}
+											onClick={this.handleSort('ag')}
 										>
 											PDV.
-										</Table.HeaderCell>
-										<Table.HeaderCell
-											sorted={column === 'price' ? direction : null}
-											onClick={this.handleSort('price')}
+										</Table.Cell>
+										<Table.Cell
+											sorted={column === 'cli' ? direction : null}
+											onClick={this.handleSort('cli')}
 										>
 											Cliente
-										</Table.HeaderCell>
-										<Table.HeaderCell
-											sorted={column === 'client_name' ? direction : null}
-											onClick={this.handleSort('client_name')}
+										</Table.Cell>
+										<Table.Cell
+											sorted={column === 'pt' ? direction : null}
+											onClick={this.handleSort('pt')}
 										>
 											TP	
 										
-										</Table.HeaderCell>
-										<Table.HeaderCell
-											sorted={column === 'client_name' ? direction : null}
-											onClick={this.handleSort('client_name')}
+										</Table.Cell>
+										<Table.Cell
+											sorted={column === 'itms' ? direction : null}
+											onClick={this.handleSort('itms')}
 										>
 											Items	
 										
-										</Table.HeaderCell>
-										<Table.HeaderCell
-											sorted={column === 'client_id' ? direction : null}
-											onClick={this.handleSort('client_id')}
-										>
+										</Table.Cell>
+										<Table.Cell>
 											Total
-										</Table.HeaderCell>
-										<Table.HeaderCell
-											sorted={column === 'client_name' ? direction : null}
-											onClick={this.handleSort('client_name')}
-										>
+										</Table.Cell>
+										<Table.Cell	>
 											Debe	
 										
-										</Table.HeaderCell>
+										</Table.Cell>
+										<Table.Cell	>
+											Encargado	
+										
+										</Table.Cell>
 										
 									</Table.Header>
 									<Table.Body>
@@ -288,6 +386,8 @@ export default class UnpaidInvoices extends Component {
 													turno={t}
 													seleccionar={this.seleccionar}
 													seleccionado={seleccionadosId.includes(t.iid)}
+													empleados={this.state.empleados} 
+													seleccionaVendedor={this.seleccionaVendedor}
 												/>
 											))}
 									</Table.Body>

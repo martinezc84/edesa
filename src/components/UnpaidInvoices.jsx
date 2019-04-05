@@ -15,9 +15,9 @@ export default class UnpaidInvoices extends Component {
 		seleccionadosId: [],
 		paginaSeleccionada: 1,
 		cantidadPaginas: 0,
-		first: 50,
+		first: 40,
 		offset: 0,
-		step: 50,
+		step: 40,
 
 		column: null,
 		direction: null
@@ -64,14 +64,14 @@ export default class UnpaidInvoices extends Component {
                 
 				Axios.post(`${ENDPOINTS.UnpaidInvoices}`,'{"valor":""}')
 					.then(({ data }) => {
-						console.log(data)
+						//console.log(data)
 						let turnosVendidos = sortBy(data.data, [ 'iid' ]);
 						guardar('turnosVendidos', turnosVendidos);
 						this.setState({
 							turnosVendidos: turnosVendidos,
 							loading: false,
 							seleccionadosId: seleccionadosVendidosID,
-							cantidadPaginas: Math.floor(turnosVendidos.length / this.state.first) + 1
+							cantidadPaginas: Math.floor(data.recordsTotal / this.state.first) + 1
 						});
 					})
 					.catch((error) => {

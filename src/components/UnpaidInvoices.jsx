@@ -77,7 +77,8 @@ export default class UnpaidInvoices extends Component {
 						//console.log(data)
 						let turnosVendidos = sortBy(data.data, [ 'iid' ]);
 						turnosVendidos.map((invoice, i)=> (
-							invoice.o !== undefined ? invoice.o = this.quitarlink(invoice.o) :''
+							console.log(invoice)
+							//invoice.o !== undefined ? invoice.o = this.quitarlink(invoice.o) :''
 							
 				
 						));

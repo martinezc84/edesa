@@ -6,7 +6,7 @@ import RutaPrivada from '../components/RutaPrivada';
 import TiposDeTurno from '../components/tipoDeTurno';
 import StepsC from '../components/StepsC';
 import TurnosVendidos from '../components/TurnosVendidos';
-import UnpaidInvoices from '../components/UnpaidInvoices';
+import TipoMandado from '../components/TipoMandado';
 import { navigate } from 'gatsby';
 import Acciones from '../components/Acciones';
 import { Container } from 'semantic-ui-react';
@@ -61,7 +61,7 @@ export default class Config extends Component {
 
 	turnosVendidos = () => {
 		return (
-			<UnpaidInvoices
+			<TipoMandado
 				
 				valores={this.state.tiposDeTurno}
 				guardar={this.guardar}
@@ -74,7 +74,7 @@ export default class Config extends Component {
 			seleccionadosVendidosID: this.state.seleccionadosVendidosID,
 			tipo: this.state.tipoSeleccionado
 		};
-		return <UnpaidInvoices valores={this.state.turnosVendidos} guardar={this.guardar} {...props} />;
+		return <TipoMandado valores={this.state.turnosVendidos} guardar={this.guardar} {...props} />;
 	};
 
 

@@ -238,7 +238,7 @@ export default class UnpaidInvoices extends Component {
 													key={t.sid}
 													turno={t}
 													seleccionar={this.seleccionar}
-													seleccionado={seleccionadosId.includes(t.id)}
+													seleccionado={seleccionadosId.includes(t.iid)}
 												/>
 											))}
 									</Table.Body>

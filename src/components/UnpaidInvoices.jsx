@@ -204,7 +204,9 @@ export default class UnpaidInvoices extends Component {
 
 <label>
           Name:
-          <input type="text" value={this.state.value} onChange={this.handleChange} />
+          <input type="text" value={this.state.value} onChange={() => {
+								this.handleChange(this.state.value);
+							}} />
         </label>
 								</div>
 								<Table sortable celled>

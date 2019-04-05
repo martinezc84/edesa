@@ -33,6 +33,7 @@ export default class UnpaidInvoices extends Component {
 	seleccionar = (turno) => {
 		let seleccionados = [];
 		let seleccionadosId = [];
+		console.log(turno)
 		if (this.state.seleccionadosId.includes(turno.iid)) {
 			seleccionados = this.state.seleccionados.filter((s) => s.id !== turno.iid);
 			seleccionadosId = this.state.seleccionadosId.filter((s) => s !== turno.iid);

@@ -7,6 +7,7 @@ import { ENDPOINTS } from '../utils/utils';
 import { Header, Table, Loader, Pagination, Search, Menu } from 'semantic-ui-react';
 import FilaFactura from './FilaFactura';
 import sortBy from 'lodash/sortBy';
+import TextSearch from '../components/TextSearch';
 
 export default class UnpaidInvoices extends Component {
 	state = {
@@ -197,6 +198,10 @@ export default class UnpaidInvoices extends Component {
 										prevItem={true ? undefined : null}
 										nextItem={true ? undefined : null}
 									/>
+
+									<TextSearch 
+									className={'Buscar'}
+									 />
 								</div>
 								<Table sortable celled>
 									<Table.Header>

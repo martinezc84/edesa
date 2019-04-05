@@ -8,10 +8,7 @@ exports.handler = async (event, context) => {
 		//@ts-ignore
 		//let body = JSON.parse(event.queryStringParameters.toString());
 		let id = event.queryStringParameters.id;
-		//console.log(event.queryStringParameters)
-		//const { id } = body;
-		//console.log(URL)
-		//console.log(headersapi)
+
 		let { data } = await axios.get(URL+id, { headers });
 		return {
 			statusCode: 200,

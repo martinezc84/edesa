@@ -12,7 +12,14 @@ export default class FilaFactura extends Component {
 		if (view)
 			return (
 				<Table.Row>
-					<Table.Cell>{turno.iid}</Table.Cell>
+					<Checkbox
+							onChange={() => {
+								seleccionar(turno);
+							}}
+							toggle
+							checked={seleccionado}
+						/>
+					
 					{/* <Table.Cell>{turno.order_number ? turno.order_number : ''}</Table.Cell> */}
 					
 					<Table.Cell>{turno.o}</Table.Cell>
@@ -31,7 +38,13 @@ export default class FilaFactura extends Component {
 		else
 			return (
 				<Table.Row>
-					<Table.Cell>{turno.iid}</Table.Cell>
+					<Checkbox
+							onChange={() => {
+								seleccionar(turno);
+							}}
+							toggle
+							checked={seleccionado}
+						/>
 					{/* <Table.Cell>{turno.order_number ? turno.order_number : ''}</Table.Cell> */}
 					
 					<Table.Cell>{turno.o}</Table.Cell>

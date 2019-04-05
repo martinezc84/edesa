@@ -83,6 +83,27 @@ export default class UnpaidInvoices extends Component {
 				
 						));
 
+						turnosVendidos.map((invoice, i)=> (
+							//console.log(invoice)
+							invoice.i != '' ? invoice.i = this.quitarlink(invoice.i) :''
+							
+				
+						));
+
+						turnosVendidos.map((invoice, i)=> (
+							//console.log(invoice)
+							invoice.cli != '' ? invoice.cli = this.quitarlink(invoice.cli) :''
+							
+				
+						));
+
+						turnosVendidos.map((invoice, i)=> (
+							//console.log(invoice)
+							invoice.ref != '' ? invoice.ref = this.quitarlink(invoice.ref) :''
+							
+				
+						));
+
 
 						guardar('turnosVendidos', turnosVendidos);
 						this.setState({

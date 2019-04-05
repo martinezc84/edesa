@@ -14,13 +14,13 @@ export default class FilaTipo extends Component {
 				<Table.Row>	
 					<Table.Cell>{turno.name}</Table.Cell>
 					<Table.Cell>{turno.time}</Table.Cell>
-					<Table.Cell><Checkbox
+					<Table.Cell><label><Checkbox
 							onChange={() => {
 								seleccionar(turno.id);
 							}}
 							toggle
 							checked={seleccionado}
-						/>{turno.firma}</Table.Cell>
+						/>{turno.firma}</label></Table.Cell>
 					<Table.Cell>{turno.geo}</Table.Cell>
 					<Table.Cell>{turno.email_notification}</Table.Cell>
 					<Table.Cell>{turno.sms_notification}</Table.Cell>
@@ -32,13 +32,13 @@ export default class FilaTipo extends Component {
 				<Table.Row>
 					<Table.Cell>{turno.name}</Table.Cell>
 					<Table.Cell>{turno.time}</Table.Cell>
-					<Table.Cell><Checkbox
+					<Table.Cell><label><Checkbox
 							onChange={() => {
 								seleccionar(turno.id);
 							}}
 							toggle
 							checked={seleccionado}
-						/>{turno.firma}</Table.Cell>
+						/>{turno.firma}</label></Table.Cell>
 					<Table.Cell>{turno.geo}</Table.Cell>
 					<Table.Cell>{turno.email_notification}</Table.Cell>
 					<Table.Cell>{turno.sms_notification}</Table.Cell>

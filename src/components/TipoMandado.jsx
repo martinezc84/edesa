@@ -146,22 +146,7 @@ export default class TipoMandado extends Component {
 									</Menu>
 								</div>
 
-								<div className="inline-block">
-									<Pagination
-										activePage={paginaSeleccionada}
-										boundaryRange={1}
-										//@ts-ignore
-										onPageChange={this.cambioDePagina}
-										size="big"
-										siblingRange={4}
-										totalPages={cantidadPaginas}
-										ellipsisItem={true ? undefined : null}
-										firstItem={true ? undefined : null}
-										lastItem={true ? undefined : null}
-										prevItem={true ? undefined : null}
-										nextItem={true ? undefined : null}
-									/>
-								</div>
+							
 								<Table sortable celled>
 									<Table.Header>
 																			

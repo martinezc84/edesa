@@ -13,6 +13,8 @@ export default class UnpaidInvoices extends Component {
 		turnosVendidos: [],
 		seleccionados: [],
 		seleccionadosId: [],
+		vendedoresseleccionados:[],
+		vendedoresseleccionadosId:[],
 		paginaSeleccionada: 1,
 		cantidadPaginas: 0,
 		first: 40,
@@ -171,6 +173,28 @@ export default class UnpaidInvoices extends Component {
 
 	seleccionaVendedor = (e, item) => {
 		console.log(item)
+		let vendedoresseleccionados = [];
+		let vendedoresseleccionadosId = [];
+		//console.log(turno)
+		if (this.state.vendedoresseleccionadosId.includes(item.id)) {
+			vendedoresseleccionados = this.state.seleccionados.filter((s) => s.iid !== item.id);
+			vendedoresseleccionadosId = this.state.vendedoresseleccionadosId.filter((s) => s !== item.id);
+		} else {
+			vendedoresseleccionados = [ ...this.state.seleccionados, item ];
+			vendedoresseleccionadosId = [ ...this.state.seleccionadosId,item.id ];
+		}
+
+		//console.log(seleccionados)
+		this.setState(
+			{
+				vendedoresseleccionados,
+				vendedoresseleccionadosId
+			},
+			() => {
+				this.props.guardar('vendedoresseleccionadosVendidos', this.state.vendedoresseleccionados);
+				this.props.guardar('vendedoresseleccionadosVendidosID', this.state.vendedoresseleccionadosId);
+			}
+		);
 	};
 
 	handleSort = (clickedColumn) => () => {

@@ -7,7 +7,7 @@ import TiposDeTurno from '../components/tipoDeTurno';
 import Steps from '../components/Steps';
 import TurnosVendidos from '../components/TurnosVendidos';
 import TurnosNoVendidos from '../components/TurnosNoVendidos';
-import UnpaidInvoices from '../components/UnpaidInvoices';
+import TipoMandado from '../components/TipoMandado';
 import { navigate } from 'gatsby';
 import Acciones from '../components/Acciones';
 import { Container } from 'semantic-ui-react';
@@ -92,7 +92,7 @@ export default class App extends Component {
 			seleccionadosVendidosID: this.state.seleccionadosVendidosID,
 			tipo: this.state.tipoSeleccionado
 		};
-		return <UnpaidInvoices valores={this.state.turnosVendidos} guardar={this.guardar} {...props} />;
+		return <TipoMandado valores={this.state.turnosVendidos} guardar={this.guardar} {...props} />;
 	};
 
 	acciones = () => {

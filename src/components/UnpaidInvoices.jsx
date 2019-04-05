@@ -7,7 +7,6 @@ import { ENDPOINTS } from '../utils/utils';
 import { Header, Table, Loader, Pagination, Search, Menu } from 'semantic-ui-react';
 import FilaFactura from './FilaFactura';
 import sortBy from 'lodash/sortBy';
-import TextSearch from '../components/TextSearch';
 
 export default class UnpaidInvoices extends Component {
 	state = {
@@ -153,6 +152,10 @@ export default class UnpaidInvoices extends Component {
 		});
 	};
 
+	handleChange = (valor) => () => {
+	console.log(valor)
+	};
+
 	render() {
 		let {
 			turnosVendidos,
@@ -199,9 +202,10 @@ export default class UnpaidInvoices extends Component {
 										nextItem={true ? undefined : null}
 									/>
 
-									<TextSearch 
-									className={'Buscar'}
-									 />
+<label>
+          Name:
+          <input type="text" value={this.state.value} onChange={this.handleChange} />
+        </label>
 								</div>
 								<Table sortable celled>
 									<Table.Header>

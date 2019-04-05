@@ -7,6 +7,7 @@ import TiposDeTurno from '../components/tipoDeTurno';
 import Steps from '../components/Steps';
 import TurnosVendidos from '../components/TurnosVendidos';
 import TurnosNoVendidos from '../components/TurnosNoVendidos';
+import UnpaidInvoices from '../components/UnpaidInvoices';
 import { navigate } from 'gatsby';
 import Acciones from '../components/Acciones';
 import { Container } from 'semantic-ui-react';
@@ -86,6 +87,14 @@ export default class App extends Component {
 		return <TurnosNoVendidos valores={this.state.turnosNoVendidos} guardar={this.guardar} {...props} />;
 	};
 
+	tiposMandados = () => {
+		let props = {
+			seleccionadosVendidosID: this.state.seleccionadosVendidosID,
+			tipo: this.state.tipoSeleccionado
+		};
+		return <UnpaidInvoices valores={this.state.turnosVendidos} guardar={this.guardar} {...props} />;
+	};
+
 	acciones = () => {
 		let props = {
 			seleccionadosNoVendidos: this.state.seleccionadosNoVendidos,
@@ -120,7 +129,7 @@ export default class App extends Component {
 					</Container>
 					<div className="pt-6">
 						{step === 1 ? (
-							<React.Fragment>{this.tiposDeTurno()}</React.Fragment>
+							<React.Fragment>{this.tiposMandados()}</React.Fragment>
 						) : step === 2 ? (
 							<React.Fragment>{this.turnosVendidos()}</React.Fragment>
 						) : step === 3 ? (

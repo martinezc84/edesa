@@ -5,10 +5,10 @@ import '../css/style.css';
 import Axios from 'axios';
 import { ENDPOINTS } from '../utils/utils';
 import { Header, Table, Loader, Pagination, Search, Menu } from 'semantic-ui-react';
-import FilaFactura from './FilaFactura';
+import FilaTipo from './FilaTipo';
 import sortBy from 'lodash/sortBy';
 
-export default class UnpaidInvoices extends Component {
+export default class TipoMandado extends Component {
 	state = {
 		turnosVendidos: [],
 		seleccionados: [],
@@ -35,11 +35,11 @@ export default class UnpaidInvoices extends Component {
 		let seleccionadosId = [];
 		//console.log(turno)
 		if (this.state.seleccionadosId.includes(turno.iid)) {
-			seleccionados = this.state.seleccionados.filter((s) => s.iid !== turno.iid);
-			seleccionadosId = this.state.seleccionadosId.filter((s) => s !== turno.iid);
+			seleccionados = this.state.seleccionados.filter((s) => s.id !== turno.id);
+			seleccionadosId = this.state.seleccionadosId.filter((s) => s !== turno.id);
 		} else {
 			seleccionados = [ ...this.state.seleccionados, turno ];
-			seleccionadosId = [ ...this.state.seleccionadosId, turno.iid ];
+			seleccionadosId = [ ...this.state.seleccionadosId, turno.id ];
 		}
 
 		//console.log(seleccionados)
@@ -65,10 +65,10 @@ export default class UnpaidInvoices extends Component {
 					loading: true
 				});
                 
-				Axios.post(`${ENDPOINTS.UnpaidInvoices}`,'{"valor":""}')
+				Axios.get(ENDPOINTS.tiposMandado+1)
 					.then(({ data }) => {
 						//console.log(data)
-						let turnosVendidos = sortBy(data.data, [ 'iid' ]);
+						let turnosVendidos = sortBy(data, [ 'id' ]);
 						guardar('turnosVendidos', turnosVendidos);
 						this.setState({
 							turnosVendidos: turnosVendidos,
@@ -139,10 +139,10 @@ export default class UnpaidInvoices extends Component {
 					) : (
 						<React.Fragment>
 							<div className="pt-8">
-								<Header>Facturas No Pagadas</Header>
+								<Header>Tipos de Mandado</Header>
 								<div className="inline-block pr-4">
 									<Menu compact>
-										<Menu.Item active>Cantidad de facturas: {turnosVendidos.length}</Menu.Item>
+										<Menu.Item active>: {turnosVendidos.length}</Menu.Item>
 									</Menu>
 								</div>
 
@@ -164,82 +164,49 @@ export default class UnpaidInvoices extends Component {
 								</div>
 								<Table sortable celled>
 									<Table.Header>
-										<Table.HeaderCell>Selector</Table.HeaderCell>
+																			
+										<Table.HeaderCell
 										
-										<Table.HeaderCell
-											sorted={column === 'invoice_date' ? direction : null}
-											onClick={this.handleSort('invoice_date')}
 										>
-											ORDEN
+											Nombre
 										</Table.HeaderCell>
 										<Table.HeaderCell
-											sorted={column === 'item_code' ? direction : null}
-											onClick={this.handleSort('item_code')}
+											
 										>
-											FACTURA
+											Tiempo
 										</Table.HeaderCell>
 										<Table.HeaderCell
-											sorted={column === 'item_name' ? direction : null}
-											onClick={this.handleSort('item_name')}
+											
 										>
-											REFERENCIA
+											Firma
 										</Table.HeaderCell>
 										<Table.HeaderCell
-											sorted={column === 'quantity' ? direction : null}
-											onClick={this.handleSort('quantity')}
+											
 										>
-											FECHA
+											Geolocalizacion
 										</Table.HeaderCell>
 										<Table.HeaderCell
-											sorted={column === 'unit_price' ? direction : null}
-											onClick={this.handleSort('unit_price')}
+											
 										>
-											PDV.
+											Correo
 										</Table.HeaderCell>
 										<Table.HeaderCell
-											sorted={column === 'price' ? direction : null}
-											onClick={this.handleSort('price')}
-										>
-											Cliente
-										</Table.HeaderCell>
-										<Table.HeaderCell
-											sorted={column === 'client_name' ? direction : null}
-											onClick={this.handleSort('client_name')}
-										>
-											TP	
 										
-										</Table.HeaderCell>
-										<Table.HeaderCell
-											sorted={column === 'client_name' ? direction : null}
-											onClick={this.handleSort('client_name')}
 										>
-											Items	
+											SMS
+										</Table.HeaderCell>
 										
-										</Table.HeaderCell>
-										<Table.HeaderCell
-											sorted={column === 'client_id' ? direction : null}
-											onClick={this.handleSort('client_id')}
-										>
-											Total
-										</Table.HeaderCell>
-										<Table.HeaderCell
-											sorted={column === 'client_name' ? direction : null}
-											onClick={this.handleSort('client_name')}
-										>
-											Debe	
-										
-										</Table.HeaderCell>
 										
 									</Table.Header>
 									<Table.Body>
 										{turnosVendidos
 											.slice(offset, first)
 											.map((t) => (
-												<FilaFactura
-													key={t.iid}
+												<FilaTipo
+													key={t.id}
 													turno={t}
 													seleccionar={this.seleccionar}
-													seleccionado={seleccionadosId.includes(t.iid)}
+													seleccionado={seleccionadosId.includes(t.id)}
 												/>
 											))}
 									</Table.Body>

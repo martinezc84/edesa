@@ -80,7 +80,7 @@ export default class UnpaidInvoices extends Component {
 		let { buscar } = this.state;
 
 		if (user !== null) {
-			let { guardar, valores, seleccionadosVendidosID, empleados } = this.props;
+			let { guardar, valores, seleccionadosVendidosID,  empleados } = this.props;
 			if (valores.length === 0) {
 				this.setState({
 					loading: true
@@ -177,11 +177,11 @@ export default class UnpaidInvoices extends Component {
 		let vendedoresseleccionadosId = [];
 		//console.log(turno)
 		if (this.state.vendedoresseleccionadosId.includes(item.id)) {
-			vendedoresseleccionados = this.state.seleccionados.filter((s) => s.iid !== item.id);
+			vendedoresseleccionados = this.state.vendedoresseleccionados.filter((s) => s.id !== item.id);
 			vendedoresseleccionadosId = this.state.vendedoresseleccionadosId.filter((s) => s !== item.id);
 		} else {
-			vendedoresseleccionados = [ ...this.state.seleccionados, item ];
-			vendedoresseleccionadosId = [ ...this.state.seleccionadosId,item.id ];
+			vendedoresseleccionados = [ ...this.state.vendedoresseleccionados, item ];
+			vendedoresseleccionadosId = [ ...this.state.vendedoresseleccionadosId,item.id ];
 		}
 
 		//console.log(seleccionados)

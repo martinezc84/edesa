@@ -235,7 +235,7 @@ export default class UnpaidInvoices extends Component {
 											.slice(offset, first)
 											.map((t) => (
 												<FilaFactura
-													key={t.sid}
+													key={t.iid}
 													turno={t}
 													seleccionar={this.seleccionar}
 													seleccionado={seleccionadosId.includes(t.iid)}

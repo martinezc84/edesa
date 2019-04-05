@@ -12,7 +12,7 @@ exports.handler = async (event, context) => {
 		let body = JSON.parse(event.body);
 	    const { valor}  = body;
 
-		let { data } = await axios.post(url, '{"draw":"1", "start":"0", "length":"400","search":{"value":"'+valor+'","regex":"false"}}' ,{ headers });
+		let { data } = await axios.post(url, '{"draw":"1", "start":"0", "length":"200","search":{"value":"'+valor+'","regex":"false"}}' ,{ headers });
 		return {
 			statusCode: 200,
 			body: JSON.stringify(data)

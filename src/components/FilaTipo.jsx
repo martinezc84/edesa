@@ -13,17 +13,41 @@ export default class FilaTipo extends Component {
 			return (
 				<Table.Row>	
 					<Table.Cell>{turno.name}</Table.Cell>
-					<Table.Cell>{turno.time}</Table.Cell>
+					<Table.Cell><Checkbox
+							onChange={() => {
+								seleccionar(turno.id);
+							}}
+							toggle
+							checked={seleccionado}
+						/></Table.Cell>
 					<Table.Cell><label><Checkbox
 							onChange={() => {
 								seleccionar(turno.id);
 							}}
 							toggle
 							checked={seleccionado}
-						/>{turno.firma}</label></Table.Cell>
-					<Table.Cell>{turno.geo}</Table.Cell>
-					<Table.Cell>{turno.email_notification}</Table.Cell>
-					<Table.Cell>{turno.sms_notification}</Table.Cell>
+						/></label></Table.Cell>
+					<Table.Cell><Checkbox
+							onChange={() => {
+								seleccionar(turno.id);
+							}}
+							toggle
+							checked={seleccionado}
+						/></Table.Cell>
+					<Table.Cell><Checkbox
+							onChange={() => {
+								seleccionar(turno.id);
+							}}
+							toggle
+							checked={seleccionado}
+						/></Table.Cell>
+					<Table.Cell><Checkbox
+							onChange={() => {
+								seleccionar(turno.id);
+							}}
+							toggle
+							checked={seleccionado}
+						/></Table.Cell>
 					
 				</Table.Row>
 			);
@@ -31,17 +55,41 @@ export default class FilaTipo extends Component {
 			return (
 				<Table.Row>
 					<Table.Cell>{turno.name}</Table.Cell>
-					<Table.Cell>{turno.time}</Table.Cell>
+					<Table.Cell><Checkbox
+							onChange={() => {
+								seleccionar(turno.id);
+							}}
+							toggle
+							checked={seleccionado}
+						/></Table.Cell>
 					<Table.Cell><label><Checkbox
 							onChange={() => {
 								seleccionar(turno.id);
 							}}
 							toggle
 							checked={seleccionado}
-						/>{turno.firma}</label></Table.Cell>
-					<Table.Cell>{turno.geo}</Table.Cell>
-					<Table.Cell>{turno.email_notification}</Table.Cell>
-					<Table.Cell>{turno.sms_notification}</Table.Cell>
+						/></label></Table.Cell>
+					<Table.Cell><Checkbox
+							onChange={() => {
+								seleccionar(turno.id);
+							}}
+							toggle
+							checked={seleccionado}
+						/></Table.Cell>
+					<Table.Cell><Checkbox
+							onChange={() => {
+								seleccionar(turno.id);
+							}}
+							toggle
+							checked={seleccionado}
+						/></Table.Cell>
+					<Table.Cell><Checkbox
+							onChange={() => {
+								seleccionar(turno.id);
+							}}
+							toggle
+							checked={seleccionado}
+						/></Table.Cell>
 				</Table.Row>
 			);
 	}

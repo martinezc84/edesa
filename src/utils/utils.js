@@ -19,8 +19,7 @@
 // 	turnosVendidos: `https://zauru.herokuapp.com/sales/reports/sold_active_items_with_clients.json?point_of_sale_id=2505`
 // };
 
-//const URL_PREFIX = process.env.GATSBY_NFUNC_URL_PREFIX;
-const URL_PREFIX = 'http://localhost:9000'
+const URL_PREFIX = process.env.GATSBY_NFUNC_URL_PREFIX;
 const URL_PREFIX_API = process.env.GATSBY_URL_API;
 const ZAURU_PREFIX = process.env.GATSBY_ZAURU_PREFIX;
 
@@ -42,7 +41,7 @@ const NF_ENDPOINTS = {
 	CUATRO: URL_PREFIX + process.env.GATSBY_URL_CUATRO,
 	CINCO: URL_PREFIX + process.env.GATSBY_URL_CINCO,
 	tiposMandado: URL_PREFIX + process.env.GATSBY_URL_MANDADOS,
-	UnpaidInvoices: URL_PREFIX + '/.netlify/functions/UnpaidInvoices',
+	UnpaidInvoices: URL_PREFIX + process.env.GATSBY_UNPAID_INVOICES,
 	
 };
 

@@ -152,9 +152,10 @@ export default class UnpaidInvoices extends Component {
 		});
 	};
 
-	handleChange = (valor) => () => {
-	console.log(valor)
-	};
+	handleChange(event) {
+		this.setState({value: event.target.value});
+		console.log(event.target.value)
+	  }
 
 	render() {
 		let {
@@ -204,9 +205,7 @@ export default class UnpaidInvoices extends Component {
 
 <label>
           Name:
-          <input type="text" value={this.state.value} onChange={() => {
-								this.handleChange(this.state.value);
-							}} />
+          <input type="text" value={this.state.value} onChange={this.handleChange} />
         </label>
 								</div>
 								<Table sortable celled>

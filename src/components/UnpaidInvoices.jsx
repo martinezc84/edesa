@@ -220,6 +220,11 @@ export default class UnpaidInvoices extends Component {
 		});
 	};
 
+	handleDate=(event)=> {
+
+		console.log(event.target.value)
+	}
+
 	handleChange=(event)=> {
 		
 		let {  seleccionadosVendidosID } = this.state;
@@ -287,11 +292,38 @@ export default class UnpaidInvoices extends Component {
 		
 	  }
 
+	  generar_mandados = async ({  vendedoresseleccionados, vendedoresseleccionadosid, seleccionadosId,seleccionados,  }) => {
+		await this.setStateAsync({ operando: true });
+		// Ciclo de llamadas
+		for (let seleccionado of seleccionados) {
+			try {
+				//console.log(seleccionado.iid)
+				let mensajero = this.state.vendedoresseleccionados.filter((s) => s.iid == seleccionado.iid);
+				console.log(mensajero)
+
+
+
+
+			} catch (error) {
+				console.error({ error });
+				
+			} finally {
+				this.setState({
+					operando: false,
+					operado: true
+				});
+			}
+		}
+	  };
+
 	render() {
 		let {
 			turnosVendidos,
 			loading,
 			seleccionadosId,
+			seleccionados,
+			vendedoresseleccionadosId,
+			vendedoresseleccionados,
 			paginaSeleccionada,
 			first,
 			cantidadPaginas,
@@ -385,10 +417,7 @@ export default class UnpaidInvoices extends Component {
 											TP	
 										
 										</Table.HeaderCell>
-										<Table.HeaderCell
-											sorted={column === 'itms' ? direction : null}
-											onClick={this.handleSort('itms')}
-										>
+										<Table.HeaderCell>
 											Items	
 										
 										</Table.HeaderCell>
@@ -416,6 +445,7 @@ export default class UnpaidInvoices extends Component {
 													seleccionado={seleccionadosId.includes(t.iid)}
 													empleados={this.state.empleados} 
 													seleccionaVendedor={this.seleccionaVendedor}
+													handleDate={this.handleDate}
 												/>
 											))}
 									</Table.Body>
@@ -426,8 +456,15 @@ export default class UnpaidInvoices extends Component {
 								<Button
 									size="massive"
 									primary
-									
-								
+									onClick={() => {
+										this.generar_mandados({
+											// @ts-ignore
+											vendedoresseleccionadosId,
+											vendedoresseleccionados,
+											seleccionadosId,
+											seleccionados
+										});
+									}}								
 									icon
 									labelPosition="left"
 								>

@@ -23,7 +23,8 @@ export default class UnpaidInvoices extends Component {
 		buscar:"",
 		column: null,
 		direction: null,
-		empleados:[]
+		empleados:[],
+		startDate: new Date()
 	};
 
 	setStateAsync(state) {
@@ -36,7 +37,7 @@ export default class UnpaidInvoices extends Component {
 	seleccionar = (turno) => {
 		let seleccionados = [];
 		let seleccionadosId = [];
-		console.log(turno)
+		//console.log(turno)
 		if (this.state.seleccionadosId.includes(turno.iid)) {
 			seleccionados = this.state.seleccionados.filter((s) => s.iid !== turno.iid);
 			seleccionadosId = this.state.seleccionadosId.filter((s) => s !== turno.iid);
@@ -45,7 +46,7 @@ export default class UnpaidInvoices extends Component {
 			seleccionadosId = [ ...this.state.seleccionadosId, turno.iid ];
 		}
 
-		console.log(seleccionados)
+		//console.log(seleccionados)
 		this.setState(
 			{
 				seleccionados,
@@ -220,10 +221,7 @@ export default class UnpaidInvoices extends Component {
 		});
 	};
 
-	handleDate=(event)=> {
 
-		console.log(event.target.value)
-	}
 
 	handleChange=(event)=> {
 		
@@ -341,6 +339,7 @@ export default class UnpaidInvoices extends Component {
 						<Header as="h2">No hay turnos vendidos para ese tipo</Header>
 					) : (
 						<React.Fragment>
+							
 							<div className="pt-8">
 								<Header>Facturas No Pagadas</Header>
 								<div className="inline-block pr-4">
@@ -369,6 +368,7 @@ export default class UnpaidInvoices extends Component {
           <input type="text" value={this.state.buscar} onChange={this.handleChange} />
         </label>
 								</div>
+								
 								<Table sortable celled>
 									<Table.Header>
 									<Table.Row>
@@ -445,7 +445,7 @@ export default class UnpaidInvoices extends Component {
 													seleccionado={seleccionadosId.includes(t.iid)}
 													empleados={this.state.empleados} 
 													seleccionaVendedor={this.seleccionaVendedor}
-													handleDate={this.handleDate}
+													
 												/>
 											))}
 									</Table.Body>

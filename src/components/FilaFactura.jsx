@@ -1,15 +1,13 @@
 //@ts-check
 import React, { Component } from 'react';
 import { Table, Checkbox, Label, Dropdown } from 'semantic-ui-react';
-import DatePicker from 'react-datepicker';
-import moment from 'moment';
+import Inputdate from './Inputdate';
 
 export default class FilaFactura extends Component {
-	state = {
-		startDate: new Date()
-		
-	};
 
+	state ={
+		startDate: new Date()
+	}
 	// Evita re renders innecesarios al cambiar el state
 	shouldComponentUpdate(np) {
 		
@@ -20,6 +18,10 @@ export default class FilaFactura extends Component {
 		}
 		
 	}
+
+	
+	
+
 	render() {
 		let { seleccionar, seleccionado, empleadosel, seleccionaVendedor, turno, view, empleados, handleDate } = this.props;
 
@@ -79,10 +81,11 @@ export default class FilaFactura extends Component {
 					<Table.Cell>{turno.ag}</Table.Cell>
 					<Table.Cell>{turno.cli}</Table.Cell>
 					<Table.Cell>{turno.pt}</Table.Cell>
-					<Table.Cell><div ><DatePicker
-						selected={this.state.startDate}
-						onChange={this.state.handleDate}
-					/></div></Table.Cell>
+					<Table.Cell><div>
+        <Inputdate
+          disable={seleccionado}
+        />
+      </div></Table.Cell>
 					<Table.Cell>{turno.tot}</Table.Cell>
 					<Table.Cell>{turno.due}</Table.Cell>
 					<Table.Cell><Dropdown

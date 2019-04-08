@@ -4,7 +4,7 @@ import netlifyIdentity from 'netlify-identity-widget';
 import '../css/style.css';
 import Axios from 'axios';
 import { ENDPOINTS } from '../utils/utils';
-import { Header, Table, Loader, Pagination, Search, Menu } from 'semantic-ui-react';
+import { Header, Table, Loader, Pagination, Button, Menu, Icon } from 'semantic-ui-react';
 import FilaFactura from './FilaFactura';
 import sortBy from 'lodash/sortBy';
 
@@ -36,7 +36,7 @@ export default class UnpaidInvoices extends Component {
 	seleccionar = (turno) => {
 		let seleccionados = [];
 		let seleccionadosId = [];
-		//console.log(turno)
+		console.log(turno)
 		if (this.state.seleccionadosId.includes(turno.iid)) {
 			seleccionados = this.state.seleccionados.filter((s) => s.iid !== turno.iid);
 			seleccionadosId = this.state.seleccionadosId.filter((s) => s !== turno.iid);
@@ -45,7 +45,7 @@ export default class UnpaidInvoices extends Component {
 			seleccionadosId = [ ...this.state.seleccionadosId, turno.iid ];
 		}
 
-		//console.log(seleccionados)
+		console.log(seleccionados)
 		this.setState(
 			{
 				seleccionados,
@@ -172,19 +172,23 @@ export default class UnpaidInvoices extends Component {
 	};
 
 	seleccionaVendedor = (e, item) => {
-		console.log(item)
+		console.log(item.iid)
 		let vendedoresseleccionados = [];
 		let vendedoresseleccionadosId = [];
 		//console.log(turno)
-		if (this.state.vendedoresseleccionadosId.includes(item.id)) {
-			vendedoresseleccionados = this.state.vendedoresseleccionados.filter((s) => s.id !== item.id);
-			vendedoresseleccionadosId = this.state.vendedoresseleccionadosId.filter((s) => s !== item.id);
+		if (this.state.vendedoresseleccionadosId.includes(item.iid)) {
+			//console.log("existe")
+			vendedoresseleccionados = this.state.vendedoresseleccionados.filter((s) => s.iid != item.iid);
+			vendedoresseleccionadosId = this.state.vendedoresseleccionadosId.filter((s) => s != item.iid);
+			vendedoresseleccionados = [ ...vendedoresseleccionados, item ];
+			vendedoresseleccionadosId = [ ...vendedoresseleccionadosId,item.iid ];
 		} else {
+			//console.log("nuevo")
 			vendedoresseleccionados = [ ...this.state.vendedoresseleccionados, item ];
-			vendedoresseleccionadosId = [ ...this.state.vendedoresseleccionadosId,item.id ];
+			vendedoresseleccionadosId = [ ...this.state.vendedoresseleccionadosId,item.iid ];
 		}
 
-		//console.log(seleccionados)
+		console.log(vendedoresseleccionados)
 		this.setState(
 			{
 				vendedoresseleccionados,
@@ -319,7 +323,6 @@ export default class UnpaidInvoices extends Component {
 										boundaryRange={1}
 										//@ts-ignore
 										onPageChange={this.cambioDePagina}
-										size="big"
 										siblingRange={4}
 										totalPages={cantidadPaginas}
 										ellipsisItem={true ? undefined : null}
@@ -336,70 +339,71 @@ export default class UnpaidInvoices extends Component {
 								</div>
 								<Table sortable celled>
 									<Table.Header>
-										<Table.Cell>Selector</Table.Cell>
+									<Table.Row>
+										<Table.HeaderCell>Selector</Table.HeaderCell>
 										
-										<Table.Cell
+										<Table.HeaderCell
 											sorted={column === 'o' ? direction : null}
 											onClick={this.handleSort('o')}
 										>
 											ORDEN
-										</Table.Cell>
-										<Table.Cell
+										</Table.HeaderCell>
+										<Table.HeaderCell
 											sorted={column === 'i' ? direction : null}
 											onClick={this.handleSort('i')}
 										>
 											FACTURA
-										</Table.Cell>
-										<Table.Cell
+										</Table.HeaderCell>
+										<Table.HeaderCell
 											sorted={column === 'ref' ? direction : null}
 											onClick={this.handleSort('ref')}
 										>
 											REFERENCIA
-										</Table.Cell>
-										<Table.Cell
+										</Table.HeaderCell>
+										<Table.HeaderCell
 											sorted={column === 'dte' ? direction : null}
 											onClick={this.handleSort('dte')}
 										>
 											FECHA
-										</Table.Cell>
-										<Table.Cell
+										</Table.HeaderCell>
+										<Table.HeaderCell
 											sorted={column === 'ag' ? direction : null}
 											onClick={this.handleSort('ag')}
 										>
 											PDV.
-										</Table.Cell>
-										<Table.Cell
+										</Table.HeaderCell>
+										<Table.HeaderCell
 											sorted={column === 'cli' ? direction : null}
 											onClick={this.handleSort('cli')}
 										>
 											Cliente
-										</Table.Cell>
-										<Table.Cell
+										</Table.HeaderCell>
+										<Table.HeaderCell
 											sorted={column === 'pt' ? direction : null}
 											onClick={this.handleSort('pt')}
 										>
 											TP	
 										
-										</Table.Cell>
-										<Table.Cell
+										</Table.HeaderCell>
+										<Table.HeaderCell
 											sorted={column === 'itms' ? direction : null}
 											onClick={this.handleSort('itms')}
 										>
 											Items	
 										
-										</Table.Cell>
-										<Table.Cell>
+										</Table.HeaderCell>
+										<Table.HeaderCell>
 											Total
-										</Table.Cell>
-										<Table.Cell	>
+										</Table.HeaderCell>
+										<Table.HeaderCell	>
 											Debe	
 										
-										</Table.Cell>
-										<Table.Cell	>
+										</Table.HeaderCell>
+										<Table.HeaderCell	>
 											Encargado	
 										
-										</Table.Cell>
-										
+										</Table.HeaderCell>
+										</Table.Row>
 									</Table.Header>
 									<Table.Body>
 										{turnosVendidos
@@ -417,7 +421,25 @@ export default class UnpaidInvoices extends Component {
 									</Table.Body>
 								</Table>
 							</div>
+
+							
+								<Button
+									size="massive"
+									primary
+									
+								
+									icon
+									labelPosition="left"
+								>
+								<Icon name="cogs" />
+									Generar Mandado
+								</Button>
+
+							
+
+							
 						</React.Fragment>
+						
 					)}
 				</React.Fragment>
 			);

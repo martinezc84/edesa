@@ -5,7 +5,12 @@ import { Table, Checkbox, Label, Dropdown } from 'semantic-ui-react';
 export default class FilaFactura extends Component {
 	// Evita re renders innecesarios al cambiar el state
 	shouldComponentUpdate(np) {
-		return np.seleccionado !== this.props.seleccionado || np.turno.statusOperacion;
+		
+		if(np.seleccionado !== this.props.seleccionado || np.turno.statusOperacion){
+			return true;
+		}else{
+			return false;
+		}
 		
 	}
 	render() {
@@ -75,6 +80,7 @@ export default class FilaFactura extends Component {
 							onChange={seleccionaVendedor}
 							placeholder="Selecciona Mensajero"
 							fluid
+							iid={turno.iid}
 							search
 							selection
 							options={empleados}

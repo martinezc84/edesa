@@ -84,6 +84,8 @@ export default class TipoMandado extends Component {
 		);
 	};
 
+	
+
 	cargardatos = async () => {
 		let today
 		try {
@@ -187,6 +189,30 @@ export default class TipoMandado extends Component {
 		this.setState({ paginaSeleccionada: activePage, offset, first });
 	};
 
+	guardarorden = async (listado) =>{
+		this.setState({ colors:listado });
+		console.log(this.state.colors)
+
+		for (var i=0; i<listado.length; i++) {
+
+		let fecha = this.state.turnosVendidos.filter((s) => s.id == listado[i]);
+		console.log(fecha[0].fecha)
+			let orden = i+1
+		await Axios.post(ENDPOINTS.editarmandados,'{"listorder":'+orden+',"id":'+listado[i]+', "fecha":"'+fecha[0].fecha+'"}')
+		.then(({ data }) => {
+			//console.log(data)
+			
+			
+		})
+		.catch((error) => {
+			console.error(error);
+		});
+
+		}
+
+
+	}
+
 	handleSort = (clickedColumn) => () => {
 		const { column, turnosVendidos, direction } = this.state;
 
@@ -236,7 +262,7 @@ export default class TipoMandado extends Component {
 									</Menu>
 								</div>
 					{turnosVendidos.length === 0 ? (
-						<Header as="h2">No hay turnos vendidos para ese tipo</Header>
+						<Header as="h2">No hay Mandados para este día</Header>
 					) : (
 						<React.Fragment>
 							<div className="pt-8">
@@ -249,8 +275,7 @@ export default class TipoMandado extends Component {
 												<SortableLst
 												items={turnosVendidos}
 												onChange={(colors) => {
-													this.setState({ colors });
-													console.log(this.state.colors)
+													this.guardarorden(colors)
 												
 												}}
 											>

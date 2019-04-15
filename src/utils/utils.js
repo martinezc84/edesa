@@ -44,6 +44,7 @@ const NF_ENDPOINTS = {
 	tiposMandado: URL_PREFIX + process.env.GATSBY_URL_MANDADOS,
 	UnpaidInvoices: URL_PREFIX + process.env.GATSBY_UNPAID_INVOICES,
 	guardarmandados:URL_PREFIX + process.env.GATSBY_URL_GUARDAR_MANDADO,
+	editarmandados:URL_PREFIX + process.env.GATSBY_URL_EDITAR_MANDADO,
 	ListaMandados:URL_PREFIX + process.env.GATSBY_URL_LISTADO_MANDADOS,
 	Funciones:URL_PREFIX + process.env.GATSBY_URL_FUNCIONES
 	

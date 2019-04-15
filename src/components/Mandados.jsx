@@ -108,6 +108,7 @@ export default class TipoMandado extends Component {
 			
 			let turnosVendidos = sortBy(data, [ 'listorder' ]);
 			//console.log(turnosVendidos)
+			turnosVendidos.sort((a,b) => (a.listorder- b.listorder))
 			this.setState({
 				turnosVendidos: turnosVendidos,
 				loading: false,

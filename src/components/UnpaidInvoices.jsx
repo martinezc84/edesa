@@ -6,8 +6,9 @@ import Axios from 'axios';
 import { ENDPOINTS } from '../utils/utils';
 import { Header, Table, Loader, Pagination, Button, Menu, Icon } from 'semantic-ui-react';
 import FilaFactura from './FilaFactura';
-import DialogMsg from './DialogMsg';
 import sortBy from 'lodash/sortBy';
+import { MostrarMensaje } from './Mensajes';
+
 
 
 export default class UnpaidInvoices extends Component {
@@ -29,6 +30,7 @@ export default class UnpaidInvoices extends Component {
 		startDate: new Date(),
 		fechas:[],
 		date: new Date(),
+		visible:false
 	
 	};
 
@@ -375,13 +377,23 @@ export default class UnpaidInvoices extends Component {
 				console.error({ error });
 				
 			} finally {
-				this.props.cambiarStep(3);
 				this.setState({
-					loading: false
+					loading: false,
+					visible:true
 				});
+			
+			
 			}
 		}
-	  };
+		
+		};
+		
+		onConfirm = ()=>{
+			this.setState({				
+				visible:false
+			});
+			this.props.cambiarStep(3);
+		}
 
 	render() {
 		let {
@@ -548,7 +560,9 @@ export default class UnpaidInvoices extends Component {
 						</React.Fragment>
 						
 					)}
+					<MostrarMensaje titulo={'Los mandados fueron creados con exito'} mensajes={'Prueba'}  visible={this.state.visible} onConfirm={this.onConfirm} />
 				</React.Fragment>
+				
 			);
 	}
 }

@@ -97,7 +97,8 @@ export default class App extends Component {
 		let props = {
 			seleccionadosVendidosID: this.state.seleccionadosVendidosID,
 			tipo: this.state.tipoSeleccionado,
-			cambiarStep:this.cambiaStep
+			cambiarStep:this.cambiaStep,
+			empleados:this.state.empleados
 		};
 		return <UnpaidInvoices valores={this.state.turnosVendidos} guardar={this.guardar} {...props} />;
 	};

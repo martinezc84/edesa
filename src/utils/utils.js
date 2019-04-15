@@ -43,6 +43,9 @@ const NF_ENDPOINTS = {
 	CINCO: URL_PREFIX + process.env.GATSBY_URL_CINCO,
 	tiposMandado: URL_PREFIX + process.env.GATSBY_URL_MANDADOS,
 	UnpaidInvoices: URL_PREFIX + process.env.GATSBY_UNPAID_INVOICES,
+	guardarmandados:URL_PREFIX + process.env.GATSBY_URL_GUARDAR_MANDADO,
+	ListaMandados:URL_PREFIX + process.env.GATSBY_URL_LISTADO_MANDADOS,
+	Funciones:URL_PREFIX + process.env.GATSBY_URL_FUNCIONES
 	
 };
 
@@ -66,6 +69,7 @@ const ZAURU_URL = {
 
 const API_URL = {
 	tiposMandado: URL_PREFIX_API+process.env.GATSBY_ENDPOINT_MANDADO,
+	listadoMandados: URL_PREFIX_API
 
 }
 

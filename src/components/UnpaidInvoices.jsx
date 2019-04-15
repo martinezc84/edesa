@@ -7,6 +7,8 @@ import { ENDPOINTS } from '../utils/utils';
 import { Header, Table, Loader, Pagination, Button, Menu, Icon } from 'semantic-ui-react';
 import FilaFactura from './FilaFactura';
 import sortBy from 'lodash/sortBy';
+import { headers, API_URL } from '../utils/utils';
+import { timingSafeEqual } from 'crypto';
 
 export default class UnpaidInvoices extends Component {
 	state = {
@@ -24,7 +26,9 @@ export default class UnpaidInvoices extends Component {
 		column: null,
 		direction: null,
 		empleados:[],
-		startDate: new Date()
+		startDate: new Date(),
+		fechas:[],
+		date: new Date()
 	};
 
 	setStateAsync(state) {
@@ -72,6 +76,48 @@ export default class UnpaidInvoices extends Component {
 			text: t.name,
 			todo: t
 		}));
+	};
+
+	fechain(id){
+		for (var i=0; i<this.state.fechas.length; i++) {
+			//console.log(this.state.fechas[i])
+            if (this.state.fechas[i].id==id){
+				return true;
+			}
+            //a b c
+		}
+		
+		return false;
+	} 
+
+	get_empleado(id){
+		for (var i=0; i<this.state.empleados.length; i++) {
+			//console.log(this.state.fechas[i])
+            if (this.state.empleados[i].key==id){
+				return this.state.empleados[i];
+			}
+            //a b c
+		}
+		
+		return null;
+	} 
+
+	guardar = (dte, idf) => {
+		let fechas=[]
+		const data = {dte:dte,id:idf}
+
+		if (this.fechain(idf)) {
+			fechas = this.state.fechas.filter((s) => s.id != idf);
+			fechas = [ ...fechas, data ];
+		}else{
+		fechas = [ ...this.state.fechas, data ]
+			}
+
+		this.setState({
+			fechas})
+
+		 //console.log(fechas)
+
 	};
 
 	componentDidMount() {
@@ -173,7 +219,7 @@ export default class UnpaidInvoices extends Component {
 	};
 
 	seleccionaVendedor = (e, item) => {
-		console.log(item.iid)
+		//console.log(item.iid)
 		let vendedoresseleccionados = [];
 		let vendedoresseleccionadosId = [];
 		//console.log(turno)
@@ -189,7 +235,7 @@ export default class UnpaidInvoices extends Component {
 			vendedoresseleccionadosId = [ ...this.state.vendedoresseleccionadosId,item.iid ];
 		}
 
-		console.log(vendedoresseleccionados)
+		//console.log(vendedoresseleccionados)
 		this.setState(
 			{
 				vendedoresseleccionados,
@@ -296,12 +342,28 @@ export default class UnpaidInvoices extends Component {
 		for (let seleccionado of seleccionados) {
 			try {
 				//console.log(seleccionado.iid)
-				let mensajero = this.state.vendedoresseleccionados.filter((s) => s.iid == seleccionado.iid);
-				console.log(mensajero)
+				let mensajero = []
+				mensajero = this.state.vendedoresseleccionados.filter((s) => s.iid == seleccionado.iid);
+				let fecha = this.state.fechas.filter((s) => s.id == seleccionado.iid);
 
+				if(fecha.length==0){
+					const data = {dte:this.state.date,id:seleccionado.iid}
+					fecha[0] = data
+				}
+				
+				//console.log(mensajero)
+				// @ts-ignore
+				let nombre  = this.get_empleado(mensajero[0].value)
+				//console.log(nombre)
+				//console.log(fecha)
+				let fechastr = fecha[0].dte.toLocaleDateString()
+				fecha = fechastr.split('/');
+				fechastr = fecha[2]+'/'+fecha[1]+'/'+fecha[0]
+				const posttext = '{"fecha": "'+fechastr+'",  "cliente":"'+seleccionado.cli+'","descripcion":"Cobro","tipo":"1","user":"charly","store_id":1,"encargado":"'+nombre.text+'"}'
+				//console.log(posttext)
 
-
-
+				const data = await Axios.post(ENDPOINTS.guardarmandados, posttext);
+				console.log(data)
 			} catch (error) {
 				console.error({ error });
 				
@@ -445,6 +507,7 @@ export default class UnpaidInvoices extends Component {
 													seleccionado={seleccionadosId.includes(t.iid)}
 													empleados={this.state.empleados} 
 													seleccionaVendedor={this.seleccionaVendedor}
+													guardar={this.guardar}
 													
 												/>
 											))}

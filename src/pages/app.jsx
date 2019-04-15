@@ -5,12 +5,13 @@ import { Layout } from '../components/Layout';
 import RutaPrivada from '../components/RutaPrivada';
 import TiposDeTurno from '../components/tipoDeTurno';
 import Steps from '../components/Steps';
-import TurnosVendidos from '../components/TurnosVendidos';
+import Mandados from '../components/Mandados';
 import TurnosNoVendidos from '../components/TurnosNoVendidos';
 import UnpaidInvoices from '../components/UnpaidInvoices';
 import { navigate } from 'gatsby';
 import Acciones from '../components/Acciones';
 import { Container } from 'semantic-ui-react';
+
 
 export default class App extends Component {
 	state = {
@@ -23,6 +24,7 @@ export default class App extends Component {
 
 		seleccionadosVendidos: [],
 		seleccionadosVendidosID: [],
+		items: [],
 
 		step: 1
 	};
@@ -76,7 +78,7 @@ export default class App extends Component {
 			seleccionadosVendidosID: this.state.seleccionadosVendidosID,
 			tipo: this.state.tipoSeleccionado
 		};
-		return <TurnosVendidos valores={this.state.turnosVendidos} guardar={this.guardar} {...props} />;
+		return <Mandados valores={this.state.items} guardar={this.guardar} {...props} />;
 	};
 
 	turnosNoVendidos = () => {
@@ -115,6 +117,10 @@ export default class App extends Component {
 		});
 	};
 
+	onChangelist = (order) => {
+		console.log(order);
+	}
+
 	render() {
 		let { step, tipoSeleccionado } = this.state;
 		let stepsProps = {
@@ -122,6 +128,7 @@ export default class App extends Component {
 			cambiarStep: this.cambiaStep,
 			tipoSeleccionado: tipoSeleccionado
 		};
+		 
 		return (
 			<Layout>
 				<RutaPrivada>
@@ -132,14 +139,15 @@ export default class App extends Component {
 						{step === 1 ? (
 							<React.Fragment>{this.tiposMandados()}</React.Fragment>
 						) : step === 2 ? (
-							<React.Fragment>{this.turnosVendidos()}</React.Fragment>
-						) : step === 3 ? (
 							<React.Fragment>{this.turnosNoVendidos()}</React.Fragment>
+						) : step === 3 ? (
+							<React.Fragment>{this.turnosVendidos()}</React.Fragment>
 						) : step === 4 ? (
 							<React.Fragment>{this.acciones()}</React.Fragment>
 						) : null}
 					</div>
 				</RutaPrivada>
+				
 			</Layout>
 		);
 	}

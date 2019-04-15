@@ -7,17 +7,14 @@ export default class Inputdate extends Component {
     
   }
 
-  shouldComponentUpdate(np) {
-		
-		if(np.disable !== this.props.disable ){
-			return true;
-		}else{
-			return false;
-		}
-		
-	}
+
   
-  onChange = date => this.setState({ date })
+  onChange = date => this.managedate(date)
+
+  managedate(date){
+    this.setState({ date });
+    this.props.guardar(date,this.props.guardar_id)
+  }
  
   render() {
     let disable = this.props;

@@ -83,7 +83,9 @@ export default class FilaFactura extends Component {
 					<Table.Cell>{turno.pt}</Table.Cell>
 					<Table.Cell><div>
         <Inputdate
-          disable={seleccionado}
+		  disable={seleccionado}
+		  guardar={this.props.guardar}
+		  guardar_id={turno.iid}
         />
       </div></Table.Cell>
 					<Table.Cell>{turno.tot}</Table.Cell>

@@ -19,12 +19,12 @@ export default class Steps extends Component {
 				>
 					<Icon name="map signs" />
 					<Step.Content>
-						<Step.Title>Tipo de Mandado</Step.Title>
-						<Step.Description>Elige el tipo de mandado</Step.Description>
+						<Step.Title>Facturas no pagadas</Step.Title>
+						<Step.Description>Elige el FACTURA</Step.Description>
 					</Step.Content>
 				</Step>
 				<Step
-					disabled={!tipoSeleccionado}
+					
 					active={step === 2}
 					onClick={() => {
 						this.props.cambiarStep(2);
@@ -32,12 +32,12 @@ export default class Steps extends Component {
 				>
 					<Icon name="copy" />
 					<Step.Content>
-						<Step.Title>Turnos vendidos</Step.Title>
-						<Step.Description>Selecciona los turnos vendidos</Step.Description>
+						<Step.Title>Entregas pendientes</Step.Title>
+						<Step.Description>Selecciona la entrega pendiente</Step.Description>
 					</Step.Content>
 				</Step>
 				<Step
-					disabled={!tipoSeleccionado}
+					
 					active={step === 3}
 					onClick={() => {
 						this.props.cambiarStep(3);
@@ -45,12 +45,12 @@ export default class Steps extends Component {
 				>
 					<Icon name="zip" />
 					<Step.Content>
-						<Step.Title>Turnos Disponibles</Step.Title>
-						<Step.Description>Selecciona los turnos disponibles</Step.Description>
+						<Step.Title>Mandados</Step.Title>
+						<Step.Description></Step.Description>
 					</Step.Content>
 				</Step>
 				<Step
-					disabled={!tipoSeleccionado}
+					
 					active={step === 4}
 					onClick={() => {
 						this.props.cambiarStep(4);

@@ -11,6 +11,7 @@ export default function HTML(props) {
 				<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
 				<script src="http://cdnjs.cloudflare.com/ajax/libs/Sortable/1.4.2/Sortable.min.js"></script>
   				<script src="dist/react-sortable.min.js"></script>
+				  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
 				{props.headComponents}
 			</head>
 			<body {...props.bodyAttributes}>

@@ -105,9 +105,9 @@ export default class TipoMandado extends Component {
 	
 		await Axios.get(ENDPOINTS.ListaMandados+'?int=0&dow='+today)
 		.then(({ data }) => {
-			//console.log(data)
-			let turnosVendidos = sortBy(data, [ 'listorder' ]);
 			
+			let turnosVendidos = sortBy(data, [ 'listorder' ]);
+			//console.log(turnosVendidos)
 			this.setState({
 				turnosVendidos: turnosVendidos,
 				loading: false,
@@ -189,28 +189,48 @@ export default class TipoMandado extends Component {
 		this.setState({ paginaSeleccionada: activePage, offset, first });
 	};
 
-	guardarorden = async (listado) =>{
-		this.setState({ colors:listado });
-		console.log(this.state.colors)
-
-		for (var i=0; i<listado.length; i++) {
-
-		let fecha = this.state.turnosVendidos.filter((s) => s.id == listado[i]);
-		console.log(fecha[0].fecha)
-			let orden = i+1
-		await Axios.post(ENDPOINTS.editarmandados,'{"listorder":'+orden+',"id":'+listado[i]+', "fecha":"'+fecha[0].fecha+'"}')
-		.then(({ data }) => {
-			//console.log(data)
-			
-			
-		})
-		.catch((error) => {
-			console.error(error);
-		});
-
+	guardarorden = 	 (mandados) =>{
+		this.setState({ mandados});
+		let turnosVendidos =[];
+		//console.log(this.state.colors)
+		for (var i=0; i<mandados.length; i++) {
+			let mandado = this.state.turnosVendidos.filter((s) => s.id == mandados[i]);
+			turnosVendidos = [ ...turnosVendidos, mandado[0] ];
 		}
+		//console.log(turnosVendidos)
+		this.setState(
+			{
+				turnosVendidos:turnosVendidos
+			});
+		
+		//this.guardarDB(mandados);
 
+	}
 
+	guardarDB =(mandados) =>{
+		//console.log(mandados)
+		this.setState({
+			loading: true
+		});
+		for (var i=0; i<mandados.length; i++) {
+
+			let fecha = this.state.turnosVendidos.filter((s) => s.id == mandados[i]);
+			//console.log(fecha[0].fecha)
+				let orden = i+1
+			Axios.post(ENDPOINTS.editarmandados,'{"listorder":'+orden+',"id":'+mandados[i]+', "fecha":"'+fecha[0].fecha+'"}')
+			.then(({ data }) => {
+				//console.log(data)
+				
+				
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+	
+			}
+			this.setState({
+				loading: false
+			});
 	}
 
 	handleSort = (clickedColumn) => () => {
@@ -266,17 +286,12 @@ export default class TipoMandado extends Component {
 					) : (
 						<React.Fragment>
 							<div className="pt-8">
-								
-
-							
-								
-									
 										{									
 												<SortableLst
-												items={turnosVendidos}
-												onChange={(colors) => {
-													this.guardarorden(colors)
-												
+												items={this.state.turnosVendidos}
+												onChange={(turnosVendidos) => {
+													this.guardarorden(turnosVendidos)
+													this.guardarDB(turnosVendidos)
 												}}
 											>
 											</SortableLst>

@@ -18,7 +18,7 @@ render(){
         const order = sortable.toArray();
         onChange(order.reverse());
     };
-    const listItems = items.map(val => (<li key={uniqueId()} className={mandadostyles.mandado} data-id={val.id}>Descripción: {val.descripcion} Cliente: {val.cliente} <Checkbox
+    const listItems = items.map(val => (<li key={uniqueId()}  data-id={val.id}>{val.listorder} ) Descripción: {val.descripcion} Cliente: {val.cliente} <Checkbox
     
 /></li>));
     return (

@@ -6,9 +6,9 @@ import Axios from 'axios';
 import { ENDPOINTS } from '../utils/utils';
 import { Header, Table, Loader, Pagination, Button, Menu, Icon } from 'semantic-ui-react';
 import FilaFactura from './FilaFactura';
+import DialogMsg from './DialogMsg';
 import sortBy from 'lodash/sortBy';
-import { headers, API_URL } from '../utils/utils';
-import { timingSafeEqual } from 'crypto';
+
 
 export default class UnpaidInvoices extends Component {
 	state = {
@@ -28,7 +28,8 @@ export default class UnpaidInvoices extends Component {
 		empleados:[],
 		startDate: new Date(),
 		fechas:[],
-		date: new Date()
+		date: new Date(),
+	
 	};
 
 	setStateAsync(state) {
@@ -36,6 +37,8 @@ export default class UnpaidInvoices extends Component {
 			this.setState(state, resolve);
 		});
 	}
+
+
 
 	// Método para seleccionar o des seleccionar checkbox de turnos
 	seleccionar = (turno) => {
@@ -338,6 +341,10 @@ export default class UnpaidInvoices extends Component {
 
 	  generar_mandados = async ({  vendedoresseleccionados, vendedoresseleccionadosid, seleccionadosId,seleccionados,  }) => {
 		await this.setStateAsync({ operando: true });
+		this.setState({
+			loading: true
+		});
+	
 		// Ciclo de llamadas
 		for (let seleccionado of seleccionados) {
 			try {
@@ -368,9 +375,9 @@ export default class UnpaidInvoices extends Component {
 				console.error({ error });
 				
 			} finally {
+				this.props.cambiarStep(3);
 				this.setState({
-					operando: false,
-					operado: true
+					loading: false
 				});
 			}
 		}

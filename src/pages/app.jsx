@@ -69,6 +69,7 @@ export default class App extends Component {
 				valores={this.state.tiposDeTurno}
 				guardar={this.guardar}
 				empleados={this.state.empleados ? this.state.empleados: null}
+				cambiarStep= {this.cambiaStep}
 			/>
 		);
 	};
@@ -76,7 +77,8 @@ export default class App extends Component {
 	turnosVendidos = () => {
 		let props = {
 			seleccionadosVendidosID: this.state.seleccionadosVendidosID,
-			tipo: this.state.tipoSeleccionado
+			tipo: this.state.tipoSeleccionado,
+			cambiarStep:this.cambiaStep
 		};
 		return <Mandados valores={this.state.items} guardar={this.guardar} {...props} />;
 	};
@@ -85,7 +87,8 @@ export default class App extends Component {
 		let props = {
 			seleccionadosNoVendidos: this.state.seleccionadosNoVendidos,
 			turnosSeleccionados: this.state.seleccionadosVendidosID.length,
-			tipo: this.state.tipoSeleccionado
+			tipo: this.state.tipoSeleccionado,
+			cambiarStep:this.cambiaStep
 		};
 		return <TurnosNoVendidos valores={this.state.turnosNoVendidos} guardar={this.guardar} {...props} />;
 	};
@@ -93,7 +96,8 @@ export default class App extends Component {
 	tiposMandados = () => {
 		let props = {
 			seleccionadosVendidosID: this.state.seleccionadosVendidosID,
-			tipo: this.state.tipoSeleccionado
+			tipo: this.state.tipoSeleccionado,
+			cambiarStep:this.cambiaStep
 		};
 		return <UnpaidInvoices valores={this.state.turnosVendidos} guardar={this.guardar} {...props} />;
 	};

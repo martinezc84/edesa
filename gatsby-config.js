@@ -2,12 +2,12 @@ let activeEnv = process.env.ACTIVE_ENV || process.env.NODE_ENV || 'development';
 
 module.exports = {
 	siteMetadata: {
-		title: `Mover turnos`,
-		description: `Mover turnos vendidos hacia turnos disponibles`,
+		title: `Control de mandados`,
+		description: `Generar mandados desde documentos en Zauru`,
 		author: `@luispagarcia`,
 		titulos:{
-			landing: "Aplicación para reasignar turnos vendidos",
-			app: "Aplicación para reasignar turnos turnos"
+			landing: "Generar mandados desde documentos en Zauru",
+			app: "Generar mandados desde documentos en Zauru"
 		},
 		env: activeEnv
 	},

@@ -11,9 +11,9 @@ import { MostrarMensaje } from './Mensajes';
 
 
 
-export default class UnpaidInvoices extends Component {
+export default class Transfers extends Component {
 	state = {
-		Invoices: [],
+		transfers: [],
 		seleccionados: [],
 		seleccionadosId: [],
 		vendedoresseleccionados:[],
@@ -62,8 +62,8 @@ export default class UnpaidInvoices extends Component {
 				seleccionadosId
 			},
 			() => {
-				this.props.guardar('seleccionadosVendidos', this.state.seleccionados);
-				this.props.guardar('seleccionadosVendidosID', this.state.seleccionadosId);
+				this.props.guardar('seleccionadosTransfers', this.state.seleccionados);
+				this.props.guardar('seleccionadosTransfersID', this.state.seleccionadosId);
 			}
 		);
 	};
@@ -132,7 +132,7 @@ export default class UnpaidInvoices extends Component {
 		let { buscar } = this.state;
 
 		if (user !== null) {
-			let { guardar, valores, seleccionadosVendidosID,  empleados } = this.props;
+			let { guardar, valores, seleccionadosTransfersID,  empleados } = this.props;
 			if (valores.length === 0) {
 				this.setState({
 					loading: true
@@ -142,31 +142,31 @@ export default class UnpaidInvoices extends Component {
 					.then(({ data }) => {
 						//console.log(data)
 						
-						let Invoices = data.data.filter((d) => d.pt !== 'contado');
-						//console.log(Invoices)
-						Invoices = sortBy(Invoices, [ 'iid' ]);
-						Invoices.map((invoice, i)=> (
+						let transfers = data.data.filter((d) => d.pt == 'CREDITO CONTRA ENTREGA');
+						//console.log(transfers)
+						transfers = sortBy(transfers, [ 'iid' ]);
+						transfers.map((invoice, i)=> (
 							//console.log(invoice)
 							invoice.o != '' ? invoice.o = this.quitarlink(invoice.o) :''
 							
 				
 						));
 
-						Invoices.map((invoice, i)=> (
+						transfers.map((invoice, i)=> (
 							//console.log(invoice)
 							invoice.i != '' ? invoice.i = this.quitarlink(invoice.i) :''
 							
 				
 						));
 
-						Invoices.map((invoice, i)=> (
+						transfers.map((invoice, i)=> (
 							//console.log(invoice)
 							invoice.cli != '' ? invoice.cli = this.quitarlink(invoice.cli) :''
 							
 				
 						));
 
-						Invoices.map((invoice, i)=> (
+						transfers.map((invoice, i)=> (
 							//console.log(invoice)
 							invoice.ref != '' ? invoice.ref = this.quitarlink(invoice.ref) :''
 							
@@ -174,11 +174,11 @@ export default class UnpaidInvoices extends Component {
 						));
 
 
-						guardar('Invoices', Invoices);
+						guardar('transfers', transfers);
 						this.setState({
-							Invoices: Invoices,
+							transfers: transfers,
 							loading: false,
-							seleccionadosId: seleccionadosVendidosID,
+							seleccionadosId: seleccionadosTransfersID,
 							cantidadPaginas: Math.floor(data.recordsTotal / this.state.first) + 1
 						});
 					})
@@ -208,8 +208,8 @@ export default class UnpaidInvoices extends Component {
 			} else {
 				this.setState({
 					empleados:empleados,
-					Invoices: valores,
-					seleccionadosId: seleccionadosVendidosID,
+					transfers: valores,
+					seleccionadosId: seleccionadosTransfersID,
 					cantidadPaginas: Math.floor(valores.length / this.state.first) + 1
 				});
 			}
@@ -254,12 +254,12 @@ export default class UnpaidInvoices extends Component {
 	};
 
 	handleSort = (clickedColumn) => () => {
-		const { column, Invoices, direction } = this.state;
+		const { column, transfers, direction } = this.state;
 
 		if (column !== clickedColumn) {
 			this.setState({
 				column: clickedColumn,
-				Invoices: sortBy(Invoices, [ clickedColumn ]),
+				transfers: sortBy(transfers, [ clickedColumn ]),
 				direction: 'ascending'
 			});
 
@@ -267,7 +267,7 @@ export default class UnpaidInvoices extends Component {
 		}
 
 		this.setState({
-			Invoices: Invoices.reverse(),
+			transfers: transfers.reverse(),
 			direction: direction === 'ascending' ? 'descending' : 'ascending'
 		});
 	};
@@ -276,7 +276,7 @@ export default class UnpaidInvoices extends Component {
 
 	handleChange=(event)=> {
 		
-		let {  seleccionadosVendidosID } = this.state;
+		let {  seleccionadosTransfersID } = this.state;
 
 		let { guardar, } = this.props;
 		if (event.target.value.length>4){
@@ -292,41 +292,41 @@ export default class UnpaidInvoices extends Component {
 				.then(({ data }) => {
 					//console.log(data)
 					
-					let Invoices = data.data.filter((d) => d.pt != 'contado');
-					console.log(Invoices)
-					Invoices = sortBy(Invoices, [ 'iid' ]);
-					Invoices.map((invoice, i)=> (
+					let transfers = data.data.filter((d) => d.pt == 'CREDITO CONTRA ENTREGA');
+					//console.log(transfers)
+					transfers = sortBy(transfers, [ 'iid' ]);
+					transfers.map((invoice, i)=> (
 						//console.log(invoice)
 						invoice.o != '' ? invoice.o = this.quitarlink(invoice.o) :''
 						
 			
 					));
 
-					Invoices.map((invoice, i)=> (
+					transfers.map((invoice, i)=> (
 						//console.log(invoice)
 						invoice.i != '' ? invoice.i = this.quitarlink(invoice.i) :''
 						
 			
 					));
 
-					Invoices.map((invoice, i)=> (
+					transfers.map((invoice, i)=> (
 						//console.log(invoice)
 						invoice.cli != '' ? invoice.cli = this.quitarlink(invoice.cli) :''
 						
 			
 					));
 
-					Invoices.map((invoice, i)=> (
+					transfers.map((invoice, i)=> (
 						//console.log(invoice)
 						invoice.ref != '' ? invoice.ref = this.quitarlink(invoice.ref) :''
 						
 			
 					));
-					console.log(Invoices)
 
-					guardar('Invoices', Invoices);
+
+					guardar('transfers', transfers);
 					this.setState({
-						Invoices: Invoices,
+						transfers: transfers,
 						loading: false,
 						cantidadPaginas: Math.floor(data.recordsTotal / this.state.first) + 1,
 						
@@ -368,7 +368,7 @@ export default class UnpaidInvoices extends Component {
 				let fechastr = fecha[0].dte.toLocaleDateString()
 				fecha = fechastr.split('/');
 				fechastr = fecha[2]+'/'+fecha[1]+'/'+fecha[0]
-				const posttext = '{"fecha": "'+fechastr+'",  "cliente":"'+seleccionado.cli+'","descripcion":"Cobro","tipo":"1","user":"charly","store_id":1,"encargado":"'+nombre.text+'"}'
+				const posttext = '{"fecha": "'+fechastr+'",  "cliente":"'+seleccionado.cli+'","descripcion":"Cobro","tipo":"2","user":"charly","store_id":1,"encargado":"'+nombre.text+'"}'
 				//console.log(posttext)
 
 				const data = await Axios.post(ENDPOINTS.guardarmandados, posttext);
@@ -397,7 +397,7 @@ export default class UnpaidInvoices extends Component {
 
 	render() {
 		let {
-			Invoices,
+			transfers,
 			loading,
 			seleccionadosId,
 			seleccionados,
@@ -416,20 +416,16 @@ export default class UnpaidInvoices extends Component {
 		} else
 			return (
 				<React.Fragment>
-					<label>
-          Buscar :
-          <input type="text" value={this.state.buscar} onChange={this.handleChange} />
-        </label>
-					{Invoices.length === 0 ? (
+					{transfers.length === 0 ? (
 						<Header as="h2">No hay turnos vendidos para ese tipo</Header>
 					) : (
 						<React.Fragment>
 							
 							<div className="pt-8">
-								<Header>Facturas Vencidas</Header>
+								<Header>Facturas No Pagadas</Header>
 								<div className="inline-block pr-4">
 									<Menu compact>
-										<Menu.Item active>Cantidad de facturas: {Invoices.length}</Menu.Item>
+										<Menu.Item active>Cantidad de facturas: {transfers.length}</Menu.Item>
 									</Menu>
 								</div>
 
@@ -448,13 +444,16 @@ export default class UnpaidInvoices extends Component {
 										nextItem={true ? undefined : null}
 									/>
 
-
+<label>
+          Buscar :
+          <input type="text" value={this.state.buscar} onChange={this.handleChange} />
+        </label>
 								</div>
 								
 								<Table sortable celled>
 									<Table.Header>
 									<Table.Row>
-										<Table.HeaderCell>SELECT</Table.HeaderCell>
+										<Table.HeaderCell>Selector</Table.HeaderCell>
 										
 										<Table.HeaderCell
 											sorted={column === 'o' ? direction : null}
@@ -517,7 +516,7 @@ export default class UnpaidInvoices extends Component {
 										</Table.Row>
 									</Table.Header>
 									<Table.Body>
-										{Invoices
+										{transfers
 											.slice(offset, first)
 											.map((t) => (
 												<FilaFactura

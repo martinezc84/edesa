@@ -7,7 +7,7 @@ import TiposDeTurno from '../components/tipoDeTurno';
 import Steps from '../components/Steps';
 import Firma from '../components/Firma';
 import Mandados from '../components/Mandados';
-import TurnosNoVendidos from '../components/TurnosNoVendidos';
+import Transfers from '../components/Transfers';
 import UnpaidInvoices from '../components/UnpaidInvoices';
 import { navigate } from 'gatsby';
 import Acciones from '../components/Acciones';
@@ -17,12 +17,14 @@ import { Container } from 'semantic-ui-react';
 export default class App extends Component {
 	state = {
 		tiposDeTurno: [],
-		turnosVendidos: [],
+		Invoices: [],
+		transfers: [],
 		turnosNoVendidos: [],
 		tipoSeleccionado: null,
 
 		seleccionadosNoVendidos: {},
-
+		seleccionadosTransfersID:[],
+		seleccionadosTransfers:[],
 		seleccionadosVendidos: [],
 		seleccionadosVendidosID: [],
 		items: [],
@@ -46,7 +48,7 @@ export default class App extends Component {
 	volver = () => {
 		this.setState({
 			tiposDeTurno: [],
-			turnosVendidos: [],
+			Invoices: [],
 			turnosNoVendidos: [],
 			tipoSeleccionado: null,
 
@@ -84,14 +86,14 @@ export default class App extends Component {
 		return <Mandados valores={this.state.items} guardar={this.guardar} {...props} />;
 	};
 
-	turnosNoVendidos = () => {
+	transferencias = () => {
 		let props = {
-			seleccionadosNoVendidos: this.state.seleccionadosNoVendidos,
-			turnosSeleccionados: this.state.seleccionadosVendidosID.length,
+			seleccionadosTransfersID: this.state.seleccionadosTransfersID,
 			tipo: this.state.tipoSeleccionado,
-			cambiarStep:this.cambiaStep
+			cambiarStep:this.cambiaStep,
+			empleados:this.state.empleados
 		};
-		return <TurnosNoVendidos valores={this.state.turnosNoVendidos} guardar={this.guardar} {...props} />;
+		return <Transfers valores={this.state.transfers} guardar={this.guardar} {...props} />;
 	};
 
 	tiposMandados = () => {
@@ -101,7 +103,7 @@ export default class App extends Component {
 			cambiarStep:this.cambiaStep,
 			empleados:this.state.empleados
 		};
-		return <UnpaidInvoices valores={this.state.turnosVendidos} guardar={this.guardar} {...props} />;
+		return <UnpaidInvoices valores={this.state.Invoices} guardar={this.guardar} {...props} />;
 	};
 
 	firma = () => {
@@ -154,7 +156,7 @@ export default class App extends Component {
 						{step === 1 ? (
 							<React.Fragment>{this.tiposMandados()}</React.Fragment>
 						) : step === 2 ? (
-							<React.Fragment>{this.turnosNoVendidos()}</React.Fragment>
+							<React.Fragment>{this.transferencias()}</React.Fragment>
 						) : step === 3 ? (
 							<React.Fragment>{this.turnosVendidos()}</React.Fragment>
 						) : step === 4 ? (

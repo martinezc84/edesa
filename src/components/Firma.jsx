@@ -30,7 +30,8 @@ export default class Firma extends Component  {
 		date: new Date(),
 		visible:false,
 		trimmedDataURL: null,
-		visiblem:false
+		visiblem:false,
+		operando:false
 	
 	};
 	
@@ -51,7 +52,9 @@ export default class Firma extends Component  {
 	  
 	  console.log('Guardando');
 	  let postdata = {string:this.sigPad.toDataURL('image/png'), id:this.props.id}
-	  
+	  this.setState({				
+		operando:true
+	});
 	  
 	 await Axios.post(ENDPOINTS.saveimage, JSON.stringify( postdata))
 					.then(({ data }) => {
@@ -77,6 +80,8 @@ export default class Firma extends Component  {
 				visiblem:true
 			});
 
+
+
   }
 	componentDidMount() {
 		let user = netlifyIdentity.currentUser();
@@ -101,6 +106,7 @@ export default class Firma extends Component  {
 									}								
 									icon
 									labelPosition="left"
+									disabled={this.state.operando}
 								>
 								<Icon name="folder" />
 									Guardar
@@ -114,6 +120,7 @@ export default class Firma extends Component  {
 									}								
 									icon
 									labelPosition="left"
+									disabled={this.state.operando}
 								>
 								<Icon name="file" />
 									Limpiar

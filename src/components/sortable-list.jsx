@@ -6,11 +6,14 @@ import {  Checkbox, Label } from 'semantic-ui-react';
 
 // Functional Component
 export default class SortableList extends Component {
-   
+cambiar=(id)=>{
+    console.log(id)
+    this.props.onSelect(id)
+}
 render(){
 
    let  {
-        items, onChange
+        items
     } = this.props;
 
     let sortable = null; // sortable instance
@@ -18,9 +21,16 @@ render(){
         const order = sortable.toArray();
         onChange(order.reverse());
     };
-    const listItems = items.map(val => (<li key={uniqueId()}  data-id={val.id}>{val.listorder} ) Descripción: {val.descripcion} Cliente: {val.cliente} <Checkbox
+    const listItems = items.map(val => (<li key={uniqueId()}  data-id={val.id}>{val.listorder} ) Descripción: {val.descripcion} Cliente: {val.cliente} 
+    <Checkbox
+    onChange={() => {
+        this.cambiar(val.id)
+        
+    }}
     
-/></li>));
+    checked={val.realizado==1}
+/></li>
+));
     return (
         <div id="list">
             <button type="button" onClick={reverseOrder}>Reverse Order</button>

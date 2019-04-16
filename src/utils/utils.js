@@ -46,7 +46,8 @@ const NF_ENDPOINTS = {
 	guardarmandados:URL_PREFIX + process.env.GATSBY_URL_GUARDAR_MANDADO,
 	editarmandados:URL_PREFIX + process.env.GATSBY_URL_EDITAR_MANDADO,
 	ListaMandados:URL_PREFIX + process.env.GATSBY_URL_LISTADO_MANDADOS,
-	Funciones:URL_PREFIX + process.env.GATSBY_URL_FUNCIONES
+	Funciones:URL_PREFIX + process.env.GATSBY_URL_FUNCIONES,
+	saveimage :URL_PREFIX+process.env.GATSBY_URL_FIRMA
 	
 };
 

@@ -5,6 +5,7 @@ import { Layout } from '../components/Layout';
 import RutaPrivada from '../components/RutaPrivada';
 import TiposDeTurno from '../components/tipoDeTurno';
 import Steps from '../components/Steps';
+import Firma from '../components/Firma';
 import Mandados from '../components/Mandados';
 import TurnosNoVendidos from '../components/TurnosNoVendidos';
 import UnpaidInvoices from '../components/UnpaidInvoices';
@@ -103,6 +104,15 @@ export default class App extends Component {
 		return <UnpaidInvoices valores={this.state.turnosVendidos} guardar={this.guardar} {...props} />;
 	};
 
+	firma = () => {
+		let props = {
+			
+			cambiarStep:this.cambiaStep,
+		};
+		
+		return <Firma id={this.state.idmandado} fecha={this.state.fechamandado} {...props} />;
+	};
+
 	acciones = () => {
 		let props = {
 			seleccionadosNoVendidos: this.state.seleccionadosNoVendidos,
@@ -149,6 +159,8 @@ export default class App extends Component {
 							<React.Fragment>{this.turnosVendidos()}</React.Fragment>
 						) : step === 4 ? (
 							<React.Fragment>{this.acciones()}</React.Fragment>
+						)  : step === 5 ? (
+							<React.Fragment>{this.firma()}</React.Fragment>
 						) : null}
 					</div>
 				</RutaPrivada>

@@ -2,12 +2,12 @@
 import React, { Component } from 'react';
 import netlifyIdentity from 'netlify-identity-widget';
 import '../css/style.css';
-
 import Axios from 'axios';
 import { ENDPOINTS } from '../utils/utils';
 import { Header, Table, Loader, Pagination, Search, Menu } from 'semantic-ui-react';
 import SortableLst from '../components/sortable-list';
 import sortBy from 'lodash/sortBy';
+
 
 export default class TipoMandado extends Component {
 	state = {
@@ -24,7 +24,9 @@ export default class TipoMandado extends Component {
 		direction: null,
 		monday:null,
 		friday:null,
-		today:null
+		today:null,
+		visible:true,
+		idmandado:null
 	};
 
 	seleccionarDia = (e, { name }) => this.cargarmandados(name)
@@ -36,7 +38,7 @@ export default class TipoMandado extends Component {
 					.then(({ data }) => {
 						//console.log(data)
 						let turnosVendidos = sortBy(data, [ 'listorder' ]);
-						
+						turnosVendidos.sort((a,b) => (a.listorder- b.listorder))
 						this.setState({
 							turnosVendidos: turnosVendidos,
 							loading: false,
@@ -156,9 +158,16 @@ export default class TipoMandado extends Component {
 	}
 	}
 
+	onSelect = (id)=>{
+		this.props.guardar('idmandado', id);
+		let fecha = this.state.turnosVendidos.filter((s) => s.id == id);
+		this.props.guardar('fechamandado', fecha);
+		this.props.cambiarStep(5);
+	}
+
 	componentDidMount() {
 		let user = netlifyIdentity.currentUser();
-		let { tipo } = this.props;
+		let { tipo, guardar } = this.props;
 
 	
 
@@ -271,6 +280,7 @@ export default class TipoMandado extends Component {
 		} else
 			return (
 				<React.Fragment>
+					
 					<Header> Mandados de la semana del {this.state.monday} al {this.state.friday}</Header>
 								<div className="inline-block pr-4">
 									<Menu compact>
@@ -294,6 +304,7 @@ export default class TipoMandado extends Component {
 													this.guardarorden(turnosVendidos)
 													this.guardarDB(turnosVendidos)
 												}}
+												onSelect={this.onSelect}
 											>
 											</SortableLst>
 											}
@@ -301,6 +312,7 @@ export default class TipoMandado extends Component {
 							</div>
 						</React.Fragment>
 					)}
+					
 				</React.Fragment>
 			);
 	}

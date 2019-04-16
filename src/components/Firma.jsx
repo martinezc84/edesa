@@ -44,16 +44,16 @@ export default class Firma extends Component  {
 	this.setState({				
 		visiblem:false
 	});
-	this.props.cambiarStep(4);
+	this.props.cambiarStep(3);
 }
-  save = () => {
+  save = async () => {
    
 	  
 	  console.log('Guardando');
 	  let postdata = {string:this.sigPad.toDataURL('image/png'), id:this.props.id}
 	  
 	  
-	  Axios.post(ENDPOINTS.saveimage, JSON.stringify( postdata))
+	 await Axios.post(ENDPOINTS.saveimage, JSON.stringify( postdata))
 					.then(({ data }) => {
 						console.log(data)
 						
@@ -63,7 +63,7 @@ export default class Firma extends Component  {
 						console.error(error);
 					});
 
-		Axios.post(ENDPOINTS.editarmandados,'{"realizado":"1","id":'+this.props.id+', "fecha":"'+this.props.fecha[0].fecha+'"}')
+	await	Axios.post(ENDPOINTS.editarmandados,'{"realizado":"1","id":'+this.props.id+', "fecha":"'+this.props.fecha[0].fecha+'"}')
 			.then(({ data }) => {
 				//console.log(data)
 				
@@ -72,7 +72,10 @@ export default class Firma extends Component  {
 			.catch((error) => {
 				console.error(error);
 			});
-			this.props.cambiarStep(3);
+			//this.props.cambiarStep(3);
+			this.setState({				
+				visiblem:true
+			});
 
   }
 	componentDidMount() {

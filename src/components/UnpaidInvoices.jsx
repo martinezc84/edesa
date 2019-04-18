@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import netlifyIdentity from 'netlify-identity-widget';
 import '../css/style.css';
 import Axios from 'axios';
-import { ENDPOINTS } from '../utils/utils';
+import { ENDPOINTS, API_URL } from '../utils/utils';
 import { Header, Table, Loader, Pagination, Button, Menu, Icon } from 'semantic-ui-react';
 import FilaFactura from './FilaFactura';
 import sortBy from 'lodash/sortBy';
@@ -130,7 +130,9 @@ export default class UnpaidInvoices extends Component {
 		let { tipo } = this.props;
 
 		let { buscar } = this.state;
+	
 
+		
 		if (user !== null) {
 			let { guardar, valores, seleccionadosVendidosID,  empleados } = this.props;
 			if (valores.length === 0) {

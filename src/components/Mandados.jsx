@@ -3,11 +3,11 @@ import React, { Component } from 'react';
 import netlifyIdentity from 'netlify-identity-widget';
 import '../css/style.css';
 import Axios from 'axios';
-import { ENDPOINTS } from '../utils/utils';
+import { ENDPOINTS, API_URL } from '../utils/utils';
 import { Header, Table, Loader, Pagination, Search, Menu } from 'semantic-ui-react';
 import SortableLst from '../components/sortable-list';
 import sortBy from 'lodash/sortBy';
-
+import { MostrarMensaje } from './Mensajes';
 
 export default class TipoMandado extends Component {
 	state = {
@@ -25,31 +25,33 @@ export default class TipoMandado extends Component {
 		monday:null,
 		friday:null,
 		today:null,
-		visible:true,
-		idmandado:null
+		visible:false,
+		idmandado:null,
+		config:[]
 	};
 
 	seleccionarDia = (e, { name }) => this.cargarmandados(name)
 
 	cargarmandados(dia){
 
-		console.log(dia)
+		//console.log(dia)
 		Axios.get(ENDPOINTS.ListaMandados+'?int=0&dow='+dia)
 					.then(({ data }) => {
 						//console.log(data)
 						let turnosVendidos = sortBy(data, [ 'listorder' ]);
-						turnosVendidos.sort((a,b) => (a.listorder- b.listorder))
+						turnosVendidos.sort((a,b) => (a.listorder - b.listorder))
 						this.setState({
 							turnosVendidos: turnosVendidos,
 							loading: false,
-							today:dia,
-							
+							today:dia,							
 							cantidadPaginas: Math.floor(data.recordsTotal / this.state.first) + 1
 						});
 					})
 					.catch((error) => {
 						console.error(error);
 					});
+
+			
 	}
 
 
@@ -158,19 +160,64 @@ export default class TipoMandado extends Component {
 	}
 	}
 
-	onSelect = (id)=>{
+	onSelect = async (id)=>{
+
+		if(this.state.config[0].firma == 1){
 		this.props.guardar('idmandado', id);
 		let fecha = this.state.turnosVendidos.filter((s) => s.id == id);
 		this.props.guardar('fechamandado', fecha);
 		this.props.cambiarStep(5);
+			}else{
+		this.setState({
+			loading: true
+		});
+		let fechapartida=[];
+		let frealizado = new Date();
+		let fechastr = frealizado.toLocaleDateString()
+		fechapartida = fechastr.split('/');
+				fechastr = fechapartida[2]+'/'+fechapartida[1]+'/'+fechapartida[0]
+		let fecha = this.state.turnosVendidos.filter((s) => s.id == id);
+		let hours = new Date().getHours(); //Current Hours
+        let min = new Date().getMinutes(); //Current Minutes
+        let sec = new Date().getSeconds(); //Current Seconds
+		await Axios.post(ENDPOINTS.editarmandados,'{"realizado":"1","id":'+id+', "fecha":"'+fecha[0].fecha+'", "fecha_realizado":"'+fechastr+'", "hora_realizado":"'+hours+':'+min+':'+sec+'"}')
+			.then(({ data }) => {
+				console.log(data)
+				
+				
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+			//this.props.cambiarStep(3);
+			this.setState({	
+				loading:false,			
+				visible:true
+			});
+
+
+	}
+	
 	}
 
 	componentDidMount() {
 		let user = netlifyIdentity.currentUser();
 		let { tipo, guardar } = this.props;
 
+		this.setState({
+					config: {firma:0}
+				});
 	
-
+	    Axios.get(API_URL.tipoMandado+'1&name=General').then(({ data }) => {
+			//console.log(data[0])
+			this.setState({
+				config:data[0]
+			});
+			this.props.guardar('config', data[0]);
+		})
+		.catch((error) => {
+			console.error(error);
+		});
 		if (user !== null) {
 			let { guardar, valores, seleccionadosVendidosID } = this.props;
 			if (valores.length === 0) {
@@ -198,6 +245,13 @@ export default class TipoMandado extends Component {
 		let first = offset + this.state.step;
 		this.setState({ paginaSeleccionada: activePage, offset, first });
 	};
+
+	onConfirm = ()=>{
+		this.setState({				
+			visible:false
+		});
+		//this.props.cambiarStep(3);
+	}
 
 	guardarorden = 	 (mandados) =>{
 		this.setState({ mandados});
@@ -297,7 +351,7 @@ export default class TipoMandado extends Component {
 					) : (
 						<React.Fragment>
 							<div className="pt-8">
-										{									
+										{	this.state.turnosVendidos.length >0 ? (								
 												<SortableLst
 												items={this.state.turnosVendidos}
 												onChange={(turnosVendidos) => {
@@ -305,14 +359,15 @@ export default class TipoMandado extends Component {
 													this.guardarDB(turnosVendidos)
 												}}
 												onSelect={this.onSelect}
+												firma={this.state.config[0].firma}
 											>
-											</SortableLst>
+											</SortableLst>) :(<React.Fragment>Sin Mandados</React.Fragment> )
 											}
 								
 							</div>
 						</React.Fragment>
 					)}
-					
+				<MostrarMensaje titulo={'Datos guardados con exito!'} mensajes={'Mandado'}  visible={this.state.visible} onConfirm={this.onConfirm} />	
 				</React.Fragment>
 			);
 	}

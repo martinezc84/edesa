@@ -71,6 +71,7 @@ const ZAURU_URL = {
 
 const API_URL = {
 	tiposMandado: URL_PREFIX_API+process.env.GATSBY_ENDPOINT_MANDADO,
+	tipoMandado: URL_PREFIX+process.env.GATSBY_URL_MANDADO,
 	listadoMandados: URL_PREFIX_API
 
 }

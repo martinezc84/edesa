@@ -3,11 +3,11 @@ import React, { Component } from 'react';
 import ReactSortable  from 'react-sortablejs';
 import mandadostyles from '../css/mandados.css';
 import {  Checkbox, Label } from 'semantic-ui-react';
-
+import ImageBox from '../components/ImageBox'
 // Functional Component
 export default class SortableList extends Component {
 cambiar=(id)=>{
-    console.log(id)
+    //console.log(id)
     this.props.onSelect(id)
 }
 render(){
@@ -15,21 +15,34 @@ render(){
    let  {
         items
     } = this.props;
-
+    console.log(this.props.firma)
     let sortable = null; // sortable instance
     const reverseOrder = (evt) => {
         const order = sortable.toArray();
         onChange(order.reverse());
     };
-    const listItems = items.map(val => (<li key={uniqueId()}  data-id={val.id}>{val.listorder} ) Descripción: {val.descripcion} Cliente: {val.cliente} 
+    const listItems = items.map(val => (
+    <li className={(val.tipo == 1) ? 'cobro' : (val.tipo == 3) ? 'soporte':''} key={uniqueId()}  data-id={val.id}>
+    {val.listorder} ) Descripción: {val.descripcion} Cliente: {val.cliente} 
     <Checkbox
     onChange={() => {
-        this.cambiar(val.id)
         
-    }}
-    
-    checked={val.realizado==1}
-/></li>
+        if(val.realizado == 0){
+            val.realizado = 1;
+            this.cambiar(val.id)
+        }
+        
+    }}    
+    checked={val.realizado == 1}
+/>
+{val.realizado == 1 && this.props.firma == 1 ? (
+<ImageBox
+    image={process.env.GATSBY_URL_IMAGES+'/signature_'+val.id+'.png'}
+/>
+
+) :("")
+}
+</li>
 ));
     return (
         <div id="list">
@@ -58,7 +71,7 @@ render(){
                 // @param {Object} sortable The sortable instance.
                 // @param {Event} evt The event object.
                 onChange={(order, sortable, evt) => {
-                    onChange(order);
+                    this.props.onChange(order);
                 }}
             >
                 {listItems}

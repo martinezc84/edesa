@@ -78,6 +78,7 @@ export default class App extends Component {
 	};
 
 	turnosVendidos = () => {
+		console.log(this.state.config)
 		let props = {
 			seleccionadosVendidosID: this.state.seleccionadosVendidosID,
 			tipo: this.state.tipoSeleccionado,

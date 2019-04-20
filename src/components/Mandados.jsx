@@ -51,6 +51,8 @@ export default class TipoMandado extends Component {
 						console.error(error);
 					});
 
+				
+
 			
 	}
 
@@ -203,7 +205,7 @@ export default class TipoMandado extends Component {
 	componentDidMount() {
 		let user = netlifyIdentity.currentUser();
 		let { tipo, guardar, config } = this.props;
-
+		if (config.length === 0 ){
     Axios.get(API_URL.tipoMandado+'1&name=General').then(({ data }) => {
 			//console.log(data[0])
 			this.setState({
@@ -214,6 +216,12 @@ export default class TipoMandado extends Component {
 		.catch((error) => {
 			console.error(error);
 		});
+
+	}else{
+		this.setState({
+			config:this.props.config
+		});
+	}
 		if (user !== null) {
 			let { guardar, valores, seleccionadosVendidosID } = this.props;
 			if (valores.length === 0) {
@@ -224,7 +232,7 @@ export default class TipoMandado extends Component {
 				
 					this.cargardatos()
 					
-					console.log(this.state)
+					//console.log(this.state)
 			} else {
 				this.setState({
 					turnosVendidos: valores,
@@ -322,7 +330,8 @@ export default class TipoMandado extends Component {
 			cantidadPaginas,
 			offset,
 			column,
-			direction
+			direction,
+			config
 		} = this.state;
 
 		if (loading) {
@@ -355,7 +364,7 @@ export default class TipoMandado extends Component {
 													this.guardarDB(turnosVendidos)
 												}}
 												onSelect={this.onSelect}
-												firma={this.state.config[0].firma}
+												firma={config.firma}
 											>
 											</SortableLst>) :(<React.Fragment>Sin Mandados</React.Fragment> )
 											}

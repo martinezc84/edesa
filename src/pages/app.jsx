@@ -28,7 +28,7 @@ export default class App extends Component {
 		seleccionadosVendidos: [],
 		seleccionadosVendidosID: [],
 		items: [],
-
+		config:[],
 		step: 1
 	};
 
@@ -81,7 +81,8 @@ export default class App extends Component {
 		let props = {
 			seleccionadosVendidosID: this.state.seleccionadosVendidosID,
 			tipo: this.state.tipoSeleccionado,
-			cambiarStep:this.cambiaStep
+			cambiarStep:this.cambiaStep,
+			config:this.state.config
 		};
 		return <Mandados valores={this.state.items} guardar={this.guardar} {...props} />;
 	};

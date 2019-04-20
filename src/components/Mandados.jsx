@@ -27,7 +27,7 @@ export default class TipoMandado extends Component {
 		today:null,
 		visible:false,
 		idmandado:null,
-		config:[]
+		config:{firma:0}
 	};
 
 	seleccionarDia = (e, { name }) => this.cargarmandados(name)
@@ -202,13 +202,9 @@ export default class TipoMandado extends Component {
 
 	componentDidMount() {
 		let user = netlifyIdentity.currentUser();
-		let { tipo, guardar } = this.props;
+		let { tipo, guardar, config } = this.props;
 
-		this.setState({
-					config: {firma:0}
-				});
-	
-	    Axios.get(API_URL.tipoMandado+'1&name=General').then(({ data }) => {
+    Axios.get(API_URL.tipoMandado+'1&name=General').then(({ data }) => {
 			//console.log(data[0])
 			this.setState({
 				config:data[0]

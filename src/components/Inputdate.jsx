@@ -23,6 +23,11 @@ export default class Inputdate extends Component {
         <DatePicker
           onChange={this.onChange}
           value={this.state.date}
+          showTimeSelect
+          timeFormat="HH:mm"
+          timeIntervals={15}
+          dateFormat="MMMM d, yyyy h:mm aa"
+          timeCaption="time"
          
         />
       </div>

@@ -10,7 +10,7 @@ import Mandados from '../components/Mandados';
 import Transfers from '../components/Transfers';
 import UnpaidInvoices from '../components/UnpaidInvoices';
 import { navigate } from 'gatsby';
-import Acciones from '../components/Acciones';
+import Casos from '../components/Casos';
 import { Container } from 'semantic-ui-react';
 
 
@@ -21,7 +21,7 @@ export default class App extends Component {
 		transfers: [],
 		turnosNoVendidos: [],
 		tipoSeleccionado: null,
-
+		casos:[],
 		seleccionadosNoVendidos: {},
 		seleccionadosTransfersID:[],
 		seleccionadosTransfers:[],
@@ -117,17 +117,15 @@ export default class App extends Component {
 		return <Firma id={this.state.idmandado} fecha={this.state.fechamandado} {...props} />;
 	};
 
-	acciones = () => {
+	casos = () => {
 		let props = {
-			seleccionadosNoVendidos: this.state.seleccionadosNoVendidos,
-			seleccionadosVendidos: this.state.seleccionadosVendidos,
-			tipoSeleccionado: this.state.tipoSeleccionado,
-			volver: this.volver,
-			operado: this.state.operado,
-			errorVisible: this.state.errorVisible,
-			mensajesError: this.state.mensajesError
+			valores:this.state.casos,
+			seleccionadosVendidosID: this.state.seleccionadosVendidosID,
+			tipo: this.state.tipoSeleccionado,
+			cambiarStep:this.cambiaStep,
+			empleados:this.state.empleados
 		};
-		return <Acciones {...props} />;
+		return <Casos guardar={this.guardar} {...props} />;
 	};
 
 	cambiaStep = (step) => {
@@ -162,7 +160,7 @@ export default class App extends Component {
 						) : step === 3 ? (
 							<React.Fragment>{this.turnosVendidos()}</React.Fragment>
 						) : step === 4 ? (
-							<React.Fragment>{this.acciones()}</React.Fragment>
+							<React.Fragment>{this.casos()}</React.Fragment>
 						)  : step === 5 ? (
 							<React.Fragment>{this.firma()}</React.Fragment>
 						) : null}

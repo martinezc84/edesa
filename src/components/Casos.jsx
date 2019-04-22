@@ -3,17 +3,17 @@ import React, { Component } from 'react';
 import netlifyIdentity from 'netlify-identity-widget';
 import '../css/style.css';
 import Axios from 'axios';
-import { ENDPOINTS } from '../utils/utils';
+import { ENDPOINTS, API_URL } from '../utils/utils';
 import { Header, Table, Loader, Pagination, Button, Menu, Icon } from 'semantic-ui-react';
-import FilaEntrega from './FilaEntrega';
+import FilaCaso from './FilaCaso';
 import sortBy from 'lodash/sortBy';
 import { MostrarMensaje } from './Mensajes';
 
 
 
-export default class Transfers extends Component {
+export default class UnpaidInvoices extends Component {
 	state = {
-		transfers: [],
+		Invoices: [],
 		seleccionados: [],
 		seleccionadosId: [],
 		vendedoresseleccionados:[],
@@ -40,16 +40,13 @@ export default class Transfers extends Component {
 		});
 	}
 
-	get_id(text){
-		const resp = text.split('-')
-		return resp[2];
-	}
+
 
 	// Método para seleccionar o des seleccionar checkbox de turnos
 	seleccionar = (turno) => {
 		let seleccionados = [];
 		let seleccionadosId = [];
-		//console.log(turno)
+		console.log(turno)
 		if (this.state.seleccionadosId.includes(turno.id)) {
 			seleccionados = this.state.seleccionados.filter((s) => s.id !== turno.id);
 			seleccionadosId = this.state.seleccionadosId.filter((s) => s !== turno.id);
@@ -58,15 +55,15 @@ export default class Transfers extends Component {
 			seleccionadosId = [ ...this.state.seleccionadosId, turno.id ];
 		}
 
-		//console.log(seleccionados)
+		console.log(seleccionados)
 		this.setState(
 			{
 				seleccionados,
 				seleccionadosId
 			},
 			() => {
-				this.props.guardar('seleccionadosTransfers', this.state.seleccionados);
-				this.props.guardar('seleccionadosTransfersID', this.state.seleccionadosId);
+				this.props.guardar('seleccionadosVendidos', this.state.seleccionados);
+				this.props.guardar('seleccionadosVendidosID', this.state.seleccionadosId);
 			}
 		);
 	};
@@ -75,6 +72,11 @@ export default class Transfers extends Component {
 		const resp = text.split('>')
 		const textresp = resp[1].split('<');
 		return textresp[0];
+	}
+
+	get_id(text){
+		const resp = text.split('-')
+		return resp[2];
 	}
 
 	trataEmpleados = (empleados) => {
@@ -124,7 +126,7 @@ export default class Transfers extends Component {
 		this.setState({
 			fechas})
 
-		 //console.log(fechas)
+		 console.log(fechas)
 
 	};
 
@@ -133,61 +135,58 @@ export default class Transfers extends Component {
 		let { tipo } = this.props;
 
 		let { buscar } = this.state;
+	
 
+		
 		if (user !== null) {
-			let { guardar, valores, seleccionadosTransfersID,  empleados } = this.props;
+			let { guardar, valores,  empleados } = this.props;
 			if (valores.length === 0) {
 				this.setState({
 					loading: true
 				});
                 
-				Axios.post(`${ENDPOINTS.Entregas}`,'{"valor":"'+buscar+'"}')
+				Axios.post(`${ENDPOINTS.Casos}`,'{"valor":"'+buscar+'"}')
 					.then(({ data }) => {
 						//console.log(data)
 						
-						let transfers = data.data;
-						//console.log(transfers)
-						//transfers = sortBy(transfers, [ 'id' ]);
-						transfers.map((invoice, i)=> (
-							//console.log(invoice)
-						invoice.cid= 	invoice.id != '' ? invoice.id = this.quitarlink(invoice.id) :''
-							
-				
-						));
-
-
-						transfers.map((invoice, i)=> (
+						let Invoices = data.data;
+						//console.log(Invoices)
+						//Invoices = sortBy(Invoices, [ 'iid' ]);
+						Invoices.map((invoice, i)=> (
 							//console.log(invoice)
 						 invoice.id =	this.get_id(invoice.DT_RowId)
 							
 				
 						));
-
-
-						transfers.map((invoice, i)=> (
+						
+						Invoices.map((invoice, i)=> (
 							//console.log(invoice)
 							invoice.zid != '' ? invoice.zid = this.quitarlink(invoice.zid) :''
 							
 				
 						));
 
-						
-
-						transfers.map((invoice, i)=> (
+						Invoices.map((invoice, i)=> (
 							//console.log(invoice)
-							invoice.ref != '' ? invoice.ref = this.quitarlink(invoice.ref) :''
+							invoice.cn != '' ? invoice.cn = this.quitarlink(invoice.cn) :''
+							
+				
+						));
+
+						Invoices.map((invoice, i)=> (
+							//console.log(invoice)
+							invoice.cli != '' ? invoice.cli = this.quitarlink(invoice.cli) :''
 							
 				
 						));
 
 					
-						console.log(transfers)
 
-						guardar('transfers', transfers);
+						guardar('casos', Invoices);
 						this.setState({
-							transfers: transfers,
+							Invoices: Invoices,
 							loading: false,
-							seleccionadosId: seleccionadosTransfersID,
+						
 							cantidadPaginas: Math.floor(data.recordsTotal / this.state.first) + 1
 						});
 					})
@@ -217,8 +216,8 @@ export default class Transfers extends Component {
 			} else {
 				this.setState({
 					empleados:empleados,
-					transfers: valores,
-					seleccionadosId: seleccionadosTransfersID,
+					Invoices: valores,
+				
 					cantidadPaginas: Math.floor(valores.length / this.state.first) + 1
 				});
 			}
@@ -233,7 +232,7 @@ export default class Transfers extends Component {
 	};
 
 	seleccionaVendedor = (e, item) => {
-		//console.log(item.id)
+		//console.log(item.iid)
 		let vendedoresseleccionados = [];
 		let vendedoresseleccionadosId = [];
 		//console.log(turno)
@@ -263,12 +262,12 @@ export default class Transfers extends Component {
 	};
 
 	handleSort = (clickedColumn) => () => {
-		const { column, transfers, direction } = this.state;
+		const { column, Invoices, direction } = this.state;
 
 		if (column !== clickedColumn) {
 			this.setState({
 				column: clickedColumn,
-				transfers: sortBy(transfers, [ clickedColumn ]),
+				Invoices: sortBy(Invoices, [ clickedColumn ]),
 				direction: 'ascending'
 			});
 
@@ -276,7 +275,7 @@ export default class Transfers extends Component {
 		}
 
 		this.setState({
-			transfers: transfers.reverse(),
+			Invoices: Invoices.reverse(),
 			direction: direction === 'ascending' ? 'descending' : 'ascending'
 		});
 	};
@@ -285,7 +284,7 @@ export default class Transfers extends Component {
 
 	handleChange=(event)=> {
 		
-		let {  seleccionadosTransfersID } = this.state;
+		let {  seleccionadosVendidosID } = this.state;
 
 		let { guardar, } = this.props;
 		if (event.target.value.length>4){
@@ -297,45 +296,46 @@ export default class Transfers extends Component {
 		});
 		
 			
-			Axios.post(`${ENDPOINTS.UnpaidInvoices}`,'{"valor":"'+event.target.value+'"}')
+			Axios.post(`${ENDPOINTS.Casos}`,'{"valor":"'+event.target.value+'"}')
 				.then(({ data }) => {
 					//console.log(data)
 					
-					let transfers = data.data.filter((d) => d.pt == 'CREDITO CONTRA ENTREGA');
-					//console.log(transfers)
-					transfers = sortBy(transfers, [ 'id' ]);
-					transfers.map((invoice, i)=> (
+					let Invoices = data.data;
+					//console.log(Invoices)
+					//Invoices = sortBy(Invoices, [ 'id' ]);
+					Invoices.map((invoice, i)=> (
 						//console.log(invoice)
-						invoice.o != '' ? invoice.o = this.quitarlink(invoice.o) :''
+					 invoice.id =	this.get_id(invoice.DT_RowId)
+						
+			
+					));
+					
+					Invoices.map((invoice, i)=> (
+						//console.log(invoice)
+						invoice.zid != '' ? invoice.zid = this.quitarlink(invoice.zid) :''
 						
 			
 					));
 
-					transfers.map((invoice, i)=> (
+					Invoices.map((invoice, i)=> (
 						//console.log(invoice)
-						invoice.i != '' ? invoice.i = this.quitarlink(invoice.i) :''
+						invoice.cn != '' ? invoice.cn = this.quitarlink(invoice.cn) :''
 						
 			
 					));
 
-					transfers.map((invoice, i)=> (
+					Invoices.map((invoice, i)=> (
 						//console.log(invoice)
 						invoice.cli != '' ? invoice.cli = this.quitarlink(invoice.cli) :''
 						
 			
 					));
 
-					transfers.map((invoice, i)=> (
-						//console.log(invoice)
-						invoice.ref != '' ? invoice.ref = this.quitarlink(invoice.ref) :''
-						
-			
-					));
+					//console.log(Invoices)
 
-
-					guardar('transfers', transfers);
+					guardar('Invoices', Invoices);
 					this.setState({
-						transfers: transfers,
+						Invoices: Invoices,
 						loading: false,
 						cantidadPaginas: Math.floor(data.recordsTotal / this.state.first) + 1,
 						
@@ -359,7 +359,7 @@ export default class Transfers extends Component {
 		// Ciclo de llamadas
 		for (let seleccionado of seleccionados) {
 			try {
-				//console.log(seleccionado.id)
+				//console.log(seleccionado.iid)
 				let mensajero = []
 				mensajero = this.state.vendedoresseleccionados.filter((s) => s.id == seleccionado.id);
 				let fecha = this.state.fechas.filter((s) => s.id == seleccionado.id);
@@ -377,8 +377,8 @@ export default class Transfers extends Component {
 				let fechastr = fecha[0].dte.toLocaleDateString()
 				fecha = fechastr.split('/');
 				fechastr = fecha[2]+'/'+fecha[1]+'/'+fecha[0]
-				const posttext = '{"fecha": "'+fechastr+'",  "cliente":"","descripcion":"Entrega: Ref'+seleccionado.ref+'","tipo":"2","user":"charly","store_id":1,"encargado":"'+nombre.text+'"}'
-				//console.log(posttext)
+				const posttext = '{"fecha": "'+fechastr+'",  "cliente":"'+seleccionado.cli+'","descripcion":"'+seleccionado.cn+'","tipo":"3","user":"charly","store_id":1,"encargado":"'+nombre.text+'"}'
+				console.log(posttext)
 
 				const data = await Axios.post(ENDPOINTS.guardarmandados, posttext);
 				console.log(data)
@@ -406,7 +406,7 @@ export default class Transfers extends Component {
 
 	render() {
 		let {
-			transfers,
+			Invoices,
 			loading,
 			seleccionadosId,
 			seleccionados,
@@ -425,16 +425,20 @@ export default class Transfers extends Component {
 		} else
 			return (
 				<React.Fragment>
-					{transfers.length === 0 ? (
-						<Header as="h2">No hay entregas pendientes</Header>
+					<label>
+          Buscar :
+          <input type="text" value={this.state.buscar} onChange={this.handleChange} />
+        </label>
+					{Invoices.length === 0 ? (
+						<Header as="h2">No hay datos</Header>
 					) : (
 						<React.Fragment>
 							
 							<div className="pt-8">
-								<Header>Entregas pendientes</Header>
+								<Header>Casos Abiertos</Header>
 								<div className="inline-block pr-4">
 									<Menu compact>
-										<Menu.Item active>Cantidad: {transfers.length}</Menu.Item>
+										<Menu.Item active>Cantidad de Casos: {Invoices.length}</Menu.Item>
 									</Menu>
 								</div>
 
@@ -453,16 +457,13 @@ export default class Transfers extends Component {
 										nextItem={true ? undefined : null}
 									/>
 
-<label>
-          Buscar :
-          <input type="text" value={this.state.buscar} onChange={this.handleChange} />
-        </label>
+
 								</div>
 								
 								<Table sortable celled>
 									<Table.Header>
 									<Table.Row>
-										<Table.HeaderCell>Selector</Table.HeaderCell>
+										<Table.HeaderCell>SELECT</Table.HeaderCell>
 										
 										<Table.HeaderCell
 											sorted={column === 'zid' ? direction : null}
@@ -471,10 +472,10 @@ export default class Transfers extends Component {
 											ID
 										</Table.HeaderCell>
 										<Table.HeaderCell
-											sorted={column === 'i' ? direction : null}
-											onClick={this.handleSort('i')}
+											sorted={column === 'cn' ? direction : null}
+											onClick={this.handleSort('cn')}
 										>
-											RESERVACION
+											CASO
 										</Table.HeaderCell>
 										<Table.HeaderCell
 											sorted={column === 'ref' ? direction : null}
@@ -486,34 +487,35 @@ export default class Transfers extends Component {
 											sorted={column === 'dte' ? direction : null}
 											onClick={this.handleSort('dte')}
 										>
-											ENTREGA ESTIMADA
+											FECHA
 										</Table.HeaderCell>
 										<Table.HeaderCell
-											sorted={column === 'ag' ? direction : null}
-											onClick={this.handleSort('ag')}
+											sorted={column === 'srl' ? direction : null}
+											onClick={this.handleSort('srl')}
 										>
-											ENTREGADO EL.
+											# SERIE
 										</Table.HeaderCell>
 										<Table.HeaderCell
-											sorted={column === 'cli' ? direction : null}
-											onClick={this.handleSort('cli')}
+											sorted={column === 'sym' ? direction : null}
+											onClick={this.handleSort('sym')}
 										>
-											ORIGEN
+											SINTOMA
 										</Table.HeaderCell>
 										<Table.HeaderCell
-											sorted={column === 'pt' ? direction : null}
-											onClick={this.handleSort('pt')}
+											sorted={column === 'res' ? direction : null}
+											onClick={this.handleSort('res')}
 										>
-											DESTINO	
+											RESPONSABLE	
 										
 										</Table.HeaderCell>
-										<Table.HeaderCell>
-											MEMO	
+										<Table.HeaderCell
+										sorted={column === 'cli' ? direction : null}
+										onClick={this.handleSort('cli')}>
+											CLIENTE	
 										
 										</Table.HeaderCell>
-									
 										<Table.HeaderCell	>
-											Fecha mandado	
+											Entrega	
 										
 										</Table.HeaderCell>
 										<Table.HeaderCell	>
@@ -523,10 +525,10 @@ export default class Transfers extends Component {
 										</Table.Row>
 									</Table.Header>
 									<Table.Body>
-										{transfers
+										{Invoices
 											.slice(offset, first)
 											.map((t) => (
-												<FilaEntrega
+												<FilaCaso
 													key={t.id}
 													turno={t}
 													seleccionar={this.seleccionar}

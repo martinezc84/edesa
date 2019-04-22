@@ -47,7 +47,9 @@ const NF_ENDPOINTS = {
 	editarmandados:URL_PREFIX + process.env.GATSBY_URL_EDITAR_MANDADO,
 	ListaMandados:URL_PREFIX + process.env.GATSBY_URL_LISTADO_MANDADOS,
 	Funciones:URL_PREFIX + process.env.GATSBY_URL_FUNCIONES,
-	saveimage :URL_PREFIX+process.env.GATSBY_URL_FIRMA
+	saveimage :URL_PREFIX+process.env.GATSBY_URL_FIRMA,
+	Entregas :URL_PREFIX+process.env.GATSBY_URL_ENTREGAS,
+	Casos :URL_PREFIX+process.env.GATSBY_URL_CASOS
 	
 };
 
@@ -65,7 +67,9 @@ const ZAURU_URL = {
 	CUATRO_1: ZAURU_PREFIX + process.env.GATSBY_ENDPOINT_CUATRO_1,
 	CUATRO_2: process.env.GATSBY_ENDPOINT_CUATRO_2,
 	CINCO_1: ZAURU_PREFIX + process.env.GATSBY_ENDPOINT_CINCO_1,
-	CINCO_2: process.env.GATSBY_ENDPOINT_CINCO_2
+	CINCO_2: process.env.GATSBY_ENDPOINT_CINCO_2,
+	Entregas: ZAURU_PREFIX + process.env.GATSBY_ENDPOINT_ENTREGAS,
+	Casos: ZAURU_PREFIX + process.env.GATSBY_ENDPOINT_CASOS
 	
 };
 

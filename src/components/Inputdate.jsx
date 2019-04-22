@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import DatePicker from 'react-date-picker';
+import DateTimePicker from 'react-datetime-picker';
  
 export default class Inputdate extends Component {
   state = {
@@ -20,14 +20,10 @@ export default class Inputdate extends Component {
     let disable = this.props;
     return (
       <div>
-        <DatePicker
+        <DateTimePicker
           onChange={this.onChange}
           value={this.state.date}
-          showTimeSelect
-          timeFormat="HH:mm"
-          timeIntervals={15}
-          dateFormat="MMMM d, yyyy h:mm aa"
-          timeCaption="time"
+          
          
         />
       </div>

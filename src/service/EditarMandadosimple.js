@@ -18,7 +18,7 @@ exports.handler = (event, context, callback) => {
 	if (event.httpMethod !== 'POST') {
 		return { statusCode: 405, body: 'Method Not Allowed!' };
 	}
-	console.log(event.body);
+	//console.log(event.body);
 	
 	let URL = 'https://dcgse.com/calendario_api/apical/editmandados';
 	

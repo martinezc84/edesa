@@ -40,13 +40,13 @@ export default class FilaFactura extends Component {
 					{/* <Table.Cell>{turno.order_number ? turno.order_number : ''}</Table.Cell> */}
 					</Table.Cell>
 					<Table.Cell>{turno.zid}</Table.Cell>
-					<Table.Cell>{turno.id}</Table.Cell>
-					<Table.Cell>{turno.ref}</Table.Cell>
-					<Table.Cell>{turno.pd}</Table.Cell>
-					<Table.Cell>{turno.dt}</Table.Cell>
-					<Table.Cell>{turno.af}</Table.Cell>
-					<Table.Cell>{turno.at}</Table.Cell>
-					<Table.Cell>{turno.m}</Table.Cell>
+					<Table.Cell>{turno.id_number}</Table.Cell>
+					<Table.Cell>{turno.reference}</Table.Cell>
+					<Table.Cell>{turno.planned_delivery}</Table.Cell>
+					<Table.Cell>{turno.planned_shipping}</Table.Cell>
+					<Table.Cell>{turno.address_from}</Table.Cell>
+					<Table.Cell>{turno.address_to}</Table.Cell>
+					
 					<Table.Cell><div>
         <Inputdate
 		  disable={seleccionado}

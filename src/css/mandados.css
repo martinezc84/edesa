@@ -68,5 +68,25 @@ border-bottom-left-radius: 5px 5px;
 border-width: 1px;
 
 padding: 5px;
+margin-left: 10px;
+
+}
+
+#list li .checkbox {
+	background-color: #6c6b6b;
+
+color: white;
+
+border-top-left-radius: 5px 5px;
+
+border-bottom-right-radius: 5px 5px;
+
+border-top-right-radius: 5px 5px;
+
+border-bottom-left-radius: 5px 5px;
+
+
+
+margin-left: 10px;
 
 }

@@ -141,44 +141,14 @@ export default class Transfers extends Component {
 					loading: true
 				});
                 
-				Axios.post(`${ENDPOINTS.Entregas}`,'{"valor":"'+buscar+'"}')
+				Axios.get(`${ENDPOINTS.Entregas}`)
 					.then(({ data }) => {
 						//console.log(data)
 						
-						let transfers = data.data;
+						let transfers = data;
 						//console.log(transfers)
 						//transfers = sortBy(transfers, [ 'id' ]);
-						transfers.map((invoice, i)=> (
-							//console.log(invoice)
-						invoice.cid= 	invoice.id != '' ? invoice.id = this.quitarlink(invoice.id) :''
-							
-				
-						));
-
-
-						transfers.map((invoice, i)=> (
-							//console.log(invoice)
-						 invoice.id =	this.get_id(invoice.DT_RowId)
-							
-				
-						));
-
-
-						transfers.map((invoice, i)=> (
-							//console.log(invoice)
-							invoice.zid != '' ? invoice.zid = this.quitarlink(invoice.zid) :''
-							
-				
-						));
-
 						
-
-						transfers.map((invoice, i)=> (
-							//console.log(invoice)
-							invoice.ref != '' ? invoice.ref = this.quitarlink(invoice.ref) :''
-							
-				
-						));
 
 					
 						console.log(transfers)
@@ -283,72 +253,7 @@ export default class Transfers extends Component {
 
 
 
-	handleChange=(event)=> {
-		
-		let {  seleccionadosTransfersID } = this.state;
 
-		let { guardar, } = this.props;
-		if (event.target.value.length>4){
-			
-		}
-		this.setState({
-				
-			buscar:event.target.value
-		});
-		
-			
-			Axios.post(`${ENDPOINTS.UnpaidInvoices}`,'{"valor":"'+event.target.value+'"}')
-				.then(({ data }) => {
-					//console.log(data)
-					
-					let transfers = data.data.filter((d) => d.pt == 'CREDITO CONTRA ENTREGA');
-					//console.log(transfers)
-					transfers = sortBy(transfers, [ 'id' ]);
-					transfers.map((invoice, i)=> (
-						//console.log(invoice)
-						invoice.o != '' ? invoice.o = this.quitarlink(invoice.o) :''
-						
-			
-					));
-
-					transfers.map((invoice, i)=> (
-						//console.log(invoice)
-						invoice.i != '' ? invoice.i = this.quitarlink(invoice.i) :''
-						
-			
-					));
-
-					transfers.map((invoice, i)=> (
-						//console.log(invoice)
-						invoice.cli != '' ? invoice.cli = this.quitarlink(invoice.cli) :''
-						
-			
-					));
-
-					transfers.map((invoice, i)=> (
-						//console.log(invoice)
-						invoice.ref != '' ? invoice.ref = this.quitarlink(invoice.ref) :''
-						
-			
-					));
-
-
-					guardar('transfers', transfers);
-					this.setState({
-						transfers: transfers,
-						loading: false,
-						cantidadPaginas: Math.floor(data.recordsTotal / this.state.first) + 1,
-						
-					});
-				})
-				.catch((error) => {
-					console.error(error);
-				});
-		
-
-
-		
-	  }
 
 	  generar_mandados = async ({  vendedoresseleccionados, vendedoresseleccionadosid, seleccionadosId,seleccionados,  }) => {
 		await this.setStateAsync({ operando: true });
@@ -381,7 +286,7 @@ export default class Transfers extends Component {
 				console.log(minutes)
 				fecha = fechastr.split('/');
 				fechastr = fecha[2]+'/'+fecha[1]+'/'+fecha[0]
-				const posttext = '{"fecha": "'+fechastr+'", "hora": "'+horastr+':'+minutes+':00",   "cliente":"","descripcion":"Entrega: Ref'+seleccionado.ref+'","tipo":"2","user":"charly","store_id":1,"encargado":"'+nombre.text+'"}'
+				const posttext = '{"fecha": "'+fechastr+'", "hora": "'+horastr+':'+minutes+':00",   "cliente":"'+seleccionado.address_to+'","descripcion":"Entrega: Ref'+seleccionado.reference+'","tipo":"2","user":"charly","store_id":1,"encargado":"'+nombre.text+'", "active":"1"}'
 				//console.log(posttext)
 
 				const data = await Axios.post(ENDPOINTS.guardarmandados, posttext);
@@ -457,10 +362,7 @@ export default class Transfers extends Component {
 										nextItem={true ? undefined : null}
 									/>
 
-<label>
-          Buscar :
-          <input type="text" value={this.state.buscar} onChange={this.handleChange} />
-        </label>
+
 								</div>
 								
 								<Table sortable celled>
@@ -475,46 +377,43 @@ export default class Transfers extends Component {
 											ID
 										</Table.HeaderCell>
 										<Table.HeaderCell
-											sorted={column === 'i' ? direction : null}
-											onClick={this.handleSort('i')}
+											sorted={column === 'id_number' ? direction : null}
+											onClick={this.handleSort('id_number')}
 										>
 											RESERVACION
 										</Table.HeaderCell>
 										<Table.HeaderCell
-											sorted={column === 'ref' ? direction : null}
-											onClick={this.handleSort('ref')}
+											sorted={column === 'reference' ? direction : null}
+											onClick={this.handleSort('reference')}
 										>
 											REFERENCIA
 										</Table.HeaderCell>
 										<Table.HeaderCell
-											sorted={column === 'dte' ? direction : null}
-											onClick={this.handleSort('dte')}
+											sorted={column === 'planned_delivery' ? direction : null}
+											onClick={this.handleSort('planned_delivery')}
 										>
 											ENTREGA ESTIMADA
 										</Table.HeaderCell>
 										<Table.HeaderCell
-											sorted={column === 'ag' ? direction : null}
-											onClick={this.handleSort('ag')}
+											sorted={column === 'planned_shipping' ? direction : null}
+											onClick={this.handleSort('planned_shipping')}
 										>
 											ENTREGADO EL.
 										</Table.HeaderCell>
 										<Table.HeaderCell
-											sorted={column === 'cli' ? direction : null}
-											onClick={this.handleSort('cli')}
+											sorted={column === 'address_from' ? direction : null}
+											onClick={this.handleSort('address_from')}
 										>
 											ORIGEN
 										</Table.HeaderCell>
 										<Table.HeaderCell
-											sorted={column === 'pt' ? direction : null}
-											onClick={this.handleSort('pt')}
+											sorted={column === 'address_to' ? direction : null}
+											onClick={this.handleSort('address_to')}
 										>
 											DESTINO	
 										
 										</Table.HeaderCell>
-										<Table.HeaderCell>
-											MEMO	
-										
-										</Table.HeaderCell>
+									
 									
 										<Table.HeaderCell	>
 											Fecha mandado	

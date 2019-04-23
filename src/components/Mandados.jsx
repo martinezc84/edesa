@@ -8,6 +8,7 @@ import { Header, Table, Loader, Pagination, Search, Menu } from 'semantic-ui-rea
 import SortableLst from '../components/sortable-list';
 import sortBy from 'lodash/sortBy';
 import { MostrarMensaje } from './Mensajes';
+import { MsjConfirma } from './MsjConfirma';
 
 export default class TipoMandado extends Component {
 	state = {
@@ -26,8 +27,10 @@ export default class TipoMandado extends Component {
 		friday:null,
 		today:null,
 		visible:false,
+		visible_confirm:false,
 		idmandado:null,
-		config:{firma:0}
+		config:{firma:0},
+		delete_id:null
 	};
 
 	seleccionarDia = (e, { name }) => this.cargarmandados(name)
@@ -257,6 +260,41 @@ export default class TipoMandado extends Component {
 		//this.props.cambiarStep(3);
 	}
 
+	onConfirmCon = ()=>{
+		this.setState({				
+			visible_confirm:false
+		});
+		//this.props.cambiarStep(3);
+		console.log("Aceptar")
+		Axios.post(ENDPOINTS.editarmandadoss,'{"id":'+this.state.delete_id+', "active":"0"}')
+		.then(({ data }) => {
+			//console.log(data)
+			
+			
+		})
+		.catch((error) => {
+			console.error(error);
+		});
+	}
+
+	onCancel = ()=>{
+		this.setState({				
+			visible_confirm:false
+		});
+		//this.props.cambiarStep(3);
+		console.log("Cancelar")
+	}
+
+	borrar = (id)=>{
+		this.setState({				
+			visible_confirm:true,
+			delete_id:id
+		});
+
+		
+	 
+	}
+
 	guardarorden = 	 (mandados) =>{
 		this.setState({ mandados});
 		let turnosVendidos =[];
@@ -365,6 +403,8 @@ export default class TipoMandado extends Component {
 												}}
 												onSelect={this.onSelect}
 												firma={config.firma}
+												Borrar={this.borrar}
+												
 											>
 											</SortableLst>) :(<React.Fragment>Sin Mandados</React.Fragment> )
 											}
@@ -373,6 +413,7 @@ export default class TipoMandado extends Component {
 						</React.Fragment>
 					)}
 				<MostrarMensaje titulo={'Datos guardados con exito!'} mensajes={'Mandado'}  visible={this.state.visible} onConfirm={this.onConfirm} />	
+				<MsjConfirma titulo={'Si, Eliminar'} mensajes={'Desea eliminar este mandado?'}  visible={this.state.visible_confirm} onConfirm={this.onConfirmCon} onCancel={this.onCancel} />	
 				</React.Fragment>
 			);
 	}

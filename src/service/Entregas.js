@@ -19,10 +19,10 @@ exports.handler = async (event, context) => {
 		//@ts-ignore
 		
 		let url = `${URL}`;
-		let body = JSON.parse(event.body);
-	    const { valor}  = body;
+		
+	   
 			//console.log('{"draw":"1", "start":"0", "scope":"outcomes", "length":"200","search":{"value":"'+valor+'","regex":"false"}}')
-		let { data } = await axios.post(url, '{"draw":"1", "start":"0", "scope":"outcomes", "length":"200","search":{"value":"'+valor+'","regex":"false"}, "order":{"0":{"column":"0","dir":"desc"}}}' ,{ headers });
+		let { data } = await axios.get(url, { headers });
 	
 		return {
 			statusCode: 200,

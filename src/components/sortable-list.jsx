@@ -2,13 +2,18 @@ import uniqueId from 'lodash/uniqueId';
 import React, { Component } from 'react';
 import ReactSortable  from 'react-sortablejs';
 import mandadostyles from '../css/mandados.css';
-import {  Checkbox, Label } from 'semantic-ui-react';
+import {  Checkbox, Label, Button, Icon } from 'semantic-ui-react';
 import ImageBox from '../components/ImageBox'
 // Functional Component
 export default class SortableList extends Component {
 cambiar=(id)=>{
     //console.log(id)
     this.props.onSelect(id)
+}
+
+borrar=(id)=>{
+    console.log(id)
+    this.props.Borrar(id)
 }
 render(){
 
@@ -42,6 +47,17 @@ render(){
 
 ) :("")
 }
+
+{val.realizado == 0  ? (
+<Button >
+     
+      <Button.Content onClick={() => {
+                    this.borrar(val.id);
+                }} >
+        <Icon name='trash' />
+      </Button.Content>
+    </Button>):("")
+    }
 </li>
 ));
     return (

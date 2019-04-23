@@ -381,7 +381,7 @@ export default class UnpaidInvoices extends Component {
 				console.log(minutes)
 				fecha = fechastr.split('/');
 				fechastr = fecha[2]+'/'+fecha[1]+'/'+fecha[0]
-				const posttext = '{"fecha": "'+fechastr+'", "hora": "'+horastr+':'+minutes+':00",   "cliente":"'+seleccionado.cli+'","descripcion":"'+seleccionado.cn+'","tipo":"3","user":"charly","store_id":1,"encargado":"'+nombre.text+'"}'
+				const posttext = '{"fecha": "'+fechastr+'", "hora": "'+horastr+':'+minutes+':00",   "cliente":"'+seleccionado.cli+'","descripcion":"'+seleccionado.cn+'","tipo":"3","user":"charly","store_id":1,"encargado":"'+nombre.text+'", "active":"1"}'
 				console.log(posttext)
 
 				const data = await Axios.post(ENDPOINTS.guardarmandados, posttext);

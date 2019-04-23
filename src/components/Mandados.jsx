@@ -10,6 +10,8 @@ import sortBy from 'lodash/sortBy';
 import { MostrarMensaje } from './Mensajes';
 import { MsjConfirma } from './MsjConfirma';
 
+
+
 export default class TipoMandado extends Component {
 	state = {
 		turnosVendidos: [],
@@ -358,7 +360,16 @@ export default class TipoMandado extends Component {
 		});
 	};
 
+	
+
 	render() {
+		let MainWithGeoloc = geolocated({
+			positionOptions: {
+				enableHighAccuracy: false,
+			},
+			userDecisionTimeout: 5000,
+		});
+
 		let {
 			turnosVendidos,
 			loading,
@@ -377,7 +388,26 @@ export default class TipoMandado extends Component {
 		} else
 			return (
 				<React.Fragment>
-					
+					<Geolocation
+  render={({
+    fetchingPosition,
+    position: { coords: { latitude, longitude } = {} } = {},
+    error,
+    getCurrentPosition
+  }) =>
+    <div>
+      <button onClick={getCurrentPosition}>Get Position</button>
+      {error &&
+        <div>
+          {error.message}
+        </div>}
+      <pre>
+        latitude: {latitude}
+        longitude: {longitude}
+      </pre>
+    </div>}
+/>
+
 					<Header> Mandados de la semana del {this.state.monday} al {this.state.friday}</Header>
 								<div className="inline-block pr-4">
 									<Menu compact>

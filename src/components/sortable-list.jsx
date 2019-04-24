@@ -28,7 +28,7 @@ render(){
     };
     const listItems = items.map(val => (
     <li className={(val.tipo == 1) ? 'cobro' : (val.tipo == 3) ? 'soporte':''} key={uniqueId()}  data-id={val.id}>
-    {val.listorder} )Hora: {val.hora} Descripción: {val.descripcion} Cliente: {val.cliente} Descripción : {val.descripcion} 
+    {val.listorder} )Hora: {val.hora} Descripción: {val.descripcion} Cliente: {val.cliente} 
     <Checkbox
     onChange={() => {
         

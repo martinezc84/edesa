@@ -285,7 +285,7 @@ export default class Transfers extends Component {
 				console.log(horastr)
 				console.log(minutes)
 				fecha = fechastr.split('/');
-				fechastr = fecha[2]+'/'+fecha[1]+'/'+fecha[0]
+				fechastr = fecha[2]+'/'+fecha[0]+'/'+fecha[1]
 				const posttext = '{"fecha": "'+fechastr+'", "hora": "'+horastr+':'+minutes+':00",   "cliente":"'+seleccionado.address_to+'","descripcion":"Entrega: Ref'+seleccionado.reference+'","tipo":"2","user":"charly","store_id":1,"encargado":"'+nombre.text+'", "active":"1"}'
 				//console.log(posttext)
 

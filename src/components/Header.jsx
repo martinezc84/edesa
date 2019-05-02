@@ -27,7 +27,7 @@ class Header extends Component {
 		
 		if(user!=null){
 			userdata = user.app_metadata;
-		//console.log(userdata.roles[0])
+		console.log(userdata.roles)
 		}
 		let logged = !(user === null);
 		return (

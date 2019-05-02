@@ -24,7 +24,7 @@ class Header extends Component {
 	render() {
 		const user = netlifyIdentity.currentUser();
 		let userdata;
-		
+		console.log(user)
 		if(user!=null){
 			userdata = user.app_metadata;
 		console.log(userdata.roles)

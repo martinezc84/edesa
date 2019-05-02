@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { Menu } from 'semantic-ui-react';
 import { navigate } from 'gatsby';
+import MenuAdmin from './MenuAdmin'
 import netlifyIdentity from 'netlify-identity-widget';
 import '../css/style.css';
 import SEO from './seo';
@@ -22,7 +23,12 @@ class Header extends Component {
 	
 	render() {
 		const user = netlifyIdentity.currentUser();
+		let userdata;
 		
+		if(user!=null){
+			userdata = user.app_metadata;
+		//console.log(userdata.roles[0])
+		}
 		let logged = !(user === null);
 		return (
 			<div>
@@ -35,10 +41,15 @@ class Header extends Component {
 				<Menu>
 					<Menu.Item name="Inicio" path="/" onClick={this.onClick} />
 					{logged ? (
-						<React.Fragment>
-							<Menu.Item name="app" path="/app" onClick={this.onClick} />
-							<Menu.Item name="config" path="/config" onClick={this.onClick} />
-						</React.Fragment>
+						
+						<MenuAdmin
+						onClick={this.onClick}
+						// @ts-ignore
+						admin = {(userdata.roles[0]=='Admin')}
+						>
+							
+						</MenuAdmin>
+						
 					) : null}
 
 					<Menu.Menu position="right">

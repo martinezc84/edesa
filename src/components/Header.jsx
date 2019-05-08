@@ -7,7 +7,15 @@ import netlifyIdentity from 'netlify-identity-widget';
 import '../css/style.css';
 import SEO from './seo';
 class Header extends Component {
+	state = {
+		location:null,
+		latitude:null,
+		longitude:null
+	}
+
 	componentDidMount() {
+
+		this.findCoordinates();
 		netlifyIdentity.init();
 		netlifyIdentity.on('login', (user) => {
 			navigate('/');
@@ -20,14 +28,33 @@ class Header extends Component {
 	onClick = (e, { path }) => {
 		navigate(path);
 	};
+
+	findCoordinates = () => {
+		navigator.geolocation.getCurrentPosition(
+		  position => {
+			console.log(position)
+			let {latitude, longitude} = position.coords;
+			console.log(latitude)
+			console.log(longitude)
+			this.setState({ latitude, longitude });
+		  },
+		  error => console.log(error.message),
+		  { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+		);
+	  };
+
+	
+	
 	
 	render() {
+
+		
 		const user = netlifyIdentity.currentUser();
 		let userdata;
-		console.log(user)
+		//console.log(user)
 		if(user!=null){
 			userdata = user.app_metadata;
-		console.log(userdata.roles)
+		//console.log(userdata.roles)
 		}
 		let logged = !(user === null);
 		return (
@@ -63,6 +90,7 @@ class Header extends Component {
 									}}
 								/>
 								<Menu.Item>{user ? user.email : ''}</Menu.Item>
+								
 							</React.Fragment>
 						) : (
 							<Menu.Item name="Login" onClick={() => netlifyIdentity.open()} />

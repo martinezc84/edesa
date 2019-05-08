@@ -8,50 +8,7 @@ export default class FilaTipo extends Component {
 		return np.seleccionado !== this.props.seleccionado || np.turno.statusOperacion;
 	}
 	render() {
-		let { seleccionar, seleccionado, turno, view } = this.props;
-		if (view)
-			return (
-				<Table.Row>	
-					<Table.Cell>{turno.name}</Table.Cell>
-					<Table.Cell><Checkbox
-							onChange={() => {
-								seleccionar(turno.id);
-							}}
-							toggle
-							checked={seleccionado}
-						/></Table.Cell>
-					<Table.Cell><label><Checkbox
-							onChange={() => {
-								seleccionar(turno.id);
-							}}
-							toggle
-							checked={seleccionado}
-						/></label></Table.Cell>
-					<Table.Cell><Checkbox
-							onChange={() => {
-								seleccionar(turno.id);
-							}}
-							toggle
-							checked={seleccionado}
-						/></Table.Cell>
-					<Table.Cell><Checkbox
-							onChange={() => {
-								seleccionar(turno.id);
-							}}
-							toggle
-							checked={seleccionado}
-						/></Table.Cell>
-					<Table.Cell><Checkbox
-							onChange={() => {
-								seleccionar(turno.id);
-							}}
-							toggle
-							checked={seleccionado}
-						/></Table.Cell>
-					
-				</Table.Row>
-			);
-		else
+		let { seleccionar, tiempo, firma, geo, email, sms, seleccionado, turno} = this.props;
 			return (
 				<Table.Row>
 					<Table.Cell>{turno.name}</Table.Cell>
@@ -64,28 +21,35 @@ export default class FilaTipo extends Component {
 						/></Table.Cell>
 					<Table.Cell><label><Checkbox
 							onChange={() => {
-								seleccionar(turno.id);
+								tiempo(turno.id);
 							}}
 							toggle
 							checked={seleccionado}
 						/></label></Table.Cell>
 					<Table.Cell><Checkbox
 							onChange={() => {
-								seleccionar(turno.id);
+								firma(turno.id);
 							}}
 							toggle
 							checked={seleccionado}
 						/></Table.Cell>
 					<Table.Cell><Checkbox
 							onChange={() => {
-								seleccionar(turno.id);
+								geo(turno.id);
 							}}
 							toggle
 							checked={seleccionado}
 						/></Table.Cell>
 					<Table.Cell><Checkbox
 							onChange={() => {
-								seleccionar(turno.id);
+								email(turno.id);
+							}}
+							toggle
+							checked={seleccionado}
+						/></Table.Cell>
+					<Table.Cell><Checkbox
+							onChange={() => {
+								sms(turno.id);
 							}}
 							toggle
 							checked={seleccionado}

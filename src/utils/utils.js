@@ -49,6 +49,7 @@ const NF_ENDPOINTS = {
 	ListaMandados:URL_PREFIX + process.env.GATSBY_URL_LISTADO_MANDADOS,
 	Funciones:URL_PREFIX + process.env.GATSBY_URL_FUNCIONES,
 	saveimage :URL_PREFIX+process.env.GATSBY_URL_FIRMA,
+	savephoto :URL_PREFIX+process.env.GATSBY_URL_PHOTO,
 	Entregas :URL_PREFIX+process.env.GATSBY_URL_ENTREGAS,
 	Casos :URL_PREFIX+process.env.GATSBY_URL_CASOS
 	

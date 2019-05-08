@@ -12,6 +12,11 @@ export default class TipoMandado extends Component {
 	state = {
 		turnosVendidos: [],
 		seleccionados: [],
+		tiempo: [],
+		firna: [],
+		geo: [],
+		email: [],
+		sms: [],
 		seleccionadosId: [],
 		paginaSeleccionada: 1,
 		cantidadPaginas: 0,

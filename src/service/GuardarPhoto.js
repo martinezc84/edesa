@@ -26,12 +26,12 @@ exports.handler = (event, context, callback) => {
 	}
 	//console.log(event.body);
 	
-	let URL = 'https://dcgse.com/calendario_api/apical/saveimage';
+	let URL = 'https://dcgse.com/calendario_api/apical/savephoto';
 	
 	return axios
 		.post(URL, event.body, { headers: headers })
 		.then((data) => {
-			console.log({ response: JSON.stringify(data.data) });
+			//console.log({ response: JSON.stringify(data.data) });
 			return {
 				statusCode: 200,
 				body: JSON.stringify(data.data),

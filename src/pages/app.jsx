@@ -32,6 +32,7 @@ export default class App extends Component {
 		step: 1
 	};
 
+
 	componentDidMount() {
 		let user = netlifyIdentity.currentUser();
 		if (user === null) {

@@ -3,12 +3,10 @@ import React, { Component } from 'react';
 import netlifyIdentity from 'netlify-identity-widget';
 import { Layout } from '../components/Layout';
 import RutaPrivada from '../components/RutaPrivada';
-import TiposDeTurno from '../components/tipoDeTurno';
+import Mandados_user from '../components/Mandados_user';
 import Steps from '../components/Steps';
 import Firma from '../components/Firma';
-import Mandados from '../components/Mandados';
-import Transfers from '../components/Transfers';
-import UnpaidInvoices from '../components/UnpaidInvoices';
+
 import { navigate } from 'gatsby';
 import Casos from '../components/Casos';
 import { Container } from 'semantic-ui-react';
@@ -65,47 +63,15 @@ export default class Listado extends Component {
 		});
 	};
 
-	tiposDeTurno = () => {
-		return (
-			<TiposDeTurno
-				tipoSeleccionado={this.state.tipoSeleccionado ? this.state.tipoSeleccionado.key : null}
-				valores={this.state.tiposDeTurno}
-				guardar={this.guardar}
-				empleados={this.state.empleados ? this.state.empleados: null}
-				cambiarStep= {this.cambiaStep}
-			/>
-		);
-	};
-
-	turnosVendidos = () => {
-		console.log(this.state.config)
+	Listado = () => {
 		let props = {
 			seleccionadosVendidosID: this.state.seleccionadosVendidosID,
 			tipo: this.state.tipoSeleccionado,
 			cambiarStep:this.cambiaStep,
+			empleados:this.state.empleados,
 			config:this.state.config
 		};
-		return <Mandados valores={this.state.items} guardar={this.guardar} {...props} />;
-	};
-
-	transferencias = () => {
-		let props = {
-			seleccionadosTransfersID: this.state.seleccionadosTransfersID,
-			tipo: this.state.tipoSeleccionado,
-			cambiarStep:this.cambiaStep,
-			empleados:this.state.empleados
-		};
-		return <Transfers valores={this.state.transfers} guardar={this.guardar} {...props} />;
-	};
-
-	tiposMandados = () => {
-		let props = {
-			seleccionadosVendidosID: this.state.seleccionadosVendidosID,
-			tipo: this.state.tipoSeleccionado,
-			cambiarStep:this.cambiaStep,
-			empleados:this.state.empleados
-		};
-		return <UnpaidInvoices valores={this.state.Invoices} guardar={this.guardar} {...props} />;
+		return <Mandados_user valores={this.state.Invoices} guardar={this.guardar} {...props} />;
 	};
 
 	firma = () => {
@@ -149,20 +115,10 @@ export default class Listado extends Component {
 		return (
 			<Layout>
 				<RutaPrivada>
-					<Container>
-						<Steps {...stepsProps} />
-					</Container>
+					
 					<div className="pt-6">
 						{step === 1 ? (
-							<React.Fragment>{this.tiposMandados()}</React.Fragment>
-						) : step === 2 ? (
-							<React.Fragment>{this.transferencias()}</React.Fragment>
-						) : step === 3 ? (
-							<React.Fragment>{this.turnosVendidos()}</React.Fragment>
-						) : step === 4 ? (
-							<React.Fragment>{this.casos()}</React.Fragment>
-						)  : step === 5 ? (
-							<React.Fragment>{this.firma()}</React.Fragment>
+							<React.Fragment>{this.Listado()}</React.Fragment>
 						) : null}
 					</div>
 				</RutaPrivada>

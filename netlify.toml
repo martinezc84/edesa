@@ -30,6 +30,7 @@
 	GATSBY_URL_MANDADO='/.netlify/functions/tipoMandado?id='
 	GATSBY_URL_ENTREGAS='/.netlify/functions/Entregas'
 	GATSBY_URL_CASOS='/.netlify/functions/Casos'
+	GATSBY_URL_PHOTO='/.netlify/functions/GuardarPhoto'
 
 	# Dominio del sitio de las APIs (Backend)
 	GATSBY_ZAURU_PREFIX='https://app.zauru.com'

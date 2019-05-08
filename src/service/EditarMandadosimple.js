@@ -1,8 +1,6 @@
 //@ts-check
 import axios from 'axios';
 import { headers, URLS } from '../utils/utils';
-import format from 'date-fns/format';
-import subHours from 'date-fns/sub_hours';
 import JSON from 'circular-json';
 
 const headersr = {
@@ -18,7 +16,7 @@ exports.handler = (event, context, callback) => {
 	if (event.httpMethod !== 'POST') {
 		return { statusCode: 405, body: 'Method Not Allowed!' };
 	}
-	//console.log(event.body);
+	console.log(event.body);
 	
 	let URL = 'https://dcgse.com/calendario_api/apical/editmandados';
 	

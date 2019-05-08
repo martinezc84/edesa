@@ -20,7 +20,7 @@ export default class ImageBox extends Component {
     return (
       <div>
         <button  type="button" onClick={() => this.setState({ isOpen: true })}>
-          Firma
+         {this.props.label}
         </button>
  
         {isOpen && (

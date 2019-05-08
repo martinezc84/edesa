@@ -7,7 +7,7 @@ export default class MenuAdmin extends Component {
 
 	render() {
 		let { onClick, admin } = this.props;
-		console.log(admin)
+		//console.log(admin)
 			if (admin)
 				return (
 		<React.Fragment>

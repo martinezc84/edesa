@@ -1,10 +1,9 @@
 import uniqueId from 'lodash/uniqueId';
 import React, { Component } from 'react';
-
 import mandadostyles from '../css/mandados.css';
 import {  Checkbox, Label, Button, Icon } from 'semantic-ui-react';
 import ImageBox from '../components/ImageBox'
-import UploadBox from '../components/UploadBox'
+import UploadBox from '../components/uploadbox'
 // Functional Component
 export default class SortableList extends Component {
 cambiar=(id)=>{

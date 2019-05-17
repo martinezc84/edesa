@@ -90,3 +90,24 @@ border-bottom-left-radius: 5px 5px;
 margin-left: 10px;
 
 }
+
+.inputform{
+	border-color: rgba(34,36,38,.35);
+	box-shadow: none;
+	width: 100%;
+	display: block;
+	border-style: solid;
+	height: 30px;
+	border-width: 1px;
+}
+
+.submitform{
+	margin-top: 20px;
+	border-color: rgba(34,36,38,.35);
+	box-shadow: none;
+	width: 100%;
+	display: block;
+	border-style: solid;
+	height: 30px;
+	border-width: 1px;
+}

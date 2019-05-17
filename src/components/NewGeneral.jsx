@@ -1,0 +1,256 @@
+//@ts-check
+import React, { Component } from 'react';
+import netlifyIdentity from 'netlify-identity-widget';
+import '../css/style.css';
+import Axios from 'axios';
+import { ENDPOINTS, API_URL } from '../utils/utils';
+import { Table, Checkbox, Label, Dropdown } from 'semantic-ui-react';
+import FilaFactura from './FilaFactura';
+import sortBy from 'lodash/sortBy';
+import { MostrarMensaje } from './Mensajes';
+import Inputdate from './Inputdate';
+
+
+
+export default class UnpaidInvoices extends Component {
+	state = {
+        
+        descrip:"",
+        empleado:"",
+        empleadoid:null,
+		vendedoresseleccionados:[],
+		vendedoresseleccionadosId:[],
+		startDate: new Date(),
+		fecha:null,
+		date: new Date(),
+        visible:false,
+    };
+    
+    shouldComponentUpdate(np) {
+		
+		return true;
+		
+	}
+
+	setStateAsync(state) {
+		return new Promise((resolve) => {
+			this.setState(state, resolve);
+		});
+	}
+
+
+
+	// Método para seleccionar o des seleccionar checkbox de turnos
+	 
+
+	get_empleado(id){
+		for (var i=0; i<this.state.empleados.length; i++) {
+			//console.log(this.state.fechas[i])
+            if (this.state.empleados[i].key==id){
+				return this.state.empleados[i];
+			}
+            //a b c
+		}
+		
+		return null;
+    } 
+    
+    guardar = (dte, idf=0) => {
+		console.log(dte)
+		this.setState({
+			fecha:dte})
+
+		 //console.log(fechas)
+
+	};
+
+	
+    
+    trataEmpleados = (empleados) => {
+		return empleados.map((t) => ({
+			key: t.id,
+			value: t.id,
+			text: t.name,
+			todo: t
+		}));
+	};
+
+
+	componentDidMount() {
+		let user = netlifyIdentity.currentUser();
+		let { tipo } = this.props;
+
+		let { buscar } = this.state;
+	
+
+		
+		if (user !== null) {
+			let { guardar,   empleados } = this.props;
+		
+                
+				
+					Axios.get(`${ENDPOINTS.empleados}`)
+					.then(({ data }) => {
+						//console.log(data)
+						
+						let empleados = data.filter((d) => d.seller === true);
+						//console.log(empleados)
+						empleados = sortBy(empleados, [ 'name' ]);	
+						empleados = this.trataEmpleados(empleados)	
+
+
+						guardar('empleados', empleados);
+						this.setState({
+							empleados: empleados,
+							
+						});
+					})
+					.catch((error) => {
+						console.error(error);
+					});
+			
+    }
+}
+
+
+
+	seleccionaVendedor = (e, item) => {
+	console.log(item)
+		this.setState(
+			{
+                empleadoid:item.id,
+                empleado:item
+			})
+	};
+
+	
+
+
+
+	
+	  generar_mandados = async () => {
+		await this.setStateAsync({ operando: true });
+		this.setState({
+			loading: true
+        });
+        
+        let fecha = this.state.fecha;
+	
+		// Ciclo de llamadas
+		
+			try {
+							
+
+				if(fecha==null){
+					
+					fecha = this.state.date
+				}
+				
+				//console.log(mensajero)
+				// @ts-ignore
+				let nombre  = this.get_empleado(this.state.empleadoid)
+				//console.log(nombre)
+				//console.log(fecha)
+				let fechastr = fecha.toLocaleDateString();
+				let horastr = fecha.getHours();
+				let minutes = fecha.getMinutes();
+				console.log(horastr)
+				console.log(minutes)
+				fecha = fechastr.split('/');
+				fechastr = fecha[2]+'/'+fecha[1]+'/'+fecha[0]
+				const posttext = '{"fecha": "'+fechastr+'", "hora": "'+horastr+':'+minutes+':00",  "cliente":"","descripcion":"'+this.state.descrip+'","tipo":"1","user":"charly","store_id":1,"encargado":"'+nombre.text+'", "active":"1"}'
+				//console.log(posttext)
+
+				const data = await Axios.post(ENDPOINTS.guardarmandados, posttext);
+				console.log(data)
+			} catch (error) {
+				console.error({ error });
+				
+			} finally {
+				this.setState({
+					loading: false,
+					visible:true
+				});
+			
+			
+			}
+		
+		
+		};
+		
+		onConfirm = ()=>{
+			this.setState({				
+				visible:false
+			});
+			this.props.cambiarStep(3);
+        }
+        
+        handleInputChange = event => {
+            const target = event.target
+            const value = target.value
+            const name = target.name
+        
+            this.setState({
+              [name]: value,
+            })
+          }
+        
+          handleSubmit = event => {
+            event.preventDefault()
+            this.generar_mandados()
+            //alert(`Welcome ${this.state.firstName} ${this.state.lastName}!`)
+          }
+
+	render() {
+
+        
+		let {
+            empleados,
+            empleadoid
+			
+		} = this.state;
+
+		
+			return (
+                <div >
+                <form onSubmit={this.handleSubmit}>
+                <label>
+                  Fecha
+                  <Inputdate
+                    
+                    guardar={this.props.guardar}
+                    
+        />
+                </label>
+                
+                <label>
+                  Descripción
+                  <input
+                    type="text"
+                    name="descrip"
+                    value={this.state.descrip}
+                    onChange={this.handleInputChange}
+                    className="inputform"
+                  />
+                </label>
+                
+                <label>
+                  Encargado
+                  <Dropdown
+							value={empleadoid}
+							onChange={this.seleccionaVendedor}
+							placeholder="Selecciona Mensajero"
+							fluid							
+							search
+							selection
+							options={empleados}
+						/>
+                </label>
+                <button type="submit" className="submitform">Generar</button>
+              </form>
+              </div>
+				
+			)
+	
+}
+}

@@ -18,6 +18,7 @@ exports.handler = async (event, context) => {
 		let id = event.queryStringParameters.id;
 
 		let { data } = await axios.get(URL+id, { headers });
+		//console.error(data);
 		return {
 			statusCode: 200,
 			body: JSON.stringify(data),

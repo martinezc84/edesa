@@ -6,9 +6,9 @@ import ImageBox from '../components/ImageBox'
 import UploadBox from '../components/uploadbox'
 // Functional Component
 export default class SortableList extends Component {
-cambiar=(id)=>{
+cambiar=(id, tipo)=>{
     //console.log(id)
-    this.props.onSelect(id)
+    this.props.onSelect(id, tipo)
 }
 
 borrar=(id)=>{
@@ -29,7 +29,7 @@ render(){
         
         if(val.realizado == 0){
             val.realizado = 1;
-            this.cambiar(val.id)
+            this.cambiar(val.id,val.tipo)
         }
         
     }}    

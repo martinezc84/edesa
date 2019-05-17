@@ -210,23 +210,7 @@ export default class TipoMandado extends Component {
 	componentDidMount() {
 		let user = netlifyIdentity.currentUser();
 		let { tipo, guardar, config } = this.props;
-		if (config.length === 0 ){
-    Axios.get(API_URL.tipoMandado+'1&name=General').then(({ data }) => {
-			//console.log(data[0])
-			this.setState({
-				config:data[0]
-			});
-			this.props.guardar('config', data[0]);
-		})
-		.catch((error) => {
-			console.error(error);
-		});
-
-	}else{
-		this.setState({
-			config:this.props.config
-		});
-	}
+		
 		if (user !== null) {
 			let { guardar, valores, seleccionadosVendidosID } = this.props;
 			if (valores.length === 0) {

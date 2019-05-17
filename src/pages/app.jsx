@@ -9,9 +9,12 @@ import Firma from '../components/Firma';
 import Mandados from '../components/Mandados';
 import Transfers from '../components/Transfers';
 import UnpaidInvoices from '../components/UnpaidInvoices';
+import General from '../components/NewGeneral';
 import { navigate } from 'gatsby';
 import Casos from '../components/Casos';
 import { Container } from 'semantic-ui-react';
+import Axios from 'axios';
+import { ENDPOINTS, API_URL } from '../utils/utils';
 
 
 export default class App extends Component {
@@ -29,12 +32,68 @@ export default class App extends Component {
 		seleccionadosVendidosID: [],
 		items: [],
 		config:[],
-		step: 1
-	};
+		step: 1,
+		general:null,
+		cobros:null,
+		entregas:null,
+		servicios:null
+		};
 
+
+	cargarconfig = async () => {
+
+		if (this.state.config.length == 0 ){
+			await Axios.get(ENDPOINTS.tiposMandado+'1').then(({ data }) => {
+				let conf=[]
+				for (let x=0;x<data.length;x++){
+
+						console.log(data[x].type)
+						if (data[x].type=='1'){
+							//console.log('General');
+							conf = data[x]
+							console.log(conf);
+							this.setState({
+								general: conf
+							});
+						}
+						if (data[x].type=='2'){
+							conf = data[x]
+							this.setState({
+								cobros: conf
+							});
+						}
+						if (data[x].type=='3'){
+							conf = data[x]
+							console.log(conf);
+							this.setState({
+								entregas: conf
+							});
+						}
+						if (data[x].type=='4	'){
+							conf = data[x]
+							this.setState({
+								servicios: conf
+							});
+							break
+						}
+					}
+
+					
+				
+				})
+				.catch((error) => {
+					console.error(error);
+				});
+		
+			}
+
+	}
 
 	componentDidMount() {
 		let user = netlifyIdentity.currentUser();
+		this.cargarconfig()
+		
+
 		if (user === null) {
 			navigate('/');
 		}
@@ -84,7 +143,11 @@ export default class App extends Component {
 			seleccionadosVendidosID: this.state.seleccionadosVendidosID,
 			tipo: this.state.tipoSeleccionado,
 			cambiarStep:this.cambiaStep,
-			config:this.state.config
+			config:this.state.config,
+			general:this.state.general,
+			cobros:this.state.cobros,
+			entregas:this.state.entregas,
+			servicios:this.state.servicios
 		};
 		return <Mandados valores={this.state.items} guardar={this.guardar} {...props} />;
 	};
@@ -107,6 +170,14 @@ export default class App extends Component {
 			empleados:this.state.empleados
 		};
 		return <UnpaidInvoices valores={this.state.Invoices} guardar={this.guardar} {...props} />;
+	};
+
+	general = () => {
+		let props = {
+			
+			empleados:this.state.empleados
+		};
+		return <General valores={this.state.Invoices} guardar={this.guardar} {...props} />;
 	};
 
 	firma = () => {
@@ -140,13 +211,21 @@ export default class App extends Component {
 	}
 
 	render() {
-		let { step, tipoSeleccionado } = this.state;
+		
+		let { step, tipoSeleccionado, general, cobros, servicios, entregas } = this.state;
 		let stepsProps = {
 			active: step,
 			cambiarStep: this.cambiaStep,
-			tipoSeleccionado: tipoSeleccionado
+			tipoSeleccionado: tipoSeleccionado,
+			entregas:entregas,
+			servicios:servicios,
+			general:general,
+			cobros:cobros
+			
 		};
-		 
+		
+		//console.log(general);
+		
 		return (
 			<Layout>
 				<RutaPrivada>
@@ -164,6 +243,8 @@ export default class App extends Component {
 							<React.Fragment>{this.casos()}</React.Fragment>
 						)  : step === 5 ? (
 							<React.Fragment>{this.firma()}</React.Fragment>
+						) : step === 6 ? (
+							<React.Fragment>{this.general()}</React.Fragment>
 						) : null}
 					</div>
 				</RutaPrivada>

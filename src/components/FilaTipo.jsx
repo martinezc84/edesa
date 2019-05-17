@@ -1,58 +1,151 @@
 //@ts-check
 import React, { Component } from 'react';
 import { Table, Checkbox, Label } from 'semantic-ui-react';
+import Axios from 'axios';
+import { ENDPOINTS } from '../utils/utils';
 
 export default class FilaTipo extends Component {
+
+
+	state = {
+		time: this.props.turno.time,
+		firma: this.props.firma,
+		geo: this.props.turno.geo,
+		sms: this.props.turno.sms_notification,
+		email: this.props.turno.email_notification,
+		turno:this.props.turno
+	}
 	// Evita re renders innecesarios al cambiar el state
 	shouldComponentUpdate(np) {
-		return np.seleccionado !== this.props.seleccionado || np.turno.statusOperacion;
+		return true;
 	}
+
+	firma(id){
+		let edit 
+			edit=this.state.firma==1? 0 : 1 
+		Axios.post(ENDPOINTS.editarTipoMandado,'{"id":'+id+',"firma":"'+edit+'"}')
+					.then(({ data }) => {
+						//console.log(data)
+					
+						
+						this.setState({
+							firma:edit
+						});
+					})
+					.catch((error) => {
+						console.error(error);
+					});
+	}
+
+	tiempo(id){
+		let edit 
+			edit=this.state.time==1? 0 : 1 
+		Axios.post(ENDPOINTS.editarTipoMandado,'{"id":'+id+',"time":"'+edit+'"}')
+					.then(({ data }) => {
+						//console.log(data)
+					
+						
+						this.setState({
+							time:edit
+						});
+					})
+					.catch((error) => {
+						console.error(error);
+					});
+	}
+
+	geo(id){
+		let edit 
+			edit=this.state.geo==1? 0 : 1 
+		Axios.post(ENDPOINTS.editarTipoMandado,'{"id":'+id+',"geo":"'+edit+'"}')
+					.then(({ data }) => {
+						//console.log(data)
+					
+						
+						this.setState({
+							geo:edit
+						});
+					})
+					.catch((error) => {
+						console.error(error);
+					});
+	}
+
+	sms(id){
+		let edit 
+			edit=this.state.sms==1? 0 : 1 
+		Axios.post(ENDPOINTS.editarTipoMandado,'{"id":'+id+',"sms_notification":"'+edit+'"}')
+					.then(({ data }) => {
+						//console.log(data)
+					
+						
+						this.setState({
+							sms:edit
+						});
+					})
+					.catch((error) => {
+						console.error(error);
+					});
+	}
+
+	email(id){
+		let edit 
+			edit=this.state.email==1? 0 : 1 
+		Axios.post(ENDPOINTS.editarTipoMandado,'{"id":'+id+',"email_notification":"'+edit+'"}')
+					.then(({ data }) => {
+						//console.log(data)
+					
+						
+						this.setState({
+							email:edit
+						});
+					})
+					.catch((error) => {
+						console.error(error);
+					});
+	}
+
+	
 	render() {
-		let { seleccionar, tiempo, firma, geo, email, sms, seleccionado, turno} = this.props;
+		let { seleccionar, time, firma, geo, email, sms, seleccionado, turno} = this.state;
 			return (
 				<Table.Row>
 					<Table.Cell>{turno.name}</Table.Cell>
-					<Table.Cell><Checkbox
-							onChange={() => {
-								seleccionar(turno.id);
-							}}
-							toggle
-							checked={seleccionado}
-						/></Table.Cell>
+					
 					<Table.Cell><label><Checkbox
 							onChange={() => {
-								tiempo(turno.id);
+								this.tiempo(turno.id);
 							}}
 							toggle
-							checked={seleccionado}
+							checked={(time==1)}
 						/></label></Table.Cell>
 					<Table.Cell><Checkbox
 							onChange={() => {
-								firma(turno.id);
+								this.firma(turno.id);
 							}}
 							toggle
-							checked={seleccionado}
+							checked={(firma==1)}
 						/></Table.Cell>
 					<Table.Cell><Checkbox
 							onChange={() => {
-								geo(turno.id);
+								this.geo(turno.id);
 							}}
 							toggle
-							checked={seleccionado}
+							checked={(geo==1)}
 						/></Table.Cell>
 					<Table.Cell><Checkbox
 							onChange={() => {
-								email(turno.id);
+								this.email(turno.id);
 							}}
 							toggle
-							checked={seleccionado}
+							checked={(email==1)}
 						/></Table.Cell>
 					<Table.Cell><Checkbox
 							onChange={() => {
-								sms(turno.id);
+								this.sms(turno.id);
 							}}
 							toggle
-							checked={seleccionado}
+							checked={(sms==1)}
 						/></Table.Cell>
 				</Table.Row>
 			);

@@ -4,12 +4,11 @@ import netlifyIdentity from 'netlify-identity-widget';
 import { Layout } from '../components/Layout';
 import RutaPrivada from '../components/RutaPrivada';
 import Mandados_user from '../components/Mandados_user';
-import Steps from '../components/Steps';
 import Firma from '../components/Firma';
-
 import { navigate } from 'gatsby';
 import Casos from '../components/Casos';
-import { Container } from 'semantic-ui-react';
+import Axios from 'axios';
+import { ENDPOINTS, API_URL } from '../utils/utils';
 
 
 export default class Listado extends Component {
@@ -27,11 +26,72 @@ export default class Listado extends Component {
 		seleccionadosVendidosID: [],
 		items: [],
 		config:[],
-		step: 1
+		step: 1,
+		general:null,
+		cobros:null,
+		entregas:null,
+		servicios:null,
+		geo:false
 	};
+
+	cargarconfig = async () => {
+
+		if (this.state.config.length == 0 ){
+			await Axios.get(ENDPOINTS.tiposMandado+'1').then(({ data }) => {
+				let conf=[]
+
+				for (let x=0;x<data.length;x++){
+
+						if(data[x].geo==1){
+							this.setState({
+								geo: true
+							});
+						}
+						if (data[x].type=='1'){
+							//console.log('General');
+							conf = data[x]
+							console.log(conf);
+							this.setState({
+								general: conf
+							});
+						}
+						if (data[x].type=='2'){
+							conf = data[x]
+							this.setState({
+								cobros: conf
+							});
+						}
+						if (data[x].type=='3'){
+							conf = data[x]
+							console.log(conf);
+							this.setState({
+								entregas: conf
+							});
+						}
+						if (data[x].type=='4	'){
+							conf = data[x]
+							this.setState({
+								servicios: conf
+							});
+							break
+						}
+					}
+
+					
+				
+				})
+				.catch((error) => {
+					console.error(error);
+				});
+		
+			}
+
+	}
+
 
 	componentDidMount() {
 		let user = netlifyIdentity.currentUser();
+		this.cargarconfig()
 		if (user === null) {
 			navigate('/');
 		}
@@ -69,7 +129,12 @@ export default class Listado extends Component {
 			tipo: this.state.tipoSeleccionado,
 			cambiarStep:this.cambiaStep,
 			empleados:this.state.empleados,
-			config:this.state.config
+			config:this.state.config,
+			general:this.state.general,
+			cobros:this.state.cobros,
+			entregas:this.state.entregas,
+			servicios:this.state.servicios,
+			geo:this.state.geo
 		};
 		return <Mandados_user valores={this.state.Invoices} guardar={this.guardar} {...props} />;
 	};

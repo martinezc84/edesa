@@ -15,7 +15,7 @@ class Header extends Component {
 
 	componentDidMount() {
 
-		this.findCoordinates();
+		
 		netlifyIdentity.init();
 		netlifyIdentity.on('login', (user) => {
 			navigate('/');
@@ -29,20 +29,7 @@ class Header extends Component {
 		navigate(path);
 	};
 
-	findCoordinates = () => {
-		navigator.geolocation.getCurrentPosition(
-		  position => {
-			console.log(position)
-			let {latitude, longitude} = position.coords;
-			console.log(latitude)
-			console.log(longitude)
-			this.setState({ latitude, longitude });
-		  },
-		  error => console.log(error.message),
-		  { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-		);
-	  };
-
+	
 	
 	
 	

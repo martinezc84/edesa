@@ -40,7 +40,7 @@ export default class Listado extends Component {
 			await Axios.get(ENDPOINTS.tiposMandado+'1').then(({ data }) => {
 				let conf=[]
 
-				for (let x=0;x<=data.length;x++){
+				for (let x=0;x<data.length;x++){
 
 						if(data[x].geo==1){
 							this.setState({

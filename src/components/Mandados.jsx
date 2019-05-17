@@ -35,6 +35,20 @@ export default class TipoMandado extends Component {
 		delete_id:null
 	};
 
+	findCoordinates = () => {
+		navigator.geolocation.getCurrentPosition(
+		  position => {
+			console.log(position)
+			let {latitude, longitude} = position.coords;
+			console.log(latitude)
+			console.log(longitude)
+			this.setState({ latitude, longitude });
+		  },
+		  error => console.log(error.message),
+		  { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+		);
+	  };
+
 	seleccionarDia = (e, { name }) => this.cargarmandados(name)
 
 	cargarmandados(dia){
@@ -167,9 +181,28 @@ export default class TipoMandado extends Component {
 	}
 	}
 
-	onSelect = async (id)=>{
+	usafirma(tipo){
 
-		if(this.state.config[0].firma == 1){
+		switch(tipo){
+			case '1':
+			return this.state.general.firma
+
+			case '2':
+			return this.state.cobros.firma
+
+			case '3':
+			return this.state.entregas.firma
+
+			case '4':
+			return this.state.servicios.firma
+
+			
+		}
+	}
+
+	onSelect = async (id,tipo)=>{
+		console.log(this.usafirma(tipo))
+		if(this.usafirma(tipo) == '1'){
 		this.props.guardar('idmandado', id);
 		let fecha = this.state.turnosVendidos.filter((s) => s.id == id);
 		this.props.guardar('fechamandado', fecha);
@@ -209,7 +242,22 @@ export default class TipoMandado extends Component {
 
 	componentDidMount() {
 		let user = netlifyIdentity.currentUser();
-		let { tipo, guardar, config } = this.props;
+		console.log(this.props)
+		let { tipo, guardar, config, general, cobros, entregas, servicios, geo } = this.props;
+
+		this.setState({
+				general:general,
+				cobros:cobros,
+				entregas:entregas,
+				servicios:servicios
+
+		})
+
+		if(geo){
+			
+			this.findCoordinates();
+		
+	}
 		
 		if (user !== null) {
 			let { guardar, valores, seleccionadosVendidosID } = this.props;

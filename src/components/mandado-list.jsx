@@ -35,7 +35,7 @@ render(){
     }}    
     checked={val.realizado == 1}
 />
-{val.realizado == 1 && this.props.firma == 1 ? (
+{val.realizado == 1 && val.sign == 1 ? (
 <ImageBox
     image={process.env.GATSBY_URL_IMAGES+'/signature_'+val.id+'.png'}
     label={"Firma"}

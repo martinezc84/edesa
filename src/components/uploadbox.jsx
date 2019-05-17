@@ -52,7 +52,7 @@ export default class ImageBox extends Component {
    
     return (
       <div>
-     { !isOpen && (  <div id='photo-form-container'>
+     { isOpen && (  <div id='photo-form-container'>
         <button onClick={() => widget.open()}>Subir imagen</button>
       </div>
       )}

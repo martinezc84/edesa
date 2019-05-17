@@ -36,7 +36,8 @@ export default class App extends Component {
 		general:null,
 		cobros:null,
 		entregas:null,
-		servicios:null
+		servicios:null,
+		geo:false
 		};
 
 
@@ -47,11 +48,17 @@ export default class App extends Component {
 				let conf=[]
 				for (let x=0;x<data.length;x++){
 
-						console.log(data[x].type)
+					if(data[x].geo==1){
+						this.setState({
+							geo: true
+						});
+					}
+
+						//console.log(data[x].type)
 						if (data[x].type=='1'){
 							//console.log('General');
 							conf = data[x]
-							console.log(conf);
+							//console.log(conf);
 							this.setState({
 								general: conf
 							});
@@ -64,7 +71,7 @@ export default class App extends Component {
 						}
 						if (data[x].type=='3'){
 							conf = data[x]
-							console.log(conf);
+							//console.log(conf);
 							this.setState({
 								entregas: conf
 							});
@@ -147,7 +154,8 @@ export default class App extends Component {
 			general:this.state.general,
 			cobros:this.state.cobros,
 			entregas:this.state.entregas,
-			servicios:this.state.servicios
+			servicios:this.state.servicios,
+			geo:this.state.geo
 		};
 		return <Mandados valores={this.state.items} guardar={this.guardar} {...props} />;
 	};

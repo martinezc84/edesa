@@ -8,7 +8,7 @@ export default class Steps extends Component {
 	render() {
 		let { active: step, tipoSeleccionado: tipo, general, cobros, entregas, servicios} = this.props;
 		let tipoSeleccionado = tipo !== null;
-		console.log(this.props)
+		//console.log(this.props)
 		return (
 			<Menu>
 				{general != null?(

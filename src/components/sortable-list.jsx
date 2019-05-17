@@ -4,11 +4,12 @@ import ReactSortable  from 'react-sortablejs';
 import mandadostyles from '../css/mandados.css';
 import {  Checkbox, Label, Button, Icon } from 'semantic-ui-react';
 import ImageBox from '../components/ImageBox'
+import UploadBox from '../components/uploadbox'
 // Functional Component
 export default class SortableList extends Component {
-cambiar=(id)=>{
+cambiar=(id,tipo)=>{
     //console.log(id)
-    this.props.onSelect(id)
+    this.props.onSelect(id,tipo)
 }
 
 borrar=(id)=>{
@@ -20,7 +21,7 @@ render(){
    let  {
         items
     } = this.props;
-    console.log(this.props.firma)
+    //console.log(this.props.firma)
     let sortable = null; // sortable instance
     const reverseOrder = (evt) => {
         const order = sortable.toArray();
@@ -34,19 +35,31 @@ render(){
         
         if(val.realizado == 0){
             val.realizado = 1;
-            this.cambiar(val.id)
+            this.cambiar(val.id,val.tipo)
         }
         
     }}    
     checked={val.realizado == 1}
 />
-{val.realizado == 1 && this.props.firma == 1 ? (
+{val.realizado == 1 && val.sign == 1 ? (
 <ImageBox
     image={process.env.GATSBY_URL_IMAGES+'/signature_'+val.id+'.png'}
+    label={"Firma"}
 />
 
 ) :("")
 }
+{val.image != null ? (
+    <ImageBox
+        image={val.image}
+        label={"Foto"}
+    />
+    
+    ) :(<UploadBox
+        mandado={val.id}
+        >       
+    </UploadBox>)
+    }
 
 {val.realizado == 0  ? (
 <Button >

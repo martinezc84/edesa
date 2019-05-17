@@ -45,7 +45,7 @@ export default class App extends Component {
 		if (this.state.config.length == 0 ){
 			await Axios.get(ENDPOINTS.tiposMandado+'1').then(({ data }) => {
 				let conf=[]
-				for (let x=0;x<data.length;x++){
+				for (let x=0;x<=data.length;x++){
 
 						console.log(data[x].type)
 						if (data[x].type=='1'){

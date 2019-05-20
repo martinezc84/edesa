@@ -12,6 +12,8 @@ export default class Inputdate extends Component {
   onChange = date => this.managedate(date)
 
   managedate(date){
+    console.log(date)
+    console.log(date.getDate())
     this.setState({ date });
     this.props.guardar(date,this.props.guardar_id)
   }
@@ -23,6 +25,7 @@ export default class Inputdate extends Component {
         <DateTimePicker
           onChange={this.onChange}
           value={this.state.date}
+          format="yy"
           
          
         />

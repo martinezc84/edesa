@@ -38,10 +38,10 @@ export default class TipoMandado extends Component {
 	findCoordinates = () => {
 		navigator.geolocation.getCurrentPosition(
 		  position => {
-			console.log(position)
+		//console.log(position)
 			let {latitude, longitude} = position.coords;
-			console.log(latitude)
-			console.log(longitude)
+			//console.log(latitude)
+			//console.log(longitude)
 			this.setState({ latitude, longitude });
 		  },
 		  error => console.log(error.message),
@@ -242,7 +242,7 @@ export default class TipoMandado extends Component {
 
 	componentDidMount() {
 		let user = netlifyIdentity.currentUser();
-		console.log(this.props)
+		//console.log(this.props)
 		let { tipo, guardar, config, general, cobros, entregas, servicios, geo } = this.props;
 
 		this.setState({

@@ -374,7 +374,7 @@ export default class UnpaidInvoices extends Component {
 				let nombre  = this.get_empleado(mensajero[0].value)
 				//console.log(nombre)
 				//console.log(fecha)
-				let fechastr = fecha[0].dte.toLocaleDateString();
+				let fechastr = fecha[0].dte.toLocaleDateString('en-US');
 				let horastr = fecha[0].dte.getHours();
 				let minutes = fecha[0].dte.getMinutes();
 				console.log(horastr)

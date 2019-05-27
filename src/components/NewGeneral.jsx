@@ -44,6 +44,7 @@ export default class UnpaidInvoices extends Component {
 	 
 
 	get_empleado(id){
+		
 		for (var i=0; i<this.state.empleados.length; i++) {
 			//console.log(this.state.fechas[i])
             if (this.state.empleados[i].key==id){
@@ -56,7 +57,7 @@ export default class UnpaidInvoices extends Component {
     } 
     
     guardar = (dte, idf=0) => {
-		console.log(dte)
+	
 		this.setState({
 			fecha:dte})
 
@@ -115,10 +116,10 @@ export default class UnpaidInvoices extends Component {
 
 
 	seleccionaVendedor = (e, item) => {
-	console.log(item)
+
 		this.setState(
 			{
-                empleadoid:item.id,
+                empleadoid:item.value,
                 empleado:item
 			})
 	};
@@ -129,9 +130,9 @@ export default class UnpaidInvoices extends Component {
 
 	
 	  generar_mandados = async () => {
-		await this.setStateAsync({ operando: true });
+	
 		this.setState({
-			loading: true
+			visible: false
         });
         
         let fecha = this.state.fecha;
@@ -146,29 +147,29 @@ export default class UnpaidInvoices extends Component {
 					fecha = this.state.date
 				}
 				
-				//console.log(mensajero)
+				
 				// @ts-ignore
 				let nombre  = this.get_empleado(this.state.empleadoid)
-				//console.log(nombre)
-				//console.log(fecha)
-				let fechastr = fecha.toLocaleDateString();
+			
+				
+	
+				let fechastr = fecha.toLocaleDateString('en-US');
 				let horastr = fecha.getHours();
 				let minutes = fecha.getMinutes();
-				console.log(horastr)
-				console.log(minutes)
+			
 				fecha = fechastr.split('/');
-				fechastr = fecha[2]+'/'+fecha[1]+'/'+fecha[0]
+				fechastr = fecha[2]+'/'+fecha[0]+'/'+fecha[1]
 				const posttext = '{"fecha": "'+fechastr+'", "hora": "'+horastr+':'+minutes+':00",  "cliente":"","descripcion":"'+this.state.descrip+'","tipo":"1","user":"charly","store_id":1,"encargado":"'+nombre.text+'", "active":"1"}'
 				//console.log(posttext)
 
 				const data = await Axios.post(ENDPOINTS.guardarmandados, posttext);
-				console.log(data)
+				//console.log(data)
 			} catch (error) {
 				console.error({ error });
 				
 			} finally {
 				this.setState({
-					loading: false,
+					
 					visible:true
 				});
 			
@@ -199,7 +200,10 @@ export default class UnpaidInvoices extends Component {
             event.preventDefault()
             this.generar_mandados()
             //alert(`Welcome ${this.state.firstName} ${this.state.lastName}!`)
-          }
+					}
+					
+
+				
 
 	render() {
 
@@ -248,6 +252,7 @@ export default class UnpaidInvoices extends Component {
                 </label>
                 <button type="submit" className="submitform">Generar</button>
               </form>
+							<MostrarMensaje titulo={'Los mandados fueron creados con exito'} mensajes={'Prueba'}  visible={this.state.visible} onConfirm={this.onConfirm} />
               </div>
 				
 			)

@@ -370,8 +370,8 @@ export default class UnpaidInvoices extends Component {
 				let fechastr = fecha[0].dte.toLocaleDateString('en-US');
 				let horastr = fecha[0].dte.getHours();
 				let minutes = fecha[0].dte.getMinutes();
-				console.log(fechastr)
-				console.log(minutes)
+				//console.log(fechastr)
+				//console.log(minutes)
 				fecha = fechastr.split('/');
 				fechastr = fecha[2]+'/'+fecha[0]+'/'+fecha[1]
 				const posttext = '{"fecha": "'+fechastr+'", "hora": "'+horastr+':'+minutes+':00",  "cliente":"'+seleccionado.cli+'","descripcion":"Cobro","tipo":"1","user":"charly","store_id":1,"encargado":"'+nombre.text+'", "active":"1"}'

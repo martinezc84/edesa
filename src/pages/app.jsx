@@ -183,7 +183,8 @@ export default class App extends Component {
 	general = () => {
 		let props = {
 			
-			empleados:this.state.empleados
+			empleados:this.state.empleados,
+			cambiarStep:this.cambiaStep,
 		};
 		return <General valores={this.state.Invoices} guardar={this.guardar} {...props} />;
 	};

@@ -347,6 +347,10 @@ export default class TipoMandado extends Component {
 
 	}
 
+	child(){
+		
+	}
+
 	guardarDB =(mandados) =>{
 		//console.log(mandados)
 		this.setState({
@@ -443,6 +447,7 @@ export default class TipoMandado extends Component {
 												onSelect={this.onSelect}
 												firma={config.firma}
 												Borrar={this.borrar}
+												child={this.child}
 												
 											>
 											</SortableLst>) :(<React.Fragment>Sin Mandados</React.Fragment> )

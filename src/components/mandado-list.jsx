@@ -12,8 +12,13 @@ cambiar=(id, tipo)=>{
 }
 
 borrar=(id)=>{
-    console.log(id)
+    //console.log(id)
     this.props.Borrar(id)
+}
+
+asignar_sub=(id)=>{
+
+this.props.child(id)
 }
 render(){
 
@@ -55,7 +60,9 @@ render(){
         >       
     </UploadBox>)
     }
-
+<button  type="button" onClick={() => this.asignar_sub(val.id)}>
+         
+        </button>
 
 </li>
 )

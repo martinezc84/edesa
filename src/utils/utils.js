@@ -52,7 +52,8 @@ const NF_ENDPOINTS = {
 	savephoto :URL_PREFIX+process.env.GATSBY_URL_PHOTO,
 	Entregas :URL_PREFIX+process.env.GATSBY_URL_ENTREGAS,
 	Casos :URL_PREFIX+process.env.GATSBY_URL_CASOS,
-	editarTipoMandado: URL_PREFIX+process.env.GATSBY_URL_EDITAR_TIPO_MANDADO
+	editarTipoMandado: URL_PREFIX+process.env.GATSBY_URL_EDITAR_TIPO_MANDADO,
+	login: URL_PREFIX+process.env.GATSBY_URL_LOGIN
 	
 };
 

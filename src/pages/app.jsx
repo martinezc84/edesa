@@ -15,6 +15,7 @@ import Casos from '../components/Casos';
 import { Container } from 'semantic-ui-react';
 import Axios from 'axios';
 import { ENDPOINTS, API_URL } from '../utils/utils';
+import { isLoggedIn, logout , getUser} from "../utils/identity"
 
 
 export default class App extends Component {
@@ -97,12 +98,20 @@ export default class App extends Component {
 	}
 
 	componentDidMount() {
-		let user = netlifyIdentity.currentUser();
+		let user = isLoggedIn();
 		this.cargarconfig()
+
+		let userdata={group_id:0};
+		
+		if(user!=false){
+			userdata = getUser()
+		
+		}
 		
 
-		if (user === null) {
-			navigate('/');
+		if (userdata.group_id != 1) {
+			navigate('/listado');
+			return;
 		}
 	}
 

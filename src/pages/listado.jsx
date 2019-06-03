@@ -9,6 +9,7 @@ import { navigate } from 'gatsby';
 import Casos from '../components/Casos';
 import Axios from 'axios';
 import { ENDPOINTS, API_URL } from '../utils/utils';
+import { isLoggedIn, logout , getUser} from "../utils/identity"
 
 
 export default class Listado extends Component {
@@ -90,7 +91,7 @@ export default class Listado extends Component {
 
 
 	componentDidMount() {
-		let user = netlifyIdentity.currentUser();
+		let user = isLoggedIn()
 		this.cargarconfig()
 		if (user === null) {
 			navigate('/');

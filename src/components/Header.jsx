@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Menu } from 'semantic-ui-react';
 import { navigate } from 'gatsby';
 import MenuAdmin from './MenuAdmin'
-import netlifyIdentity from 'netlify-identity-widget';
+import { isLoggedIn, logout, getUser } from "../utils/identity"
 import '../css/style.css';
 import SEO from './seo';
 class Header extends Component {
@@ -15,14 +15,11 @@ class Header extends Component {
 
 	componentDidMount() {
 
-		
-		netlifyIdentity.init();
-		netlifyIdentity.on('login', (user) => {
-			navigate('/');
-		});
-		netlifyIdentity.on('logout', () => {
-			navigate('/');
-		});
+		if (!isLoggedIn() && location.pathname !== `/app` && location.pathname !== `/listado`) {
+			navigate(`/app`)
+			return null
+			
+		}
 	}
 
 	onClick = (e, { path }) => {
@@ -36,12 +33,12 @@ class Header extends Component {
 	render() {
 
 		
-		const user = netlifyIdentity.currentUser();
-		let userdata;
+		const user =isLoggedIn();
+		let userdata={group_id:0};
 		//console.log(user)
-		if(user!=null){
-			userdata = user.app_metadata;
-		//console.log(userdata.roles)
+		if(user!=false){
+			userdata = getUser()
+		console.log(userdata)
 		}
 		let logged = !(user === null);
 		return (
@@ -59,7 +56,7 @@ class Header extends Component {
 						<MenuAdmin
 						onClick={this.onClick}
 						// @ts-ignore
-						admin = {(userdata.roles[0]=='Admin')}
+						admin = {(userdata.group_id === "1")}
 						>
 							
 						</MenuAdmin>
@@ -72,15 +69,15 @@ class Header extends Component {
 								<Menu.Item
 									name="Log out"
 									onClick={() => {
-										netlifyIdentity.logout();
+										logout()
 										navigate('/');
 									}}
 								/>
-								<Menu.Item>{user ? user.email : ''}</Menu.Item>
+								<Menu.Item>{user ? user : ''}</Menu.Item>
 								
 							</React.Fragment>
 						) : (
-							<Menu.Item name="Login" onClick={() => netlifyIdentity.open()} />
+							<Menu.Item name="Login" onClick={() => navigate('/login')} />
 						)}
 					</Menu.Menu>
 				</Menu>

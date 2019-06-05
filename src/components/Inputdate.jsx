@@ -26,7 +26,7 @@ export default class Inputdate extends Component {
           onChange={this.onChange}
           value={this.state.date}
           format="yy"
-          
+                   
          
         />
       </div>

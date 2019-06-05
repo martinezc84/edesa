@@ -72,8 +72,8 @@ export default class Steps extends Component {
 					onClick={() => {
 						this.props.cambiarStep(3);
 					}}
-					name={'Mandados'}
-					icon={"calendar alternate"}
+					name={'Tareas'}
+					icon={"list ol"}
 				>
 					
 					

@@ -8,20 +8,29 @@ export default class MenuAdmin extends Component {
 	render() {
 		let { onClick, admin } = this.props;
 		//console.log(admin)
-			if (admin)
+			if (admin == 1)
 				return (
 		<React.Fragment>
 				<Menu.Item name="app" path="/app" onClick={onClick} />
 				<Menu.Item name="config" path="/config" onClick={onClick} />	
 				</React.Fragment>
 				)
-			else
-			return(
-				<React.Fragment>
-				<Menu.Item name="Listado" path="/listado" onClick={onClick} />
+			else if (admin == 2) {
+				return(
+					<React.Fragment>
+				<Menu.Item name="app" path="/app" onClick={onClick} />
 					
 				</React.Fragment>
-			)
+				)
+			} else {
+				return(
+					<React.Fragment>
+					<Menu.Item name="Listado" path="/listado" onClick={onClick} />
+						
+					</React.Fragment>
+				)
+			}
+			
 		
 	}
 }

@@ -8,7 +8,7 @@ import { Header, Table, Loader, Pagination, Button, Menu, Icon } from 'semantic-
 import FilaCaso from './FilaCaso';
 import sortBy from 'lodash/sortBy';
 import { MostrarMensaje } from './Mensajes';
-
+import { isLoggedIn, logout , getUser} from "../utils/identity"
 
 
 export default class UnpaidInvoices extends Component {
@@ -30,7 +30,8 @@ export default class UnpaidInvoices extends Component {
 		startDate: new Date(),
 		fechas:[],
 		date: new Date(),
-		visible:false
+		visible:false,
+		userdata:null
 	
 	};
 
@@ -136,9 +137,11 @@ export default class UnpaidInvoices extends Component {
 
 		let { buscar } = this.state;
 	
-
+		this.setState({
+			userdata: getUser()
+		});
 		
-		if (user !== null) {
+		
 			let { guardar, valores,  empleados } = this.props;
 			if (valores.length === 0) {
 				this.setState({
@@ -221,7 +224,7 @@ export default class UnpaidInvoices extends Component {
 					cantidadPaginas: Math.floor(valores.length / this.state.first) + 1
 				});
 			}
-		}
+		
 	}
 
 	// Método para cambiar de página de turnos
@@ -375,13 +378,13 @@ export default class UnpaidInvoices extends Component {
 				//console.log(nombre)
 				//console.log(fecha)
 				let fechastr = fecha[0].dte.toLocaleDateString('en-US');
-				let horastr = fecha[0].dte.getHours();
+				let horastr = fecha[0].dte.getHours()-1;
 				let minutes = fecha[0].dte.getMinutes();
 				console.log(horastr)
 				console.log(minutes)
 				fecha = fechastr.split('/');
 				fechastr = fecha[2]+'/'+fecha[0]+'/'+fecha[1]
-				const posttext = '{"fecha": "'+fechastr+'", "hora": "'+horastr+':'+minutes+':00",   "cliente":"'+seleccionado.cli+'","descripcion":"'+seleccionado.cn+'","tipo":"3","user":"charly","store_id":1,"encargado":"'+nombre.text+'", "active":"1"}'
+				const posttext = '{"fecha": "'+fechastr+'", "hora": "'+horastr+':'+minutes+':00",   "cliente":"'+seleccionado.cli+'","descripcion":"'+seleccionado.cn+'","tipo":"3","user":"'+this.state.userdata.username+'", "employee_id":"'+mensajero[0].value+'"  ,"store_id":1,"encargado":"'+nombre.text+'", "active":"1"}'
 				console.log(posttext)
 
 				const data = await Axios.post(ENDPOINTS.guardarmandados, posttext);

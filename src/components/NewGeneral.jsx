@@ -9,6 +9,7 @@ import FilaFactura from './FilaFactura';
 import sortBy from 'lodash/sortBy';
 import { MostrarMensaje } from './Mensajes';
 import Inputdate from './Inputdate';
+import { isLoggedIn, logout , getUser} from "../utils/identity"
 
 
 
@@ -22,8 +23,11 @@ export default class UnpaidInvoices extends Component {
 		vendedoresseleccionadosId:[],
 		startDate: new Date(),
 		fecha:null,
+		direccion:null,
+		tel:null,
 		date: new Date(),
-        visible:false,
+				visible:false,
+				userdata:null
     };
     
     shouldComponentUpdate(np) {
@@ -83,9 +87,11 @@ export default class UnpaidInvoices extends Component {
 
 		let { buscar } = this.state;
 	
-
+		this.setState({
+			userdata: getUser()
+		});
 		
-		if (user !== null) {
+	
 			let { guardar,   empleados } = this.props;
 		
                 
@@ -110,7 +116,7 @@ export default class UnpaidInvoices extends Component {
 						console.error(error);
 					});
 			
-    }
+    
 }
 
 
@@ -154,12 +160,12 @@ export default class UnpaidInvoices extends Component {
 				
 	
 				let fechastr = fecha.toLocaleDateString('en-US');
-				let horastr = fecha.getHours();
+				let horastr = fecha.getHours()-1;
 				let minutes = fecha.getMinutes();
 			
 				fecha = fechastr.split('/');
 				fechastr = fecha[2]+'/'+fecha[0]+'/'+fecha[1]
-				const posttext = '{"fecha": "'+fechastr+'", "hora": "'+horastr+':'+minutes+':00",  "cliente":"","descripcion":"'+this.state.descrip+'","tipo":"1","user":"charly","store_id":1,"encargado":"'+nombre.text+'", "active":"1"}'
+				const posttext = '{"fecha": "'+fechastr+'", "hora": "'+horastr+':'+minutes+':00",  "cliente":"","descripcion":"'+this.state.descrip+' Direccion:'+this.state.direccion+' Tel.'+this.state.tel+'","tipo":"1","user":"'+this.state.userdata.username+'","employee_id":"'+this.state.empleadoid+'","store_id":1,"encargado":"'+nombre.text+'", "active":"1"}'
 				//console.log(posttext)
 
 				const data = await Axios.post(ENDPOINTS.guardarmandados, posttext);
@@ -233,6 +239,28 @@ export default class UnpaidInvoices extends Component {
                     type="text"
                     name="descrip"
                     value={this.state.descrip}
+                    onChange={this.handleInputChange}
+                    className="inputform"
+                  />
+                </label>
+
+								<label>
+                  Dirección
+                  <input
+                    type="text"
+                    name="direccion"
+                    value={this.state.direccion}
+                    onChange={this.handleInputChange}
+                    className="inputform"
+                  />
+                </label>
+
+								<label>
+                  Tel.
+                  <input
+                    type="text"
+                    name="tel"
+                    value={this.state.tel}
                     onChange={this.handleInputChange}
                     className="inputform"
                   />

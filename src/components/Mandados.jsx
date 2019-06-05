@@ -9,7 +9,8 @@ import SortableLst from '../components/sortable-list';
 import sortBy from 'lodash/sortBy';
 import { MostrarMensaje } from './Mensajes';
 import { MsjConfirma } from './MsjConfirma';
-
+import { isLoggedIn, logout , getUser} from "../utils/identity"
+import { async } from 'q';
 
 
 export default class TipoMandado extends Component {
@@ -32,7 +33,8 @@ export default class TipoMandado extends Component {
 		visible_confirm:false,
 		idmandado:null,
 		config:{firma:0},
-		delete_id:null
+		delete_id:null,
+		userdata:null
 	};
 
 	findCoordinates = () => {
@@ -109,7 +111,24 @@ export default class TipoMandado extends Component {
 		);
 	};
 
-	
+	recargar=async()=>{
+		await Axios.get(ENDPOINTS.ListaMandados+'?int=0&dow='+this.state.today)
+		.then(({ data }) => {
+			
+			let turnosVendidos = sortBy(data, [ 'listorder' ]);
+			//console.log(turnosVendidos)
+			turnosVendidos.sort((a,b) => (a.listorder- b.listorder))
+			this.setState({
+				turnosVendidos: turnosVendidos,
+				loading: false,
+				
+				cantidadPaginas: Math.floor(data.recordsTotal / this.state.first) + 1
+			});
+		})
+		.catch((error) => {
+			console.error(error);
+		});
+	}
 
 	cargardatos = async () => {
 		let today
@@ -244,7 +263,9 @@ export default class TipoMandado extends Component {
 		let user = netlifyIdentity.currentUser();
 		//console.log(this.props)
 		let { tipo, guardar, config, general, cobros, entregas, servicios, geo } = this.props;
-
+		this.setState({
+			userdata: getUser()
+		});
 		this.setState({
 				general:general,
 				cobros:cobros,
@@ -351,6 +372,20 @@ export default class TipoMandado extends Component {
 		
 	}
 
+	autorizar = async (id)=>{
+
+		await Axios.post(ENDPOINTS.editarmandadoss,'{"autorizado":"1","id":"'+id+'","autorizo":"'+this.state.userdata.employee_id+'"}')
+		.then(({ data }) => {
+			//console.log(data)
+			this.recargar()
+			
+		})
+		.catch((error) => {
+			//console.error(error);
+			//return false
+		});
+	}
+
 	guardarDB =(mandados) =>{
 		//console.log(mandados)
 		this.setState({
@@ -448,6 +483,7 @@ export default class TipoMandado extends Component {
 												firma={config.firma}
 												Borrar={this.borrar}
 												child={this.child}
+												autorizar={this.autorizar}
 												
 											>
 											</SortableLst>) :(<React.Fragment>Sin Mandados</React.Fragment> )

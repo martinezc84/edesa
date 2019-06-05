@@ -38,9 +38,9 @@ class Header extends Component {
 		//console.log(user)
 		if(user!=false){
 			userdata = getUser()
-		console.log(userdata)
+		//console.log(userdata)
 		}
-		let logged = !(user === null);
+		let logged = !(user === false);
 		return (
 			<div>
 				<SEO
@@ -56,7 +56,7 @@ class Header extends Component {
 						<MenuAdmin
 						onClick={this.onClick}
 						// @ts-ignore
-						admin = {(userdata.group_id === "1")}
+						admin = {userdata.group_id}
 						>
 							
 						</MenuAdmin>
@@ -77,7 +77,7 @@ class Header extends Component {
 								
 							</React.Fragment>
 						) : (
-							<Menu.Item name="Login" onClick={() => navigate('/login')} />
+							''
 						)}
 					</Menu.Menu>
 				</Menu>

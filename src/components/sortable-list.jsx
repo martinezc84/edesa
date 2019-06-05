@@ -13,8 +13,14 @@ cambiar=(id,tipo)=>{
 }
 
 borrar=(id)=>{
-    console.log(id)
+    //console.log(id)
     this.props.Borrar(id)
+}
+
+autorizar=(id)=>{
+    //console.log(id)
+   this.props.autorizar(id)
+
 }
 render(){
 
@@ -68,6 +74,15 @@ render(){
                     this.borrar(val.id);
                 }} >
         <Icon name='trash' />
+      </Button.Content>
+    </Button>):("")
+    }
+    {val.autorizado == 0  ? (
+<Button onClick={() => {
+                    this.autorizar(val.id);
+                }} >
+     Autorizar
+      <Button.Content  >
       </Button.Content>
     </Button>):("")
     }

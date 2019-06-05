@@ -35,64 +35,12 @@ export default class Listado extends Component {
 		geo:false
 	};
 
-	cargarconfig = async () => {
-
-		if (this.state.config.length == 0 ){
-			await Axios.get(ENDPOINTS.tiposMandado+'1').then(({ data }) => {
-				let conf=[]
-
-				for (let x=0;x<data.length;x++){
-
-						if(data[x].geo==1){
-							this.setState({
-								geo: true
-							});
-						}
-						if (data[x].type=='1'){
-							//console.log('General');
-							conf = data[x]
-							console.log(conf);
-							this.setState({
-								general: conf
-							});
-						}
-						if (data[x].type=='2'){
-							conf = data[x]
-							this.setState({
-								cobros: conf
-							});
-						}
-						if (data[x].type=='3'){
-							conf = data[x]
-							console.log(conf);
-							this.setState({
-								entregas: conf
-							});
-						}
-						if (data[x].type=='4	'){
-							conf = data[x]
-							this.setState({
-								servicios: conf
-							});
-							break
-						}
-					}
-
-					
-				
-				})
-				.catch((error) => {
-					console.error(error);
-				});
-		
-			}
-
-	}
+	
 
 
 	componentDidMount() {
 		let user = isLoggedIn()
-		this.cargarconfig()
+		
 		if (user === null) {
 			navigate('/');
 		}
@@ -125,17 +73,14 @@ export default class Listado extends Component {
 	};
 
 	Listado = () => {
+
+		
 		let props = {
 			seleccionadosVendidosID: this.state.seleccionadosVendidosID,
 			tipo: this.state.tipoSeleccionado,
 			cambiarStep:this.cambiaStep,
 			empleados:this.state.empleados,
-			config:this.state.config,
-			general:this.state.general,
-			cobros:this.state.cobros,
-			entregas:this.state.entregas,
-			servicios:this.state.servicios,
-			geo:this.state.geo
+			
 		};
 		return <Mandados_user valores={this.state.Invoices} guardar={this.guardar} {...props} />;
 	};

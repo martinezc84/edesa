@@ -17,10 +17,11 @@ export const handleLogin = ({ username, password }) => {
 					.then(({ data }) => {
 						console.log(data)
 						return setUser({
-							username: username,
+							username: data.username,
 							name: data.first_name+' '+data.last_name,
 							email: data.email,
-							group_id:data.group_id
+							group_id:data.group_id,
+							eid:data.employee_id
 						  })
 						
 					})

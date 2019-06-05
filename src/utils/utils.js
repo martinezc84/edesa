@@ -47,6 +47,7 @@ const NF_ENDPOINTS = {
 	editarmandados:URL_PREFIX + process.env.GATSBY_URL_EDITAR_MANDADO,
 	editarmandadoss:URL_PREFIX + process.env.GATSBY_URL_EDITAR_MANDADOS,
 	ListaMandados:URL_PREFIX + process.env.GATSBY_URL_LISTADO_MANDADOS,
+	ListaAutorizados:URL_PREFIX + process.env.GATSBY_URL_LISTADO_AUTORIZADOS,
 	Funciones:URL_PREFIX + process.env.GATSBY_URL_FUNCIONES,
 	saveimage :URL_PREFIX+process.env.GATSBY_URL_FIRMA,
 	savephoto :URL_PREFIX+process.env.GATSBY_URL_PHOTO,
@@ -80,7 +81,8 @@ const ZAURU_URL = {
 const API_URL = {
 	tiposMandado: URL_PREFIX_API+process.env.GATSBY_ENDPOINT_MANDADO,
 	tipoMandado: URL_PREFIX+process.env.GATSBY_URL_MANDADO,
-	listadoMandados: URL_PREFIX_API
+	listadoMandados: URL_PREFIX_API,
+	listadoAutorizados :URL_PREFIX_API+process.env.GATSBY_ENDPOINT_AUTORIZADOS_LIST
 
 }
 

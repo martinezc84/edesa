@@ -9,6 +9,7 @@ import MsjLst from './mandado-list';
 import sortBy from 'lodash/sortBy';
 import { MostrarMensaje } from './Mensajes';
 import { MsjConfirma } from './MsjConfirma';
+import { isLoggedIn, logout , getUser} from "../utils/identity"
 
 
 
@@ -39,7 +40,8 @@ export default class Mandados_user extends Component {
 		general:null,
 		cobros:null,
 		entregas:null,
-		servicios:null
+		servicios:null,
+		geo:null
 	};
 
 	seleccionarDia = (e, { name }) => this.cargarmandados(name)
@@ -47,10 +49,10 @@ export default class Mandados_user extends Component {
 	findCoordinates = () => {
 		navigator.geolocation.getCurrentPosition(
 		  position => {
-			console.log(position)
+			//console.log(position)
 			let {latitude, longitude} = position.coords;
-			console.log(latitude)
-			console.log(longitude)
+			//console.log(latitude)
+			//console.log(longitude)
 			this.setState({ latitude, longitude });
 		  },
 		  error => console.log(error.message),
@@ -62,7 +64,7 @@ export default class Mandados_user extends Component {
 	cargarmandados(dia){
 
 		//console.log(dia)
-		Axios.get(ENDPOINTS.ListaMandados+'?int=0&dow='+dia)
+		Axios.get(ENDPOINTS.ListaAutorizados+'?int=0&dow='+dia+'&eid='+this.state.userdata.eid)
 					.then(({ data }) => {
 						//console.log(data)
 						let turnosVendidos = sortBy(data, [ 'listorder' ]);
@@ -136,7 +138,7 @@ export default class Mandados_user extends Component {
 			console.error(error);
 		});
 	
-		await Axios.get(ENDPOINTS.ListaMandados+'?int=0&dow='+today)
+		await Axios.get(ENDPOINTS.ListaAutorizados+'?int=0&dow='+today+'&eid='+this.state.userdata.eid)
 		.then(({ data }) => {
 			
 			let turnosVendidos = sortBy(data, [ 'listorder' ]);
@@ -208,6 +210,60 @@ export default class Mandados_user extends Component {
 		}
 	}
 
+
+	cargarconfig = async () => {
+
+		
+		await Axios.get(ENDPOINTS.tiposMandado+'1').then(({ data }) => {
+			let conf=[]
+			//console.log(data.length)
+			for (let x=0;x<data.length;x++){
+
+					if(data[x].geo==1){
+						this.setState({
+							geo: true
+						});
+					}
+					if (data[x].type=='1'){
+						//console.log('General');
+						conf = data[x]
+						//console.log(conf);
+						this.setState({
+							general: conf
+						});
+					}
+					if (data[x].type=='2'){
+						conf = data[x]
+						this.setState({
+							cobros: conf
+						});
+					}
+					if (data[x].type=='3'){
+						conf = data[x]
+						//console.log(conf);
+						this.setState({
+							entregas: conf
+						});
+					}
+					if (data[x].type=='4	'){
+						conf = data[x]
+						this.setState({
+							servicios: conf
+						});
+						break
+					}
+				}
+
+				
+			
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+	
+		
+
+}
 	
 
 	onSelect = async (id, tipo)=>{
@@ -254,8 +310,12 @@ export default class Mandados_user extends Component {
 
 	componentDidMount() {
 		
-		let user = netlifyIdentity.currentUser();
-		let { tipo, guardar, config, general, cobros, entregas, servicios, geo } = this.props;
+		this.setState({
+			userdata: getUser()
+		});
+
+		console.log(this.props)
+		let {  general, cobros, entregas, servicios, geo } = this.props;
 
 		this.setState({
 				general:general,
@@ -269,8 +329,8 @@ export default class Mandados_user extends Component {
 			this.findCoordinates();
 		
 	}
-		if (user !== null) {
-			let { guardar, valores, seleccionadosVendidosID } = this.props;
+	
+			let { valores, seleccionadosVendidosID } = this.props;
 			if (valores.length === 0) {
 				this.setState({
 					loading: true
@@ -287,8 +347,7 @@ export default class Mandados_user extends Component {
 					cantidadPaginas: Math.floor(valores.length / this.state.first) + 1
 				});
 			}
-		}
-	}
+			}
 
 	// Método para cambiar de página de turnos
 	cambioDePagina = (e, { activePage }) => {

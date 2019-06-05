@@ -109,7 +109,7 @@ export default class App extends Component {
 		}
 		
 
-		if (userdata.group_id != 1) {
+		if (userdata.group_id > 2) {
 			navigate('/listado');
 			return;
 		}

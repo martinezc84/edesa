@@ -160,7 +160,7 @@ export default class UnpaidInvoices extends Component {
 				
 	
 				let fechastr = fecha.toLocaleDateString('en-US');
-				let horastr = fecha.getHours()-1;
+				let horastr = fecha.getHours();
 				let minutes = fecha.getMinutes();
 			
 				fecha = fechastr.split('/');

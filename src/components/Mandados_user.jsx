@@ -332,7 +332,7 @@ onStart = async (id, tipo)=>{
 		fechapartida = fechastr.split('/');
 				fechastr = fechapartida[2]+'/'+fechapartida[1]+'/'+fechapartida[0]
 		let fecha = this.state.turnosVendidos.filter((s) => s.id == id);
-		let hours = new Date().getHours()-1; //Current Hours
+		let hours = new Date().getHours(); //Current Hours
         let min = new Date().getMinutes(); //Current Minutes
 				let sec = new Date().getSeconds(); //Current Seconds
 				let coordenadas=""

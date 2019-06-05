@@ -119,7 +119,30 @@ export default class Mandados_user extends Component {
 		);
 	};
 
-	
+	recargar=async()=>{
+		this.setState({
+			loading: true
+		});
+		await Axios.get(ENDPOINTS.ListaAutorizados+'?int=0&dow='+this.state.today+'&eid='+this.state.userdata.eid)
+		.then(({ data }) => {
+			
+			let turnosVendidos = sortBy(data, [ 'listorder' ]);
+			//console.log(turnosVendidos)
+			turnosVendidos.sort((a,b) => (a.listorder- b.listorder))
+			this.setState({
+				turnosVendidos: turnosVendidos,
+				loading: false,
+				
+				cantidadPaginas: Math.floor(data.recordsTotal / this.state.first) + 1
+			});
+		})
+		.catch((error) => {
+			console.error(error);
+		});
+		this.setState({
+			loading: false
+		});
+	}
 
 	cargardatos = async () => {
 		let today
@@ -216,6 +239,7 @@ export default class Mandados_user extends Component {
 		
 		await Axios.get(ENDPOINTS.tiposMandado+'1').then(({ data }) => {
 			let conf=[]
+			let geoload = false;
 			//console.log(data.length)
 			for (let x=0;x<data.length;x++){
 
@@ -223,6 +247,11 @@ export default class Mandados_user extends Component {
 						this.setState({
 							geo: true
 						});
+						if(!geoload){
+							this.findCoordinates();
+							geoload=true
+						}
+
 					}
 					if (data[x].type=='1'){
 						//console.log('General');
@@ -264,6 +293,25 @@ export default class Mandados_user extends Component {
 		
 
 }
+
+onStart = async (id, tipo)=>{
+
+	let hours = new Date().getHours()-1; //Current Hours
+			let min = new Date().getMinutes(); //Current Minutes
+			let sec = new Date().getSeconds(); //Current Secon
+
+	await Axios.post(ENDPOINTS.editarmandadoss,'{"id":'+id+', "hora_inicio":"'+hours+':'+min+':'+sec+'"}')
+			.then(({ data }) => {
+				//console.log(data)
+				this.recargar()
+				return true
+				
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+
+}
 	
 
 	onSelect = async (id, tipo)=>{
@@ -272,7 +320,8 @@ export default class Mandados_user extends Component {
 		this.props.guardar('idmandado', id);
 		let fecha = this.state.turnosVendidos.filter((s) => s.id == id);
 		this.props.guardar('fechamandado', fecha);
-		this.props.cambiarStep(5);
+		this.props.guardar('coordenadas', this.state.latitude+','+this.state.longitude);
+				this.props.cambiarStep(5);
 			}else{
 		this.setState({
 			loading: true
@@ -283,10 +332,16 @@ export default class Mandados_user extends Component {
 		fechapartida = fechastr.split('/');
 				fechastr = fechapartida[2]+'/'+fechapartida[1]+'/'+fechapartida[0]
 		let fecha = this.state.turnosVendidos.filter((s) => s.id == id);
-		let hours = new Date().getHours(); //Current Hours
+		let hours = new Date().getHours()-1; //Current Hours
         let min = new Date().getMinutes(); //Current Minutes
-        let sec = new Date().getSeconds(); //Current Seconds
-		await Axios.post(ENDPOINTS.editarmandados,'{"realizado":"1","id":'+id+', "fecha":"'+fecha[0].fecha+'", "fecha_realizado":"'+fechastr+'", "hora_realizado":"'+hours+':'+min+':'+sec+'"}')
+				let sec = new Date().getSeconds(); //Current Seconds
+				let coordenadas=""
+			if (this.state.longitude!==null){
+				 coordenadas=this.state.latitude+','+this.state.longitude
+			}else{
+				coordenadas = '0,0';
+			}	
+		await Axios.post(ENDPOINTS.editarmandados,'{"realizado":"1","id":'+id+', "fecha":"'+fecha[0].fecha+'", "fecha_realizado":"'+fechastr+'", "hora_realizado":"'+hours+':'+min+':'+sec+'","coordenadas":"'+coordenadas+'"}')
 			.then(({ data }) => {
 				console.log(data)
 				
@@ -324,11 +379,7 @@ export default class Mandados_user extends Component {
 				servicios:servicios
 
 		})
-		if(this.state.geo){
-			
-			this.findCoordinates();
-		
-	}
+	
 	
 			let { valores, seleccionadosVendidosID } = this.props;
 			if (valores.length === 0) {
@@ -503,6 +554,7 @@ export default class Mandados_user extends Component {
 												<MsjLst
 												items={this.state.turnosVendidos}
 												onSelect={this.onSelect}
+												onStart={this.onStart}
 												general={general}
 												cobros={cobros}
 												entregas={entregas}

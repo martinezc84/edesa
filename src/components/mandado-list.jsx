@@ -11,6 +11,11 @@ cambiar=(id, tipo)=>{
     this.props.onSelect(id, tipo)
 }
 
+empezar=(id, tipo)=>{
+    //console.log(id)
+    this.props.onStart(id, tipo)
+}
+
 borrar=(id)=>{
     //console.log(id)
     this.props.Borrar(id)
@@ -29,18 +34,43 @@ render(){
     const listItems = items.map(val => (
     <li className={(val.tipo == 1) ? 'cobro' : (val.tipo == 3) ? 'soporte':''} key={uniqueId()}  data-id={val.id}>
     {val.listorder} )Hora: {val.hora} Descripción: {val.descripcion} Cliente: {val.cliente} 
+      {val.hora_inicio !== null ?(' Hora de inicio'+val.hora_inicio):('')}
+
+
+    {val.time == 1 && val.hora_inicio != null ?(
+    <Checkbox
+   
+    checked={1==1}
+/>):('')
+
+    }
+
+    {val.time == 1 && val.hora_inicio == null && val.realizado == 0 ? ( 
       
     <Checkbox
+    
     onChange={() => {
         
-        if(val.realizado == 0){
-            val.realizado = 1;
-            this.cambiar(val.id,val.tipo)
-        }
+       let resp= this.empezar(val.id,val.tipo)
+       if(resp){
+        val.hora_inicio = 1
+       }
         
     }}    
-    checked={val.realizado == 1}
+    checked={val.hora_inicio == 1}
 />
+    ):(  <Checkbox
+        onChange={() => {
+            
+            if(val.realizado == 0){
+                val.realizado = 1;
+                this.cambiar(val.id,val.tipo)
+            }
+            
+        }}    
+        checked={val.realizado == 1}
+    />)
+}
 {val.realizado == 1 && val.sign == 1 ? (
 <ImageBox
     image={process.env.GATSBY_URL_IMAGES+'/signature_'+val.id+'.png'}

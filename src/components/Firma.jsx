@@ -66,7 +66,7 @@ export default class Firma extends Component  {
 						console.error(error);
 					});
 
-	await	Axios.post(ENDPOINTS.editarmandados,'{"realizado":"1","id":'+this.props.id+', "fecha":"'+this.props.fecha[0].fecha+'","sign":"1"}')
+	await	Axios.post(ENDPOINTS.editarmandados,'{"realizado":"1","id":'+this.props.id+', "fecha":"'+this.props.fecha[0].fecha+'","sign":"1", "coordenadas":"'+this.props.coordenadas+'" }')
 			.then(({ data }) => {
 				//console.log(data)
 				

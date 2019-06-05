@@ -91,7 +91,7 @@ export default class Listado extends Component {
 			cambiarStep:this.cambiaStep,
 		};
 		
-		return <Firma id={this.state.idmandado} fecha={this.state.fechamandado} {...props} />;
+		return <Firma id={this.state.idmandado} fecha={this.state.fechamandado} coordenadas={this.state.coordenadas} {...props} />;
 	};
 
 	casos = () => {

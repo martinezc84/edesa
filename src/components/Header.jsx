@@ -20,6 +20,14 @@ class Header extends Component {
 			return null
 			
 		}
+
+		let user = getUser();
+
+		if (user.group_id > 2 && location.pathname !== `/app`)  {
+			navigate(`/listado`)
+			return null
+			
+		}
 	}
 
 	onClick = (e, { path }) => {

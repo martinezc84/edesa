@@ -15,14 +15,16 @@ export const handleLogin = ({ username, password }) => {
 
 	Axios.post(`${ENDPOINTS.login}`,'{"username":"'+username+'","password":"'+password+'"}')
 					.then(({ data }) => {
-						console.log(data)
-						return setUser({
+						//console.log(data)
+						 setUser({
 							username: data.username,
 							name: data.first_name+' '+data.last_name,
 							email: data.email,
 							group_id:data.group_id,
 							eid:data.employee_id
-						  })
+							})
+							
+							return data.group_id
 						
 					})
 					.catch((error) => {
@@ -31,7 +33,7 @@ export const handleLogin = ({ username, password }) => {
 					});
  
 
-  return false
+  //return false
 }
 
 export const isLoggedIn = () => {

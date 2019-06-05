@@ -268,8 +268,6 @@ export default class Mandados_user extends Component {
 
 	onSelect = async (id, tipo)=>{
 
-
-
 		if(this.usafirma(tipo) == 1){
 		this.props.guardar('idmandado', id);
 		let fecha = this.state.turnosVendidos.filter((s) => s.id == id);
@@ -314,6 +312,8 @@ export default class Mandados_user extends Component {
 			userdata: getUser()
 		});
 
+		this.cargarconfig();
+
 		console.log(this.props)
 		let {  general, cobros, entregas, servicios, geo } = this.props;
 
@@ -324,7 +324,7 @@ export default class Mandados_user extends Component {
 				servicios:servicios
 
 		})
-		if(geo){
+		if(this.state.geo){
 			
 			this.findCoordinates();
 		

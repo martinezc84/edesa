@@ -22,7 +22,8 @@ class Login extends React.Component {
         mensaje:""
     })
     event.preventDefault()
-    if(!handleLogin(this.state)){
+
+    if(handleLogin(this.state)===false){
         this.setState({
             mensaje:"El usuario o contraseña no coinciden"
         })
@@ -30,9 +31,7 @@ class Login extends React.Component {
   }
 
   render() {
-    if (isLoggedIn()) {
-      navigate(`/app/`)
-    }
+ 
     let {mensaje} =  this.state
     return (
       <>
@@ -42,8 +41,13 @@ class Login extends React.Component {
         <form
           method="post"
           onSubmit={event => {
-            this.handleSubmit(event)
-            navigate(`/app/`)
+            let gp=this.handleSubmit(event)
+            if(gp>2){
+              navigate(`/listado`)
+            }else{
+              navigate(`/app/`)
+            }
+            
           }}
         >
           <label>

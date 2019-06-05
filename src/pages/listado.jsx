@@ -27,7 +27,7 @@ export default class Listado extends Component {
 		seleccionadosVendidosID: [],
 		items: [],
 		config:[],
-		step: 1,
+		step: 3,
 		general:null,
 		cobros:null,
 		entregas:null,
@@ -128,9 +128,11 @@ export default class Listado extends Component {
 				<RutaPrivada>
 					
 					<div className="pt-6">
-						{step === 1 ? (
+						{step === 3 ? (
 							<React.Fragment>{this.Listado()}</React.Fragment>
-						) : null}
+						)  : step === 5 ? (
+							<React.Fragment>{this.firma()}</React.Fragment>
+						) :null}
 					</div>
 				</RutaPrivada>
 				

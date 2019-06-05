@@ -9,6 +9,7 @@ import FilaFactura from './FilaFactura';
 import sortBy from 'lodash/sortBy';
 import { MostrarMensaje } from './Mensajes';
 import { isLoggedIn, logout , getUser} from "../utils/identity"
+import { navigate } from '@reach/router';
 
 
 
@@ -132,10 +133,15 @@ export default class UnpaidInvoices extends Component {
 		let { tipo } = this.props;
 
 		let { buscar } = this.state;
-	
+
+		let user = getUser();
 		this.setState({
-			userdata: getUser()
+			userdata: user
 		});
+
+		if (user.group_id>2){
+			navigate(`/listado`)
+		}
 		
 		
 			let { guardar, valores, seleccionadosVendidosID,  empleados } = this.props;

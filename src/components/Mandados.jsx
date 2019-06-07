@@ -34,7 +34,8 @@ export default class TipoMandado extends Component {
 		idmandado:null,
 		config:{firma:0},
 		delete_id:null,
-		userdata:null
+		userdata:null,
+		week:0
 	};
 
 	findCoordinates = () => {
@@ -53,10 +54,12 @@ export default class TipoMandado extends Component {
 
 	seleccionarDia = (e, { name }) => this.cargarmandados(name)
 
+	seleccionarSemana = (e, { name }) => this.cargarmandadosweek(name)
+
 	cargarmandados(dia){
 
 		//console.log(dia)
-		Axios.get(ENDPOINTS.ListaMandados+'?int=0&dow='+dia)
+		Axios.get(ENDPOINTS.ListaMandados+'?int='+this.state.week+'&dow='+dia)
 					.then(({ data }) => {
 						//console.log(data)
 						let turnosVendidos = sortBy(data, [ 'listorder' ]);
@@ -74,6 +77,27 @@ export default class TipoMandado extends Component {
 
 				
 
+			
+	}
+
+	cargarmandadosweek(semana){
+
+		//console.log(dia)
+		Axios.get(ENDPOINTS.ListaMandados+'?int='+semana+'&dow='+this.state.today)
+					.then(({ data }) => {
+						//console.log(data)
+						let turnosVendidos = sortBy(data, [ 'listorder' ]);
+						turnosVendidos.sort((a,b) => (a.listorder - b.listorder))
+						this.setState({
+							turnosVendidos: turnosVendidos,
+							loading: false,
+							week:semana,							
+							cantidadPaginas: Math.floor(data.recordsTotal / this.state.first) + 1
+						});
+					})
+					.catch((error) => {
+						console.error(error);
+					});
 			
 	}
 
@@ -112,7 +136,7 @@ export default class TipoMandado extends Component {
 	};
 
 	recargar=async()=>{
-		await Axios.get(ENDPOINTS.ListaMandados+'?int=0&dow='+this.state.today)
+		await Axios.get(ENDPOINTS.ListaMandados+'?int='+this.state.week+'&dow='+this.state.today)
 		.then(({ data }) => {
 			
 			let turnosVendidos = sortBy(data, [ 'listorder' ]);
@@ -459,11 +483,13 @@ export default class TipoMandado extends Component {
 					<Header> Mandados de la semana del {this.state.monday} al {this.state.friday}</Header>
 								<div className="inline-block pr-4">
 									<Menu compact>
+									{this.state.week==1 ? (<Menu.Item onClick={this.seleccionarSemana} name={'0'}> Semana Actual</Menu.Item>):('')}
 									<Menu.Item 	onClick={this.seleccionarDia} name={'2'} >{this.state.today==2 ? '*' : ''} Lunes</Menu.Item>
 									<Menu.Item onClick={this.seleccionarDia} name={'3'}>{this.state.today==3 ? '*' : ''} Martes</Menu.Item>
 									<Menu.Item onClick={this.seleccionarDia} name={'4'}>{this.state.today==4 ? '*' : ''} Miercoles</Menu.Item>
 									<Menu.Item onClick={this.seleccionarDia} name={'5'}>{this.state.today==5 ? '*' : ''} Jueves</Menu.Item>
 									<Menu.Item onClick={this.seleccionarDia} name={'6'}>{this.state.today==6 ? '*' : ''} Viernes</Menu.Item>
+									<Menu.Item onClick={this.seleccionarSemana} name={'1'}>{this.state.week==1 ? '*' : ''} Proxima Semana</Menu.Item>
 										
 									</Menu>
 								</div>

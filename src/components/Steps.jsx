@@ -68,6 +68,18 @@ export default class Steps extends Component {
 				}
 				<Menu.Item
 					
+					active={step === 7}
+					onClick={() => {
+						this.props.cambiarStep(7);
+					}}
+					name={'Compras'}
+					icon={"tag"}
+				>
+					
+					
+				</Menu.Item>
+				<Menu.Item
+					
 					active={step === 3}
 					onClick={() => {
 						this.props.cambiarStep(3);

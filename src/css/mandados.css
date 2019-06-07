@@ -52,6 +52,24 @@ border-width: 1px;
 border-color: #000;
 }
 
+#list li.compra  {
+	list-style: outside none none;
+	width: 90%;
+	padding: 8px;
+			 background-color:#7f8e0c;
+			 margin-top: 0;
+margin-right: auto;
+margin-bottom: 3px;
+margin-left: auto;
+border-top-left-radius: 10px 5px;
+border-bottom-right-radius: 10px 5px;
+border-top-right-radius: 10px 5px; 
+border-bottom-left-radius: 10px 5px; 
+border-width: 1px;
+
+border-color: #000;
+}
+
 #list li button {
 	background-color: #6c6b6b;
 

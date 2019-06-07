@@ -41,10 +41,13 @@ export default class Mandados_user extends Component {
 		cobros:null,
 		entregas:null,
 		servicios:null,
-		geo:null
+		geo:null,
+		week:0
 	};
 
 	seleccionarDia = (e, { name }) => this.cargarmandados(name)
+
+	seleccionarSemana = (e, { name }) => this.cargarmandadosweek(name)
 
 	findCoordinates = () => {
 		navigator.geolocation.getCurrentPosition(
@@ -79,9 +82,27 @@ export default class Mandados_user extends Component {
 					.catch((error) => {
 						console.error(error);
 					});
+			
+	}
 
-				
+	cargarmandadosweek(semana){
 
+		//console.log(dia)
+		Axios.get(ENDPOINTS.ListaMandados+'?int='+semana+'&dow='+this.state.today)
+					.then(({ data }) => {
+						//console.log(data)
+						let turnosVendidos = sortBy(data, [ 'listorder' ]);
+						turnosVendidos.sort((a,b) => (a.listorder - b.listorder))
+						this.setState({
+							turnosVendidos: turnosVendidos,
+							loading: false,
+							week:semana,							
+							cantidadPaginas: Math.floor(data.recordsTotal / this.state.first) + 1
+						});
+					})
+					.catch((error) => {
+						console.error(error);
+					});
 			
 	}
 
@@ -123,7 +144,7 @@ export default class Mandados_user extends Component {
 		this.setState({
 			loading: true
 		});
-		await Axios.get(ENDPOINTS.ListaAutorizados+'?int=0&dow='+this.state.today+'&eid='+this.state.userdata.eid)
+		await Axios.get(ENDPOINTS.ListaAutorizados+'?int='+this.state.week+'&dow='+this.state.today+'&eid='+this.state.userdata.eid)
 		.then(({ data }) => {
 			
 			let turnosVendidos = sortBy(data, [ 'listorder' ]);
@@ -161,7 +182,7 @@ export default class Mandados_user extends Component {
 			console.error(error);
 		});
 	
-		await Axios.get(ENDPOINTS.ListaAutorizados+'?int=0&dow='+today+'&eid='+this.state.userdata.eid)
+		await Axios.get(ENDPOINTS.ListaAutorizados+'?int='+this.state.week+'&dow='+today+'&eid='+this.state.userdata.eid)
 		.then(({ data }) => {
 			
 			let turnosVendidos = sortBy(data, [ 'listorder' ]);
@@ -537,11 +558,13 @@ onStart = async (id, tipo)=>{
 					<Header> Mandados de la semana del {this.state.monday} al {this.state.friday}</Header>
 								<div className="inline-block pr-4">
 									<Menu compact>
+									{this.state.week==1 ? (<Menu.Item onClick={this.seleccionarSemana} name={'0'}> Semana Actual</Menu.Item>):('')}
 									<Menu.Item 	onClick={this.seleccionarDia} name={'2'} >{this.state.today==2 ? '*' : ''} Lunes</Menu.Item>
 									<Menu.Item onClick={this.seleccionarDia} name={'3'}>{this.state.today==3 ? '*' : ''} Martes</Menu.Item>
 									<Menu.Item onClick={this.seleccionarDia} name={'4'}>{this.state.today==4 ? '*' : ''} Miercoles</Menu.Item>
 									<Menu.Item onClick={this.seleccionarDia} name={'5'}>{this.state.today==5 ? '*' : ''} Jueves</Menu.Item>
 									<Menu.Item onClick={this.seleccionarDia} name={'6'}>{this.state.today==6 ? '*' : ''} Viernes</Menu.Item>
+									<Menu.Item onClick={this.seleccionarSemana} name={'1'}>{this.state.week==1 ? '*' : ''} Proxima Semana</Menu.Item>
 										
 									</Menu>
 								</div>

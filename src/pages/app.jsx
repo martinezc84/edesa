@@ -10,6 +10,7 @@ import Mandados from '../components/Mandados';
 import Transfers from '../components/Transfers';
 import UnpaidInvoices from '../components/UnpaidInvoices';
 import PurchaseOrders from '../components/PurchaseOrders';
+import PurchaseDetail from '../components/PurchaseDetail';
 import General from '../components/NewGeneral';
 import { navigate } from 'gatsby';
 import Casos from '../components/Casos';
@@ -201,6 +202,16 @@ export default class App extends Component {
 		return <PurchaseOrders valores={this.state.Purchases} guardar={this.guardar} {...props} />;
 	};
 
+	purchasedetail = () => {
+		let props = {
+			seleccionadosVendidosID: this.state.seleccionadosVendidosID,
+			tipo: this.state.tipoSeleccionado,
+			cambiarStep:this.cambiaStep,
+			empleados:this.state.empleados
+		};
+		return <PurchaseDetail valores={this.state.Purchases} guardar={this.guardar} {...props} />;
+	};
+
 	general = () => {
 		let props = {
 			
@@ -277,6 +288,8 @@ export default class App extends Component {
 							<React.Fragment>{this.general()}</React.Fragment>
 						) : step === 7 ? (
 							<React.Fragment>{this.purchases()}</React.Fragment>
+						) : step === 8 ? (
+							<React.Fragment>{this.purchasedetail()}</React.Fragment>
 						) : null}
 					</div>
 				</RutaPrivada>

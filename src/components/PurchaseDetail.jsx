@@ -15,10 +15,12 @@ import { navigate } from '@reach/router';
 
 export default class UnpaidInvoices extends Component {
 	state = {
-		cells:1,
+		Cells:[],
 		date: new Date(),
 		visible:false,
-		userdata:null
+		userdata:null,
+		first:0,
+		productos:[]
 	
 	};
 
@@ -31,6 +33,7 @@ export default class UnpaidInvoices extends Component {
 
 
 	// Método para seleccionar o des seleccionar checkbox de turnos
+
 
 
 
@@ -49,34 +52,14 @@ export default class UnpaidInvoices extends Component {
 		if (user.group_id>2){
 			navigate(`/listado`)
 		}
+
+		this.agregarlinea("");
 		
 		
 			let { guardar, valores, seleccionadosVendidosID,  empleados } = this.props;
-			if (valores.length === 0) {
-				this.setState({
-					loading: true
-				});
-                
-				
-
-				
-			} else {
-				this.setState({
-					empleados:empleados,
-					Invoices: valores,
-					seleccionadosId: seleccionadosVendidosID,
-					cantidadPaginas: Math.floor(valores.length / this.state.first) + 1
-				});
-			}
+		
 		
 	}
-
-	// Método para cambiar de página de turnos
-	cambioDePagina = (e, { activePage }) => {
-		let offset = (activePage - 1) * this.state.step;
-		let first = offset + this.state.step;
-		this.setState({ paginaSeleccionada: activePage, offset, first });
-	};
 
 
 	handleSort = (clickedColumn) => () => {
@@ -98,14 +81,33 @@ export default class UnpaidInvoices extends Component {
 		});
 	};
 
-agregarlinea(){
+	agregarlinea=(codigo)=>{
+		//console.log(codigo)
+		if(codigo!=""){
+		let codigos = [...this.state.productos, codigo];
+		
+		//console.log(codigos)
+		this.setState({
+			productos:codigos,
+			
+		});
+		
+		}
 
+		let items = [...this.state.Cells];
+		let id = this.state.first + 1
+		//console.log(id)
+		
+  items.push({
+    id:id,codigo:"name"
+	});
 	
-}
-
-	
-
-	  
+	this.setState({
+		Cells:items,
+		first:id
+  });
+		}
+  
 		
 		onConfirm = ()=>{
 			this.setState({				
@@ -127,9 +129,10 @@ agregarlinea(){
 			cantidadPaginas,
 			offset,
 			column,
-			direction
+			direction,
+			Cells
 		} = this.state;
-
+//console.log(Cells)
 		if (loading) {
 			return <Loader active inline="centered" />;
 		} else
@@ -140,35 +143,15 @@ agregarlinea(){
 						<React.Fragment>
 							
 							<div className="pt-8">
-								<Header>Facturas Vencidas</Header>
-								<div className="inline-block pr-4">
-									<Menu compact>
-										<Menu.Item active>Cantidad de facturas: {Invoices.length}</Menu.Item>
-									</Menu>
-								</div>
+								<Header>Orden de compra</Header>
+							
 
-								<div className="inline-block">
-									<Pagination
-										activePage={paginaSeleccionada}
-										boundaryRange={1}
-										//@ts-ignore
-										onPageChange={this.cambioDePagina}
-										siblingRange={4}
-										totalPages={cantidadPaginas}
-										ellipsisItem={true ? undefined : null}
-										firstItem={true ? undefined : null}
-										lastItem={true ? undefined : null}
-										prevItem={true ? undefined : null}
-										nextItem={true ? undefined : null}
-									/>
-
-
-								</div>
+							
 								
 								<Table sortable celled>
 									<Table.Header>
 									<Table.Row>
-										<Table.HeaderCell>Producto</Table.HeaderCell>
+									
 										
 										<Table.HeaderCell
 											sorted={column === 'o' ? direction : null}
@@ -180,12 +163,12 @@ agregarlinea(){
 										</Table.Row>
 									</Table.Header>
 									<Table.Body>
-										{Invoices
-											.slice(offset, first)
+										{Cells
 											.map((t) => (
 												<FilaDetalle
-													key={t.iid}
-													turno={t}
+													
+													fila={t}
+													agregarlinea={this.agregarlinea}
 												
 		
 													
@@ -199,14 +182,15 @@ agregarlinea(){
 								<Button
 									size="massive"
 									primary
-									onClick={(this.agregarlinea()) => {
-									
-									}}								
+									onClick={ ()=>{
+										
+										this.agregarlinea("")}	
+									}							
 									icon
 									labelPosition="left"
 								>
 								<Icon name="cogs" />
-									Generar Mandado
+									Agregar Linea
 								</Button>
 
 							
@@ -214,7 +198,7 @@ agregarlinea(){
 							
 						</React.Fragment>
 						
-					)}
+					
 					<MostrarMensaje titulo={'Los mandados fueron creados con exito'} mensajes={'Prueba'}  visible={this.state.visible} onConfirm={this.onConfirm} />
 				</React.Fragment>
 				

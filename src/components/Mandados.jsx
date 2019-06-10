@@ -136,6 +136,10 @@ export default class TipoMandado extends Component {
 	};
 
 	recargar=async()=>{
+
+		this.setState({
+			loading: true
+		});
 		await Axios.get(ENDPOINTS.ListaMandados+'?int='+this.state.week+'&dow='+this.state.today)
 		.then(({ data }) => {
 			
@@ -348,7 +352,7 @@ export default class TipoMandado extends Component {
 		Axios.post(ENDPOINTS.editarmandadoss,'{"id":'+this.state.delete_id+', "active":"0"}')
 		.then(({ data }) => {
 			//console.log(data)
-			
+			this.recargar()
 			
 		})
 		.catch((error) => {
@@ -364,7 +368,7 @@ export default class TipoMandado extends Component {
 		console.log("Cancelar")
 	}
 
-	borrar = (id)=>{
+	borrar =  (id)=>{
 		this.setState({				
 			visible_confirm:true,
 			delete_id:id

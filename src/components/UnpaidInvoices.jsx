@@ -208,7 +208,7 @@ export default class UnpaidInvoices extends Component {
 					empleados = [...empleados,...resposables];
 
 						
-						console.log(empleados)
+						//console.log(empleados)
 						empleados = sortBy(empleados, [ 'name' ]);	
 						empleados = this.trataEmpleados(empleados)	
 

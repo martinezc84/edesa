@@ -27,6 +27,8 @@ class Login extends React.Component {
         this.setState({
             mensaje:"El usuario o contraseña no coinciden"
         })
+    }else{
+      navigate(`/app/`)
     }
   }
 

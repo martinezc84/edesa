@@ -11,9 +11,9 @@ export const getUser = () =>
 const setUser = user =>
   window.localStorage.setItem("gatsbyUser", JSON.stringify(user))
 
-export const handleLogin = ({ username, password }) => {
+export const handleLogin = async ({ username, password }) => {
 
-	Axios.post(`${ENDPOINTS.login}`,'{"username":"'+username+'","password":"'+password+'"}')
+	await Axios.post(`${ENDPOINTS.login}`,'{"username":"'+username+'","password":"'+password+'"}')
 					.then(({ data }) => {
 						//console.log(data)
 						 setUser({
@@ -28,12 +28,12 @@ export const handleLogin = ({ username, password }) => {
 						
 					})
 					.catch((error) => {
-						console.error(error);
+						//console.error(error);
 						return false;
 					});
  
 
-  //return false
+  return false
 }
 
 export const isLoggedIn = () => {

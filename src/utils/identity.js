@@ -1,5 +1,6 @@
 import { ENDPOINTS } from '../utils/utils';
 import Axios from 'axios';
+import { navigate } from '@reach/router';
 
 export const isBrowser = () => typeof window !== "undefined"
 
@@ -23,7 +24,7 @@ export const handleLogin = async ({ username, password }) => {
 							group_id:data.group_id,
 							eid:data.employee_id
 							})
-							
+							navigate('/')
 							return data.group_id
 						
 					})
@@ -33,7 +34,7 @@ export const handleLogin = async ({ username, password }) => {
 					});
  
 
-  return false
+  //return false
 }
 
 export const isLoggedIn = () => {

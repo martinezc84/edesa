@@ -11,6 +11,7 @@ import Transfers from '../components/Transfers';
 import UnpaidInvoices from '../components/UnpaidInvoices';
 import PurchaseOrders from '../components/PurchaseOrders';
 import PurchaseDetail from '../components/PurchaseDetail';
+import Login from '../components/Login';
 import General from '../components/NewGeneral';
 import { navigate } from 'gatsby';
 import Casos from '../components/Casos';
@@ -41,7 +42,8 @@ export default class App extends Component {
 		cobros:null,
 		entregas:null,
 		servicios:null,
-		geo:false
+		geo:false,
+		islogin:false
 		};
 
 
@@ -104,6 +106,10 @@ export default class App extends Component {
 		let user = isLoggedIn();
 		this.cargarconfig()
 
+		this.setState({
+			islogin: user
+		});
+
 		let userdata={group_id:0};
 		
 		if(user!=false){
@@ -121,6 +127,12 @@ export default class App extends Component {
 	guardar = (state, valores) => {
 		this.setState({
 			[state]: valores
+		});
+	};
+
+	setlogin = () => {
+		this.setState({
+			islogin: true
 		});
 	};
 
@@ -230,6 +242,16 @@ export default class App extends Component {
 		return <Firma id={this.state.idmandado} fecha={this.state.fechamandado} {...props} />;
 	};
 
+	login = () => {
+		let props = {
+			
+			cambiarStep:this.cambiaStep,
+			setlogin:this.setlogin
+		};
+		
+		return <Login {...props} />;
+	};
+
 	casos = () => {
 		let props = {
 			valores:this.state.casos,
@@ -253,7 +275,7 @@ export default class App extends Component {
 
 	render() {
 		
-		let { step, tipoSeleccionado, general, cobros, servicios, entregas } = this.state;
+		let { step, tipoSeleccionado, general, cobros, servicios, entregas, islogin } = this.state;
 		let stepsProps = {
 			active: step,
 			cambiarStep: this.cambiaStep,
@@ -264,15 +286,20 @@ export default class App extends Component {
 			cobros:cobros
 			
 		};
+
+		if(!islogin){
+			step=99
+		}
 		
 		//console.log(general);
 		
 		return (
 			<Layout>
 				<RutaPrivada>
-					<Container>
+					{islogin ? (<Container>
 						<Steps {...stepsProps} />
-					</Container>
+					</Container>):('')}
+					
 					<div className="pt-6">
 						{step === 1 ? (
 							<React.Fragment>{this.tiposMandados()}</React.Fragment>
@@ -290,6 +317,8 @@ export default class App extends Component {
 							<React.Fragment>{this.purchases()}</React.Fragment>
 						) : step === 8 ? (
 							<React.Fragment>{this.purchasedetail()}</React.Fragment>
+						): step === 99 ? (
+							<React.Fragment>{this.login()}</React.Fragment>
 						) : null}
 					</div>
 				</RutaPrivada>

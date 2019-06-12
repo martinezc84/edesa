@@ -10,6 +10,7 @@ import TipoMandado from '../components/TipoMandado';
 import { navigate } from 'gatsby';
 import Acciones from '../components/Acciones';
 import { Container } from 'semantic-ui-react';
+import { Router } from "@reach/router"
 
 export default class Config extends Component {
 	state = {
@@ -69,13 +70,6 @@ export default class Config extends Component {
 		);
 	};
 	
-	tiposMandados = () => {
-		let props = {
-			seleccionadosVendidosID: this.state.seleccionadosVendidosID,
-			tipo: this.state.tipoSeleccionado
-		};
-		return <TipoMandado valores={this.state.turnosVendidos} guardar={this.guardar} {...props} />;
-	};
 
 
 
@@ -99,24 +93,22 @@ export default class Config extends Component {
 	};
 
 	render() {
-		let { step, tipoSeleccionado } = this.state;
-		let stepsProps = {
-			active: step,
-			cambiarStep: this.cambiaStep,
-			tipoSeleccionado: tipoSeleccionado
+		
+		
+		let props = {
+			seleccionadosVendidosID: this.state.seleccionadosVendidosID,
+			tipo: this.state.tipoSeleccionado
 		};
 		return (
 			<Layout>
-				<RutaPrivada>
-					<Container>
-						<StepsC {...stepsProps} />
-					</Container>
-					<div className="pt-6">
-						{step === 1 ? (
-							<React.Fragment>{this.tiposMandados()}</React.Fragment>
-						) : null}
-					</div>
+			<Router>
+
+				<RutaPrivada path="/config" component={TipoMandado} valores={this.state.turnosVendidos} guardar={this.guardar} {...props}>
+					
+					
 				</RutaPrivada>
+			</Router>
+
 			</Layout>
 		);
 	}

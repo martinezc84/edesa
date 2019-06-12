@@ -20,7 +20,8 @@ export default class UnpaidInvoices extends Component {
 		visible:false,
 		userdata:null,
 		first:0,
-		productos:[]
+		productos:[],
+		orden_compra:0
 	
 	};
 
@@ -40,13 +41,14 @@ export default class UnpaidInvoices extends Component {
 
 	componentDidMount() {
 		
-		let { tipo } = this.props;
+		let { tipo, orden_compra } = this.props;
 
 		let { buscar } = this.state;
 
 		let user = getUser();
 		this.setState({
-			userdata: user
+			userdata: user,
+			orden_compra:orden_compra
 		});
 
 		if (user.group_id>2){

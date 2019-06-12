@@ -16,6 +16,11 @@ empezar=(id, tipo)=>{
     this.props.onStart(id, tipo)
 }
 
+tags=(id)=>{
+    //console.log(id)
+    this.props.tags(id)
+}
+
 borrar=(id)=>{
     //console.log(id)
     this.props.Borrar(id)
@@ -28,7 +33,7 @@ this.props.child(id)
 render(){
 
    let  {
-        items
+        items,sub
     } = this.props;
    
     const listItems = items.map(val => (
@@ -90,6 +95,18 @@ render(){
         mandado={val.id}
         >       
     </UploadBox>)
+    }
+
+{val.tipo>4 && sub==1 ? (
+    <Button onClick={() => {
+        this.tags(val.id);
+    }} >
+Ingresar Bultos
+<Button.Content  >
+</Button.Content>
+</Button>
+    
+    ) :('')
     }
        
 

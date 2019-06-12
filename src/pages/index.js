@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import netlifyIdentity from 'netlify-identity-widget';
 import { navigate } from 'gatsby';
 import { Layout } from '../components/Layout';
 import gatsbyConfig from '../../gatsby-config';
@@ -7,7 +6,7 @@ import '../css/style.css';
 
 export default class Index extends Component {
 	componentDidMount() {
-		let user = netlifyIdentity.currentUser();
+		
 
 		
 	}

@@ -1,13 +1,17 @@
 //@ts-check
 import React, { Component } from 'react';
 import { Step, Icon, Menu } from 'semantic-ui-react';
+import { navigate } from 'gatsby';
+import { isLoggedIn, logout , getUser} from "../utils/identity"
 
 export default class Steps extends Component {
 	state = {};
 	
 	render() {
-		let { active: step, tipoSeleccionado: tipo, general, cobros, entregas, servicios} = this.props;
+		let { active: step, tipoSeleccionado: tipo, general, cobros, entregas, servicios, group_id} = this.props;
 		let tipoSeleccionado = tipo !== null;
+
+		let userdata = getUser()
 		//console.log(this.props)
 		return (
 			<Menu>
@@ -15,7 +19,7 @@ export default class Steps extends Component {
 				<Menu.Item
 					active={step === 6}
 					onClick={() => {
-						this.props.cambiarStep(6);
+						navigate('/app/general')
 					}}
 					name={'General'}
 					icon={'file alternate'}
@@ -27,7 +31,7 @@ export default class Steps extends Component {
 				<Menu.Item
 					active={step === 1}
 					onClick={() => {
-						this.props.cambiarStep(1);
+						navigate('/app/cobros')
 					}}
 					name={'Facturas no pagadas'}
 					icon={'file alternate'}
@@ -43,7 +47,7 @@ export default class Steps extends Component {
 					
 					active={step === 2}
 					onClick={() => {
-						this.props.cambiarStep(2);
+						navigate('/app/transferencias')
 					}}
 					name={'Entregas pendientes'}
 					icon={"dolly flatbed"}
@@ -57,7 +61,7 @@ export default class Steps extends Component {
 					
 					active={step === 4}
 					onClick={() => {
-						this.props.cambiarStep(4);
+						navigate('/app/casos')
 					}}
 					name={'Servicios'}
 					icon={"cogs"}
@@ -70,7 +74,7 @@ export default class Steps extends Component {
 					
 					active={step === 7}
 					onClick={() => {
-						this.props.cambiarStep(7);
+						navigate('/app/compras')
 					}}
 					name={'Compras'}
 					icon={"tag"}
@@ -78,18 +82,27 @@ export default class Steps extends Component {
 					
 					
 				</Menu.Item>
+				{userdata.group_id < 3 ? (
 				<Menu.Item
 					
 					active={step === 3}
 					onClick={() => {
-						this.props.cambiarStep(3);
+						navigate('/app/mandados')
 					}}
 					name={'Tareas'}
 					icon={"list ol"}
 				>
 					
 					
-				</Menu.Item>
+		</Menu.Item>):(<Menu.Item
+					
+					active={step === 10}
+					onClick={() => {
+						navigate('/app/mandadosu')
+					}}
+					name={'Tareas'}
+					icon={"list ol"}
+				></Menu.Item>)}
 			</Menu>
 		);
 	}

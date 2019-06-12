@@ -10,6 +10,7 @@ import sortBy from 'lodash/sortBy';
 import { MostrarMensaje } from './Mensajes';
 import Inputdate from './Inputdate';
 import { isLoggedIn, logout , getUser} from "../utils/identity"
+import { navigate } from 'gatsby';
 
 
 
@@ -189,7 +190,7 @@ export default class UnpaidInvoices extends Component {
 			this.setState({				
 				visible:false
 			});
-			this.props.cambiarStep(3);
+			navigate('/app/mandados/')
         }
         
         handleInputChange = event => {

@@ -25,7 +25,7 @@ autorizar=(id)=>{
 render(){
 
    let  {
-        items
+        items, group_id
     } = this.props;
     //console.log(this.props.firma)
     let sortable = null; // sortable instance
@@ -35,7 +35,7 @@ render(){
     };
     const listItems = items.map(val => (
     <li className={(val.tipo == 1) ? 'cobro' : (val.tipo == 3) ? 'soporte':(val.tipo == 5) ? 'compra':''} key={uniqueId()}  data-id={val.id}>
-    {val.listorder} )Hora: {val.hora} Descripción: {val.descripcion} Cliente: {val.cliente} 
+    {val.listorder} )Hora: {val.hora} <strong>Encargado:</strong>{val.encargado} <strong>Descripción:</strong> {val.descripcion} Cliente: {val.cliente} 
     <Checkbox
     onChange={() => {
         
@@ -77,7 +77,7 @@ render(){
       </Button.Content>
     </Button>):("")
     }
-    {val.autorizado == 0  ? (
+    {val.autorizado == 0 && group_id<3  ? (
 <Button onClick={() => {
                     this.autorizar(val.id);
                 }} >

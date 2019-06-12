@@ -11,6 +11,7 @@ import { MostrarMensaje } from './Mensajes';
 import { MsjConfirma } from './MsjConfirma';
 import { isLoggedIn, logout , getUser} from "../utils/identity"
 import { async } from 'q';
+import { navigate } from '@reach/router';
 
 
 export default class TipoMandado extends Component {
@@ -291,8 +292,13 @@ export default class TipoMandado extends Component {
 		let user = netlifyIdentity.currentUser();
 		//console.log(this.props)
 		let { tipo, guardar, config, general, cobros, entregas, servicios, geo } = this.props;
+		let userdata =getUser();
+
+		if(userdata.group_id>2){
+			navigate('/app/mandadosu')
+		}
 		this.setState({
-			userdata: getUser()
+			userdata: userdata
 		});
 		this.setState({
 				general:general,
@@ -514,6 +520,7 @@ export default class TipoMandado extends Component {
 												Borrar={this.borrar}
 												child={this.child}
 												autorizar={this.autorizar}
+												group_id={this.state.userdata.group_id}
 												
 											>
 											</SortableLst>) :(<React.Fragment>Sin Mandados</React.Fragment> )

@@ -15,19 +15,15 @@ class Header extends Component {
 
 	componentDidMount() {
 
-		if (!isLoggedIn() && location.pathname !== `/app` && location.pathname !== `/listado`) {
-			navigate(`/app`)
-			return null
-			
-		}
+		
 
 		let user = getUser();
 
-		if (user.group_id > 2 && location.pathname !== `/app`)  {
+		/*if (user.group_id > 2 && location.pathname !== `/app`)  {
 			navigate(`/listado`)
 			return null
 			
-		}
+		}*/
 	}
 
 	onClick = (e, { path }) => {
@@ -58,7 +54,7 @@ class Header extends Component {
 				/>
 
 				<Menu>
-					<Menu.Item name="Inicio" path="/" onClick={this.onClick} />
+					
 					{logged ? (
 						
 						<MenuAdmin
@@ -69,7 +65,7 @@ class Header extends Component {
 							
 						</MenuAdmin>
 						
-					) : null}
+					) : <Menu.Item name="Login" path="/app/login/0" onClick={this.onClick} />}
 
 					<Menu.Menu position="right">
 						{logged ? (
@@ -78,7 +74,8 @@ class Header extends Component {
 									name="Log out"
 									onClick={() => {
 										logout()
-										navigate('/');
+										navigate('/app/login/0');
+										
 									}}
 								/>
 								<Menu.Item>{user ? user : ''}</Menu.Item>

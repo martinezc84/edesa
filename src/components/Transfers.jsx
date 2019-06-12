@@ -9,6 +9,7 @@ import FilaEntrega from './FilaEntrega';
 import sortBy from 'lodash/sortBy';
 import { MostrarMensaje } from './Mensajes';
 import { isLoggedIn, logout , getUser} from "../utils/identity"
+import { navigate } from 'gatsby';
 
 
 
@@ -288,10 +289,10 @@ export default class Transfers extends Component {
 				let fechastr = fecha[0].dte.toLocaleDateString('en-US');
 				let horastr = fecha[0].dte.getHours();
 				let minutes = fecha[0].dte.getMinutes();
-				console.log(horastr)
-				console.log(minutes)
+				//console.log(horastr)
+				//console.log(minutes)
 				fecha = fechastr.split('/');
-				fechastr = fecha[2]+'/'+fecha[1]+'/'+fecha[0]
+				fechastr = fecha[2]+'/'+fecha[0]+'/'+fecha[1]
 				const posttext = '{"fecha": "'+fechastr+'", "hora": "'+horastr+':'+minutes+':00",   "cliente":"'+seleccionado.address_to+'","descripcion":"Entrega: Ref'+seleccionado.reference+'","tipo":"2","user":"'+this.state.userdata.username+'","store_id":1,"encargado":"'+nombre.text+'","employee_id":"'+mensajero[0].value+'", "active":"1"}'
 				//console.log(posttext)
 
@@ -316,7 +317,7 @@ export default class Transfers extends Component {
 			this.setState({				
 				visible:false
 			});
-			this.props.cambiarStep(3);
+		navigate('/app/mandados')
 		}
 
 	render() {

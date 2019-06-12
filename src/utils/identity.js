@@ -24,12 +24,15 @@ export const handleLogin = async ({ username, password }) => {
 							group_id:data.group_id,
 							eid:data.employee_id
 							})
-							navigate('/')
-							return data.group_id
+							navigate(`/app/cobros`)
+							//return data.group_id
 						
 					})
 					.catch((error) => {
 						//console.error(error);
+
+						navigate(`/app/login/1`)
+
 						return false;
 					});
  

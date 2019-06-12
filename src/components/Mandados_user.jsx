@@ -10,6 +10,7 @@ import sortBy from 'lodash/sortBy';
 import { MostrarMensaje } from './Mensajes';
 import { MsjConfirma } from './MsjConfirma';
 import { isLoggedIn, logout , getUser} from "../utils/identity"
+import { compareAsc } from 'date-fns';
 
 
 
@@ -41,6 +42,7 @@ export default class Mandados_user extends Component {
 		cobros:null,
 		entregas:null,
 		servicios:null,
+		compras:null,
 		geo:null,
 		week:0
 	};
@@ -250,6 +252,12 @@ export default class Mandados_user extends Component {
 			case '4':
 			return this.state.servicios.firma
 
+			case '5':
+			return this.state.compras.firma
+
+			case '6':
+			return this.state.compras.firma
+
 			
 		}
 	}
@@ -295,10 +303,28 @@ export default class Mandados_user extends Component {
 							entregas: conf
 						});
 					}
-					if (data[x].type=='4	'){
+					if (data[x].type=='4'){
 						conf = data[x]
 						this.setState({
 							servicios: conf
+						});
+						break
+					}
+
+					if (data[x].type=='5'){
+						conf = data[x]
+						conf.sub=0
+						this.setState({
+							compras: conf
+						});
+						break
+					}
+
+					if (data[x].type=='6'){
+						conf = data[x]
+						conf.sub=1
+						this.setState({
+							compras: conf
 						});
 						break
 					}
@@ -390,7 +416,7 @@ onStart = async (id, tipo)=>{
 
 		this.cargarconfig();
 
-		console.log(this.props)
+		//console.log(this.props)
 		let {  general, cobros, entregas, servicios, geo } = this.props;
 
 		this.setState({
@@ -403,22 +429,13 @@ onStart = async (id, tipo)=>{
 	
 	
 			let { valores, seleccionadosVendidosID } = this.props;
-			if (valores.length === 0) {
-				this.setState({
-					loading: true
-				});
+		
 
 				
 					this.cargardatos()
 					
 					//console.log(this.state)
-			} else {
-				this.setState({
-					turnosVendidos: valores,
-					seleccionadosId: seleccionadosVendidosID,
-					cantidadPaginas: Math.floor(valores.length / this.state.first) + 1
-				});
-			}
+	
 			}
 
 	// Método para cambiar de página de turnos
@@ -464,10 +481,12 @@ onStart = async (id, tipo)=>{
 		this.setState({				
 			visible_confirm:true,
 			delete_id:id
-		});
+		}); 
+	}
 
-		
-	 
+	tags = (id)=>{
+		this.props.guardar('orden_compra',id)
+		this.props.cambiarStep(8);
 	}
 
 	guardarorden = 	 (mandados) =>{
@@ -545,7 +564,8 @@ onStart = async (id, tipo)=>{
 			general,
 			cobros,
 			entregas,
-			servicios
+			servicios,
+			compras
 		} = this.state;
 
 		if (loading) {
@@ -582,6 +602,8 @@ onStart = async (id, tipo)=>{
 												cobros={cobros}
 												entregas={entregas}
 												servicios={servicios}
+												sub={compras.sub}
+												tags={this.tags}
 												
 											>
 											</MsjLst>) :(<React.Fragment>Sin Mandados</React.Fragment> )

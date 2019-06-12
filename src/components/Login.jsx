@@ -17,37 +17,36 @@ class Login extends React.Component {
     })
   }
 
-  handleSubmit = event => {
+  handleSubmit = event  => {
     this.setState({
         mensaje:""
     })
     event.preventDefault()
 
-   if(handleLogin(this.state)===false){
-       
-
-        return false
-       }
+   handleLogin(this.state)
+      
   }
 
   render() {
  
     let {mensaje} =  this.state
+
+    let error = this.props.error;
+    
+    
+
     return (
       <>
         <h1>Log in</h1>
-        <h3 className={"msjerror"}>{mensaje}</h3>
+        {error ==1 ? (
+        <h3 className={"msjerror"}>Error al ingresar usuario o contraseña</h3>):('')
+        }
         <div >
         <form
           method="post"
           onSubmit={event => {
-            let gp=this.handleSubmit(event)
-           console.log(gp)   
-           if(gp===undefined){
-           this.setState({
-            mensaje:"El usuario o contraseña no coinciden"
-        })
-      }
+            this.handleSubmit(event)
+            
           }}
         >
           <label>

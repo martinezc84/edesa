@@ -15,21 +15,14 @@ export default class MenuAdmin extends Component {
 				<Menu.Item name="config" path="/config" onClick={onClick} />	
 				</React.Fragment>
 				)
-			else if (admin == 2) {
+			else  
 				return(
 					<React.Fragment>
 				<Menu.Item name="app" path="/app" onClick={onClick} />
 					
 				</React.Fragment>
 				)
-			} else {
-				return(
-					<React.Fragment>
-					<Menu.Item name="Listado" path="/listado" onClick={onClick} />
-						
-					</React.Fragment>
-				)
-			}
+			
 			
 		
 	}

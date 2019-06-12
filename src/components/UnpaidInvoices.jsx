@@ -130,19 +130,13 @@ export default class UnpaidInvoices extends Component {
 
 	componentDidMount() {
 		
-		let { tipo } = this.props;
-
-		let { buscar } = this.state;
+			let { buscar } = this.state;
 
 		let user = getUser();
 		this.setState({
 			userdata: user
 		});
 
-		if (user.group_id>2){
-			navigate(`/listado`)
-		}
-		
 		
 			let { guardar, valores, seleccionadosVendidosID,  empleados } = this.props;
 			if (valores.length === 0) {
@@ -413,7 +407,7 @@ export default class UnpaidInvoices extends Component {
 			this.setState({				
 				visible:false
 			});
-			this.props.cambiarStep(3);
+			navigate('/app/mandados/')
 		}
 
 	render() {

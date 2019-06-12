@@ -1,12 +1,13 @@
 //@ts-check
 import React, { Component } from 'react';
-import netlifyIdentity from 'netlify-identity-widget';
 import '../css/style.css';
 import Axios from 'axios';
 import { ENDPOINTS } from '../utils/utils';
 import { Header, Table, Loader, Pagination, Search, Menu } from 'semantic-ui-react';
 import FilaTipo from './FilaTipo';
 import sortBy from 'lodash/sortBy';
+import {  getUser} from "../utils/identity"
+import { navigate } from '@reach/router';
 
 export default class TipoMandado extends Component {
 	state = {
@@ -55,10 +56,14 @@ export default class TipoMandado extends Component {
 		);
 	};
 	componentDidMount() {
-		let user = netlifyIdentity.currentUser();
+		
 		let { tipo } = this.props;
 
-		if (user !== null) {
+		let user= getUser();
+
+		if(user.group_id != 1){
+			navigate('/app/')
+		}
 			let { guardar, valores, seleccionadosVendidosID } = this.props;
 			if (valores.length === 0) {
 				this.setState({
@@ -87,7 +92,7 @@ export default class TipoMandado extends Component {
 					cantidadPaginas: Math.floor(valores.length / this.state.first) + 1
 				});
 			}
-		}
+		
 	}
 
 	// Método para cambiar de página de turnos

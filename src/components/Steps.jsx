@@ -103,6 +103,20 @@ export default class Steps extends Component {
 					name={'Tareas'}
 					icon={"list ol"}
 				></Menu.Item>)}
+				{userdata.group_id == 1 ? (
+				<Menu.Item
+					
+					active={step === 3}
+					onClick={() => {
+						navigate('/app/config')
+					}}
+					name={'Config'}
+					icon={"cogs"}
+				>
+					
+					
+		</Menu.Item>):('')}
+			
 			</Menu>
 		);
 	}

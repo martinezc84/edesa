@@ -11,6 +11,7 @@ import Transfers from '../components/Transfers';
 import UnpaidInvoices from '../components/UnpaidInvoices';
 import PurchaseOrders from '../components/PurchaseOrders';
 import PurchaseDetail from '../components/PurchaseDetail';
+import Config from '../components/Config';
 import Login from '../components/Login';
 import General from '../components/NewGeneral';
 import { Router } from "@reach/router"
@@ -299,6 +300,7 @@ export default class App extends Component {
 				<RutaPrivada  path="/app/mandados" component={Mandados} {...propsmandados} guardar={this.guardar}  ></RutaPrivada>
 				<RutaPrivada  path="/app/mandadosu" component={MandadosU} {...propsmandadosu} guardar={this.guardar} ></RutaPrivada>
 				<RutaPrivada  path="/app/firma" component={Firma} id={this.state.idmandado} fecha={this.state.fechamandado} ></RutaPrivada>
+				<RutaPrivada  path="/app/config" component={Config} ></RutaPrivada>
 				<Login path='/app/login/:error' />
 				
 				

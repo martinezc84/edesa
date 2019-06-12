@@ -12,7 +12,7 @@ export default class MenuAdmin extends Component {
 				return (
 		<React.Fragment>
 				<Menu.Item name="app" path="/app" onClick={onClick} />
-				<Menu.Item name="config" path="/config" onClick={onClick} />	
+				<Menu.Item name="config" path="/app/config" onClick={onClick} />	
 				</React.Fragment>
 				)
 			else  

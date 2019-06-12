@@ -4,8 +4,6 @@ import React from 'react';
 import { isLoggedIn} from "../utils/identity"
 import { navigate } from "gatsby"
 
-
-
 const RutaPrivada = ({ component: Component,  ...rest }) => {
 
 	if (!isLoggedIn() && location.pathname !== `/app/login/0`) {

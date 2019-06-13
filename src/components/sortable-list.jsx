@@ -22,6 +22,12 @@ autorizar=(id)=>{
    this.props.autorizar(id)
 
 }
+
+editar=(id)=>{
+    //console.log(id)
+   this.props.editar(id)
+
+}
 render(){
 
    let  {
@@ -82,6 +88,15 @@ render(){
                     this.autorizar(val.id);
                 }} >
      Autorizar
+      <Button.Content  >
+      </Button.Content>
+    </Button>):("")
+    }
+    {val.autorizado == 0 && group_id<3  ? (
+<Button onClick={() => {
+                    this.editar(val.id);
+                }} >
+     Editar
       <Button.Content  >
       </Button.Content>
     </Button>):("")

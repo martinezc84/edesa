@@ -4,10 +4,11 @@ import netlifyIdentity from 'netlify-identity-widget';
 import '../css/style.css';
 import Axios from 'axios';
 import { ENDPOINTS, API_URL } from '../utils/utils';
-import { Header, Table, Loader, Pagination, Search, Menu } from 'semantic-ui-react';
+import { Header, Table, Loader, Button, Icon, Menu,Dropdown } from 'semantic-ui-react';
 import SortableLst from '../components/sortable-list';
 import sortBy from 'lodash/sortBy';
 import { MostrarMensaje } from './Mensajes';
+import VendedorSel  from '../components/VendedorSel';
 import { MsjConfirma } from './MsjConfirma';
 import { isLoggedIn, logout , getUser} from "../utils/identity"
 import { async } from 'q';
@@ -36,7 +37,10 @@ export default class TipoMandado extends Component {
 		config:{firma:0},
 		delete_id:null,
 		userdata:null,
-		week:0
+		week:0,
+		empleados:[],
+		empleadosel:0
+		
 	};
 
 	findCoordinates = () => {
@@ -60,7 +64,7 @@ export default class TipoMandado extends Component {
 	cargarmandados(dia){
 
 		//console.log(dia)
-		Axios.get(ENDPOINTS.ListaMandados+'?int='+this.state.week+'&dow='+dia)
+		Axios.get(ENDPOINTS.ListaMandados+'?int='+this.state.week+'&dow='+dia+"&eid="+this.state.empleadosel)
 					.then(({ data }) => {
 						//console.log(data)
 						let turnosVendidos = sortBy(data, [ 'listorder' ]);
@@ -102,7 +106,14 @@ export default class TipoMandado extends Component {
 			
 	}
 
-
+	trataEmpleados = (empleados) => {
+		return empleados.map((t) => ({
+			key: t.id,
+			value: t.id,
+			text: t.name,
+			todo: t
+		}));
+	};
 
 	setStateAsync(state) {
 		return new Promise((resolve) => {
@@ -141,7 +152,7 @@ export default class TipoMandado extends Component {
 		this.setState({
 			loading: true
 		});
-		await Axios.get(ENDPOINTS.ListaMandados+'?int='+this.state.week+'&dow='+this.state.today)
+		await Axios.get(ENDPOINTS.ListaMandados+'?int='+this.state.week+'&dow='+this.state.today+"&eid="+this.state.empleadosel)
 		.then(({ data }) => {
 			
 			let turnosVendidos = sortBy(data, [ 'listorder' ]);
@@ -176,7 +187,7 @@ export default class TipoMandado extends Component {
 			console.error(error);
 		});
 	
-		await Axios.get(ENDPOINTS.ListaMandados+'?int=0&dow='+today)
+		await Axios.get(ENDPOINTS.ListaMandados+'?int=0&dow='+today+"&eid="+this.state.empleadosel)
 		.then(({ data }) => {
 			
 			let turnosVendidos = sortBy(data, [ 'listorder' ]);
@@ -218,6 +229,11 @@ export default class TipoMandado extends Component {
 		.catch((error) => {
 			console.error(error);
 		});
+		//console.error(this.props.empleados);
+
+	
+
+
 	} catch (error) {
 		console.error({ error });
 		
@@ -289,8 +305,7 @@ export default class TipoMandado extends Component {
 	}
 
 	componentDidMount() {
-		let user = netlifyIdentity.currentUser();
-		//console.log(this.props)
+	
 		let { tipo, guardar, config, general, cobros, entregas, servicios, geo } = this.props;
 		let userdata =getUser();
 
@@ -314,25 +329,51 @@ export default class TipoMandado extends Component {
 		
 	}
 		
-		if (user !== null) {
-			let { guardar, valores, seleccionadosVendidosID } = this.props;
-			if (valores.length === 0) {
-				this.setState({
-					loading: true
-				});
-
-				
+	
+			let { valores, seleccionadosVendidosID } = this.props;
+			this.setState({
+				loading: true
+			});	
 					this.cargardatos()
 					
-					//console.log(this.state)
-			} else {
+		
+
+			console.log(this.props)
+			if(this.state.empleados.length==0){
+				Axios.get(`${ENDPOINTS.empleados}`)
+				.then(({ data }) => {
+					//console.log(data)
+					
+					let empleados = data.filter((d) => d.active === true && d.seller === true && d.inventory_controller === false);
+					 let	resposables = data.filter((d) => d.inventory_controller === true && d.active === true);
+		
+				empleados = [...empleados,...resposables];
+		
+					
+					//console.log(empleados)
+					empleados = sortBy(empleados, [ 'name' ]);	
+					empleados = this.trataEmpleados(empleados)	
+		
+		
+					this.props.guardar('empleados', empleados);
+					this.setState({
+						empleados: empleados,
+						
+					});
+				})
+				.catch((error) => {
+					console.error(error);
+				});
+			}else{
 				this.setState({
-					turnosVendidos: valores,
-					seleccionadosId: seleccionadosVendidosID,
-					cantidadPaginas: Math.floor(valores.length / this.state.first) + 1
+					empleados: this.props.empleados,
+					
 				});
 			}
-		}
+			this.setState({
+				loading: false
+			});	
+		
 	}
 
 	// Método para cambiar de página de turnos
@@ -382,6 +423,10 @@ export default class TipoMandado extends Component {
 
 		
 	 
+	}
+
+	editar =  (id)=>{
+		navigate('/app/mandado/'+id)	 
 	}
 
 	guardarorden = 	 (mandados) =>{
@@ -465,7 +510,27 @@ export default class TipoMandado extends Component {
 		});
 	};
 
-	
+	seleccionaVendedor = (e, item) => {
+		//console.log(item.value)
+					this.setState(
+			{
+				empleadosel:item.value
+			}
+		);
+
+		
+	};
+
+	limpiavendedor= async ()=>{
+		//console.log(item.value)				
+		await this.setState(
+			{
+				empleadosel:0
+			}
+		);
+
+		
+	};
 
 	render() {
 	
@@ -473,14 +538,9 @@ export default class TipoMandado extends Component {
 		let {
 			turnosVendidos,
 			loading,
-			seleccionadosId,
-			paginaSeleccionada,
-			first,
-			cantidadPaginas,
-			offset,
-			column,
-			direction,
-			config
+		empleadosel,
+			config,
+			empleados
 		} = this.state;
 
 		if (loading) {
@@ -488,8 +548,11 @@ export default class TipoMandado extends Component {
 		} else
 			return (
 				<React.Fragment>
-			
-
+			{empleados.length>0 && (
+				<VendedorSel limpiavendedor={this.limpiavendedor} empleadosel={this.state.empleadosel} empleados={this.state.empleados} seleccionaVendedor={this.seleccionaVendedor} recargar={this.recargar}></VendedorSel>
+						)
+			}
+	
 					<Header> Mandados de la semana del {this.state.monday} al {this.state.friday}</Header>
 								<div className="inline-block pr-4">
 									<Menu compact>
@@ -521,6 +584,7 @@ export default class TipoMandado extends Component {
 												child={this.child}
 												autorizar={this.autorizar}
 												group_id={this.state.userdata.group_id}
+												editar={this.editar}
 												
 											>
 											</SortableLst>) :(<React.Fragment>Sin Mandados</React.Fragment> )

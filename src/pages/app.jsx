@@ -6,6 +6,7 @@ import RutaPrivada from '../components/RutaPrivada';
 import TiposDeTurno from '../components/tipoDeTurno';
 import Firma from '../components/Firma';
 import Mandados from '../components/Mandados';
+import Mandado from '../components/EditarMandado';
 import MandadosU from '../components/Mandados_user';
 import Transfers from '../components/Transfers';
 import UnpaidInvoices from '../components/UnpaidInvoices';
@@ -276,7 +277,8 @@ export default class App extends Component {
 			entregas:this.state.entregas,
 			servicios:this.state.servicios,
 			compras:this.state.compras,
-			geo:this.state.geo
+			geo:this.state.geo,
+			empleados:this.state.empleados
 		};
 
 		let propspurchase = {
@@ -301,6 +303,7 @@ export default class App extends Component {
 				<RutaPrivada  path="/app/mandadosu" component={MandadosU} {...propsmandadosu} guardar={this.guardar} ></RutaPrivada>
 				<RutaPrivada  path="/app/firma" component={Firma} id={this.state.idmandado} fecha={this.state.fechamandado} ></RutaPrivada>
 				<RutaPrivada  path="/app/config" component={Config} ></RutaPrivada>
+				<RutaPrivada  path="/app/mandado/:id" component={Mandado} guardar={this.guardar} ></RutaPrivada>
 				<Login path='/app/login/:error' />
 				
 				

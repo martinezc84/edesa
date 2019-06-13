@@ -56,7 +56,8 @@ const NF_ENDPOINTS = {
 	Entregas :URL_PREFIX+process.env.GATSBY_URL_ENTREGAS,
 	Casos :URL_PREFIX+process.env.GATSBY_URL_CASOS,
 	editarTipoMandado: URL_PREFIX+process.env.GATSBY_URL_EDITAR_TIPO_MANDADO,
-	login: URL_PREFIX+process.env.GATSBY_URL_LOGIN
+	login: URL_PREFIX+process.env.GATSBY_URL_LOGIN,
+	mandado: URL_PREFIX+process.env.GATSBY_URL_MANDADOINFO
 	
 };
 

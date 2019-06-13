@@ -36,6 +36,7 @@
 	GATSBY_URL_LISTADO_AUTORIZADOS='/.netlify/functions/Autorizados'
 	GATSBY_URL_PURCHASE_ORDERS='/.netlify/functions/PurchaseOrders'
 	GATSBY_URL_PURCHASE_ORDER='/.netlify/functions/PurchaseOrder'
+	GATSBY_URL_MANDADOINFO='/.netlify/functions/Mandado'
 
 
 	# Dominio del sitio de las APIs (Backend)

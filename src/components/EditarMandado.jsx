@@ -1,14 +1,12 @@
 //@ts-check
 import React, { Component } from 'react';
-import netlifyIdentity from 'netlify-identity-widget';
 import '../css/style.css';
 import Axios from 'axios';
-import { ENDPOINTS, API_URL } from '../utils/utils';
-import { Table, Checkbox, Label, Dropdown } from 'semantic-ui-react';
-import FilaFactura from './FilaFactura';
+import { ENDPOINTS } from '../utils/utils';
+import {  Dropdown } from 'semantic-ui-react';
 import sortBy from 'lodash/sortBy';
 import { MostrarMensaje } from './Mensajes';
-import Inputdate from './Inputdate';
+import Inputdate from './Inputdate_edit';
 import { isLoggedIn, logout , getUser} from "../utils/identity"
 import { navigate } from 'gatsby';
 
@@ -19,16 +17,20 @@ export default class UnpaidInvoices extends Component {
         
         descrip:"",
         empleado:"",
-        empleadoid:null,
+        empleadoid:1254,
 		vendedoresseleccionados:[],
 		vendedoresseleccionadosId:[],
 		startDate: new Date(),
 		fecha:null,
 		direccion:null,
 		tel:null,
+		id:null,
 		date: new Date(),
 				visible:false,
-				userdata:null
+				userdata:null,
+				mandado:{descripcion:""},
+				fechamandado:null
+				
     };
     
     shouldComponentUpdate(np) {
@@ -61,12 +63,12 @@ export default class UnpaidInvoices extends Component {
 		return null;
     } 
     
-    guardar = (dte, idf=0) => {
+    guardar = (dte) => {
 	
 		this.setState({
 			fecha:dte})
 
-		 //console.log(fechas)
+		 console.log(dte)
 
 	};
 
@@ -83,17 +85,16 @@ export default class UnpaidInvoices extends Component {
 
 
 	componentDidMount() {
-		let user = netlifyIdentity.currentUser();
-		let { tipo } = this.props;
+		
 
-		let { buscar } = this.state;
+
 	
 		this.setState({
 			userdata: getUser()
 		});
 		
 	
-			let { guardar,   empleados } = this.props;
+			let { guardar,   empleados  } = this.props;
 		
                 
 				
@@ -111,6 +112,25 @@ export default class UnpaidInvoices extends Component {
 						guardar('empleados', empleados);
 						this.setState({
 							empleados: empleados,
+							
+						});
+					})
+					.catch((error) => {
+						console.error(error);
+					});
+					
+					Axios.get(ENDPOINTS.mandado+'?id='+this.props.id)
+					.then(({ data }) => {
+						//console.log(data)
+
+						let mandado = data
+						
+					
+						this.setState({
+							mandado: mandado,
+							empleadoid:mandado.employee_id,
+							fechamandado:mandado.fecha+" "+mandado.hora,
+							descrip:mandado.descripcion
 							
 						});
 					})
@@ -167,10 +187,10 @@ export default class UnpaidInvoices extends Component {
 			
 				fecha = fechastr.split('/');
 				fechastr = fecha[2]+'/'+fecha[0]+'/'+fecha[1]
-				const posttext = '{"fecha": "'+fechastr+'", "hora": "'+horastr+':'+minutes+':00",  "cliente":"","descripcion":"'+this.state.descrip+' Direccion:'+this.state.direccion+' Tel.'+this.state.tel+'","tipo":"1","user":"'+this.state.userdata.username+'","employee_id":"'+this.state.empleadoid+'","store_id":1,"encargado":"'+nombre.text+'", "active":"1"}'
+				const posttext = '{"id":"'+this.props.id+'","fecha": "'+fechastr+'", "hora": "'+horastr+':'+minutes+':00",  "cliente":"","descripcion":"'+this.state.descrip+'","user":"'+this.state.userdata.username+'", "active":"1"}'
 				//console.log(posttext)
 
-				const data = await Axios.post(ENDPOINTS.guardarmandados, posttext);
+				const data = await Axios.post(ENDPOINTS.editarmandados, posttext);
 				//console.log(data)
 			} catch (error) {
 				console.error({ error });
@@ -218,7 +238,9 @@ export default class UnpaidInvoices extends Component {
         
 		let {
             empleados,
-            empleadoid
+						empleadoid,
+						mandado,
+						fechamandado
 			
 		} = this.state;
 
@@ -226,15 +248,16 @@ export default class UnpaidInvoices extends Component {
 			return (
                 <div >
                 <form onSubmit={this.handleSubmit}>
+								{fechamandado!==null ? (
                 <label>
                   Fecha
                   <Inputdate
-                    date={""}
-                    guardar={this.props.guardar}
-                    
+                    date={fechamandado}
+                    guardar={this.guardar}                   
         />
-                </label>
-                
+                </label>):("")
+								}
+                {fechamandado!==null ? (
                 <label>
                   Descripción
                   <input
@@ -244,45 +267,12 @@ export default class UnpaidInvoices extends Component {
                     onChange={this.handleInputChange}
                     className="inputform"
                   />
-                </label>
+                </label>):('')}
 
-								<label>
-                  Dirección
-                  <input
-                    type="text"
-                    name="direccion"
-                    value={this.state.direccion}
-                    onChange={this.handleInputChange}
-                    className="inputform"
-                  />
-                </label>
-
-								<label>
-                  Tel.
-                  <input
-                    type="text"
-                    name="tel"
-                    value={this.state.tel}
-                    onChange={this.handleInputChange}
-                    className="inputform"
-                  />
-                </label>
-                
-                <label>
-                  Encargado
-                  <Dropdown
-							value={empleadoid}
-							onChange={this.seleccionaVendedor}
-							placeholder="Selecciona Mensajero"
-							fluid							
-							search
-							selection
-							options={empleados}
-						/>
-                </label>
-                <button type="submit" className="submitform">Generar</button>
+								
+                <button type="submit" className="submitform">Guardar</button>
               </form>
-							<MostrarMensaje titulo={'Los mandados fueron creados con exito'} mensajes={'Prueba'}  visible={this.state.visible} onConfirm={this.onConfirm} />
+							<MostrarMensaje titulo={'Sus Datos fueron editados con exito'} mensajes={'Guardar'}  visible={this.state.visible} onConfirm={this.onConfirm} />
               </div>
 				
 			)

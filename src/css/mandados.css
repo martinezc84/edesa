@@ -172,6 +172,24 @@ margin-left: 10px;
 
 }
 
+.drop{
+	width: 40%;
+
+}
+
+.searchbutton{
+	float: right;
+    position: relative;
+    left: 100px;
+    top: -37px;
+}
+.searchbuttonu{
+	float: right;
+    position: relative;
+    left: 275px;
+    top: -37px;
+}
+
 .msjerror{
 	color: red;
 }

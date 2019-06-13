@@ -6,6 +6,7 @@ import { Button, Icon } from 'semantic-ui-react';
 import {  ENDPOINTS } from '../utils/utils';
 import Axios from 'axios';
 import { MostrarMensaje } from './Mensajes';
+import { navigate } from 'gatsby';
 
 
 
@@ -45,7 +46,7 @@ export default class Firma extends Component  {
 	this.setState({				
 		visiblem:false
 	});
-	this.props.cambiarStep(3);
+	navigate('/app/mandados/')
 }
   save = async () => {
    

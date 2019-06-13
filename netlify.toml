@@ -37,6 +37,7 @@
 	GATSBY_URL_PURCHASE_ORDERS='/.netlify/functions/PurchaseOrders'
 	GATSBY_URL_PURCHASE_ORDER='/.netlify/functions/PurchaseOrder'
 	GATSBY_URL_MANDADOINFO='/.netlify/functions/Mandado'
+	GATSBY_URL_LISTADO_MANDADOSXFECHA='/.netlify/functions/Mandadosxfecha'
 
 
 	# Dominio del sitio de las APIs (Backend)

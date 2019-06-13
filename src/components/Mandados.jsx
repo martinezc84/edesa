@@ -13,6 +13,7 @@ import { MsjConfirma } from './MsjConfirma';
 import { isLoggedIn, logout , getUser} from "../utils/identity"
 import { async } from 'q';
 import { navigate } from '@reach/router';
+import Inputdate from './Inputdate';
 
 
 export default class TipoMandado extends Component {
@@ -39,7 +40,8 @@ export default class TipoMandado extends Component {
 		userdata:null,
 		week:0,
 		empleados:[],
-		empleadosel:0
+		empleadosel:0,
+		fecha:new Date()
 		
 	};
 
@@ -73,6 +75,29 @@ export default class TipoMandado extends Component {
 							turnosVendidos: turnosVendidos,
 							loading: false,
 							today:dia,							
+							cantidadPaginas: Math.floor(data.recordsTotal / this.state.first) + 1
+						});
+					})
+					.catch((error) => {
+						console.error(error);
+					});
+
+				
+
+			
+	}
+
+	cargarmandadosxfecha(){
+
+		//console.log(dia)
+		Axios.get(ENDPOINTS.mandadosxfecha+'?date='+this.state.fecha+"&eid="+this.state.empleadosel)
+					.then(({ data }) => {
+						//console.log(data)
+						let turnosVendidos = sortBy(data, [ 'listorder' ]);
+						turnosVendidos.sort((a,b) => (a.listorder - b.listorder))
+						this.setState({
+							turnosVendidos: turnosVendidos,
+							loading: false,						
 							cantidadPaginas: Math.floor(data.recordsTotal / this.state.first) + 1
 						});
 					})
@@ -465,6 +490,21 @@ export default class TipoMandado extends Component {
 		});
 	}
 
+	guardar = (dte,id) => {
+		
+		let fechastr = dte.toLocaleDateString('en-US');
+	
+		let fecha = fechastr.split('/');
+		let fechaf = fecha[2]+'-'+fecha[0]+'-'+fecha[1]
+		console.log(fechaf)
+		this.setState({
+			fecha:fechaf
+		})
+
+		 //console.log(fechas)
+
+	};
+
 	guardarDB =(mandados) =>{
 		//console.log(mandados)
 		this.setState({
@@ -552,9 +592,25 @@ export default class TipoMandado extends Component {
 				<VendedorSel limpiavendedor={this.limpiavendedor} empleadosel={this.state.empleadosel} empleados={this.state.empleados} seleccionaVendedor={this.seleccionaVendedor} recargar={this.recargar}></VendedorSel>
 						)
 			}
+			<Inputdate
+									guardar={this.guardar}
+									guardar_id={0}
+										/><Button
+		
+										primary
+										onClick={() => {
+											this.cargarmandadosxfecha()					
+										}}								
+										icon
+										className="searchdate"
+									>
+									
+										Buscar
+									</Button>
 	
 					<Header> Mandados de la semana del {this.state.monday} al {this.state.friday}</Header>
 								<div className="inline-block pr-4">
+								
 									<Menu compact>
 									{this.state.week==1 ? (<Menu.Item onClick={this.seleccionarSemana} name={'0'}> Semana Actual</Menu.Item>):('')}
 									<Menu.Item 	onClick={this.seleccionarDia} name={'2'} >{this.state.today==2 ? '*' : ''} Lunes</Menu.Item>

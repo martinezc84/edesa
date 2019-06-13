@@ -11,6 +11,7 @@ import { MostrarMensaje } from './Mensajes';
 import { MsjConfirma } from './MsjConfirma';
 import { isLoggedIn, logout , getUser} from "../utils/identity"
 import { compareAsc } from 'date-fns';
+import { navigate } from 'gatsby';
 
 
 
@@ -308,7 +309,7 @@ export default class Mandados_user extends Component {
 						this.setState({
 							servicios: conf
 						});
-						break
+						
 					}
 
 					if (data[x].type=='5'){
@@ -317,7 +318,7 @@ export default class Mandados_user extends Component {
 						this.setState({
 							compras: conf
 						});
-						break
+						
 					}
 
 					if (data[x].type=='6'){
@@ -326,7 +327,7 @@ export default class Mandados_user extends Component {
 						this.setState({
 							compras: conf
 						});
-						break
+						
 					}
 				}
 
@@ -368,7 +369,7 @@ onStart = async (id, tipo)=>{
 		let fecha = this.state.turnosVendidos.filter((s) => s.id == id);
 		this.props.guardar('fechamandado', fecha);
 		this.props.guardar('coordenadas', this.state.latitude+','+this.state.longitude);
-				this.props.cambiarStep(5);
+			 navigate('/app/firma/')
 			}else{
 		this.setState({
 			loading: true
@@ -593,7 +594,7 @@ onStart = async (id, tipo)=>{
 					) : (
 						<React.Fragment>
 							<div className="pt-8">
-										{	this.state.turnosVendidos.length >0 ? (								
+										{	this.state.compras !==null ? (								
 												<MsjLst
 												items={this.state.turnosVendidos}
 												onSelect={this.onSelect}

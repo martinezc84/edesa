@@ -67,10 +67,7 @@ render(){
         label={"Foto"}
     />
     
-    ) :(<UploadBox
-        mandado={val.id}
-        >       
-    </UploadBox>)
+    ) :('')
     }
 
 {val.realizado == 0  ? (

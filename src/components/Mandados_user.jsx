@@ -487,7 +487,7 @@ onStart = async (id, tipo)=>{
 
 	tags = (id)=>{
 		this.props.guardar('orden_compra',id)
-		this.props.cambiarStep(8);
+		navigate('/app/bultos/'+id)
 	}
 
 	guardarorden = 	 (mandados) =>{

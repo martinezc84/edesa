@@ -39,9 +39,15 @@ export default class FilaVendidos extends Component {
                     value={this.state.label}
 					onChange={this.handleInputChange}
 					onKeyDown={(event)=>{
-
+						console.log(event.keyCode);
 						if(event.keyCode === 13){
-							this.props.agregarlinea(this.state.code)
+							this.props.agregarlinea(this.state.code,fila.id)
+							//console.log(this.state.code);
+
+						}
+
+						if(event.keyCode === 9){
+							this.props.editarlinea(this.state.code,fila.id)
 							//console.log(this.state.code);
 
 						}

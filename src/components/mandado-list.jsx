@@ -99,7 +99,7 @@ render(){
 
 {val.tipo>4 && sub==1 ? (
     <Button onClick={() => {
-        this.tags(val.id);
+        this.tags(val.zauru_id);
     }} >
 Ingresar Bultos
 <Button.Content  >

@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 
 import { Layout } from '../components/Layout';
 import RutaPrivada from '../components/RutaPrivada';
-import TiposDeTurno from '../components/tipoDeTurno';
 import Firma from '../components/Firma';
 import Mandados from '../components/Mandados';
 import Mandado from '../components/EditarMandado';
@@ -288,7 +287,12 @@ export default class App extends Component {
 			valores:this.state.Purchases
 		};
 
-		
+		let propsdetail = {
+			seleccionadosVendidosID: this.state.seleccionadosVendidosID,
+			tipo: this.state.tipoSeleccionado,
+			empleados:this.state.empleados,
+			orden_compra:this.state.orden_compra
+		};
 		
 		return (
 			
@@ -302,6 +306,7 @@ export default class App extends Component {
 				<RutaPrivada  path="/app/mandados" component={Mandados} {...propsmandados} guardar={this.guardar}  ></RutaPrivada>
 				<RutaPrivada  path="/app/mandadosu" component={MandadosU} {...propsmandadosu} guardar={this.guardar} ></RutaPrivada>
 				<RutaPrivada  path="/app/firma" component={Firma} id={this.state.idmandado} fecha={this.state.fechamandado} ></RutaPrivada>
+				<RutaPrivada  path="/app/bultos/:id" component={PurchaseDetail} {...propsdetail} ></RutaPrivada>
 				<RutaPrivada  path="/app/config" component={Config} ></RutaPrivada>
 				<RutaPrivada  path="/app/mandado/:id" component={Mandado} guardar={this.guardar} ></RutaPrivada>
 				<Login path='/app/login/:error' />

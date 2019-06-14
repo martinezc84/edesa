@@ -21,7 +21,8 @@ export default class UnpaidInvoices extends Component {
 		userdata:null,
 		first:0,
 		productos:[],
-		orden_compra:0
+		orden_compra:0,
+		purchase_id:null
 	
 	};
 
@@ -44,16 +45,14 @@ export default class UnpaidInvoices extends Component {
 		let { tipo, orden_compra } = this.props;
 
 		let { buscar } = this.state;
-
+		
 		let user = getUser();
 		this.setState({
 			userdata: user,
-			orden_compra:orden_compra
+			orden_compra:orden_compra,
+			purchase_id:this.props.id
 		});
 
-		if (user.group_id>2){
-			navigate(`/listado`)
-		}
 
 		this.agregarlinea("");
 		
@@ -83,12 +82,35 @@ export default class UnpaidInvoices extends Component {
 		});
 	};
 
-	agregarlinea=(codigo)=>{
+	isin=(id)=>{
+		let codigos = this.state.productos
+
+		for(let x=0;x<codigos.length;x++){
+			if(codigos[x].id==id){
+				return true
+			}
+		}
+		return false
+	}
+
+	agregarlinea=(codigo, idl)=>{
 		//console.log(codigo)
 		if(codigo!=""){
-		let codigos = [...this.state.productos, codigo];
-		
-		//console.log(codigos)
+			let nuevo;
+			let codes = []
+			let codigos = []
+
+			if (this.state.productos.includes(idl)){
+				codes = this.state.productos.filter((s) => s.id != idl);
+				nuevo = {id:idl,codigo:codigo}
+
+				codigos = [...codes, nuevo]
+			}else{
+				 nuevo = {id:idl,codigo:codigo}
+
+		 codigos = [...this.state.productos, nuevo];
+			}
+		console.log(codigos)
 		this.setState({
 			productos:codigos,
 			
@@ -109,6 +131,33 @@ export default class UnpaidInvoices extends Component {
 		first:id
   });
 		}
+
+		editarlinea=(codigo, idl)=>{
+			//console.log(codigo)
+			if(codigo!=""){
+				let nuevo;
+				let codes = []
+				let codigos = []
+	
+				if (this.isin(idl)){
+					codes = this.state.productos.filter((s) => s.id != idl);
+					nuevo = {id:idl,codigo:codigo}
+	
+					codigos = [...codes, nuevo]
+				}else{
+					 nuevo = {id:idl,codigo:codigo}
+	
+			 codigos = [...this.state.productos, nuevo];
+				}
+			console.log(codigos)
+			this.setState({
+				productos:codigos,
+				
+			});
+			
+			}
+	
+			}
   
 		
 		onConfirm = ()=>{
@@ -116,6 +165,26 @@ export default class UnpaidInvoices extends Component {
 				visible:false
 			});
 			this.props.cambiarStep(3);
+		}
+
+		Guardar= async ()=>{
+			let codigos = this.state.productos;
+			let detalle =''
+			
+			for (let x = 0; x< codigos.length;x++){
+				if(x>0){
+					detalle=detalle+',';
+				}
+				
+				detalle=detalle+'"'+codigos[x].codigo+'"'
+				
+			}
+
+			let orden = '{"id":'+this.state.purchase_id+',"items":['+detalle+'],"store":"'+this.state.userdata.store+'"}'
+
+			const data = await Axios.post(ENDPOINTS.editarorden, orden);
+
+			navigate('/app/mandados/')
 		}
 
 	render() {
@@ -171,6 +240,7 @@ export default class UnpaidInvoices extends Component {
 													
 													fila={t}
 													agregarlinea={this.agregarlinea}
+													editarlinea={this.editarlinea}
 												
 		
 													
@@ -182,7 +252,7 @@ export default class UnpaidInvoices extends Component {
 
 							
 								<Button
-									size="massive"
+									
 									primary
 									onClick={ ()=>{
 										
@@ -191,8 +261,22 @@ export default class UnpaidInvoices extends Component {
 									icon
 									labelPosition="left"
 								>
-								<Icon name="cogs" />
+								<Icon name="disk" />
 									Agregar Linea
+								</Button>
+
+								<Button
+									
+									primary
+									onClick={ ()=>{
+										
+										this.Guardar()}	
+									}							
+									icon
+									labelPosition="left"
+								>
+								<Icon name="cogs" />
+									Guardar
 								</Button>
 
 							

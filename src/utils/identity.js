@@ -16,13 +16,14 @@ export const handleLogin = async ({ username, password }) => {
 
 	await Axios.post(`${ENDPOINTS.login}`,'{"username":"'+username+'","password":"'+password+'"}')
 					.then(({ data }) => {
-						//console.log(data)
+						console.log(data)
 						 setUser({
 							username: data.username,
 							name: data.first_name+' '+data.last_name,
 							email: data.email,
 							group_id:data.group_id,
-							eid:data.employee_id
+							eid:data.employee_id,
+							store:data.store_id
 							})
 							navigate(`/app/cobros`)
 							//return data.group_id

@@ -9,11 +9,13 @@ export default class FilaTipo extends Component {
 
 	state = {
 		time: this.props.turno.time,
-		firma: this.props.firma,
+		firma: this.props.turno.firma,
 		geo: this.props.turno.geo,
 		sms: this.props.turno.sms_notification,
 		email: this.props.turno.email_notification,
-		turno:this.props.turno
+		turno:this.props.turno,
+		numero:this.props.turno.phone,
+		direccion:this.props.turno.email
 	}
 	// Evita re renders innecesarios al cambiar el state
 	shouldComponentUpdate(np) {
@@ -105,6 +107,38 @@ export default class FilaTipo extends Component {
 					});
 	}
 
+	correo(){
+	
+		Axios.post(ENDPOINTS.editarTipoMandado,'{"id":'+this.state.turno.id+',"email":"'+this.state.direccion+'"}')
+					.then(({ data }) => {
+						
+					})
+					.catch((error) => {
+						console.error(error);
+					});
+	}
+
+	numero(){
+		
+		Axios.post(ENDPOINTS.editarTipoMandado,'{"id":'+this.state.turno.id+',"phone":"'+this.state.numero+'"}')
+					.then(({ data }) => {
+						//console.log(data)
+					
+					})
+					.catch((error) => {
+						console.error(error);
+					});
+	}
+	handleInputChange = event => {
+		
+		const target = event.target
+		const value = target.value
+		const name = target.name
+	
+		this.setState({
+		  [name]: value,
+		})
+	  }
 	
 	render() {
 		let { seleccionar, time, firma, geo, email, sms, seleccionado, turno} = this.state;
@@ -140,13 +174,67 @@ export default class FilaTipo extends Component {
 							toggle
 							checked={(email==1)}
 						/></Table.Cell>
-					<Table.Cell><Checkbox
+						<Table.Cell>
+						<input
+					autoFocus
+                    type="text"
+					name="direccion"
+					
+                    value={this.state.direccion}
+					onChange={this.handleInputChange}				
+					onKeyDown={(event)=>{
+						console.log(event.keyCode);
+						if(event.keyCode === 13){
+							this.correo()
+							//console.log(this.state.code);
+
+						}
+
+						if(event.keyCode === 9){
+							this.correo()
+							//console.log(this.state.code);
+
+						}
+						
+					}}
+                    className="inputform"
+                  />
+						</Table.Cell>
+					<Table.Cell>
+						
+						<Checkbox
 							onChange={() => {
 								this.sms(turno.id);
 							}}
 							toggle
 							checked={(sms==1)}
 						/></Table.Cell>
+						<Table.Cell>
+						<input
+					autoFocus
+                    type="text"
+					name="numero"
+					
+                    value={this.state.numero}
+					onChange={this.handleInputChange}				
+					onKeyDown={(event)=>{
+						console.log(event.keyCode);
+						if(event.keyCode === 13){
+							this.numero()
+							//console.log(this.state.code);
+
+						}
+
+						if(event.keyCode === 9){
+							this.numero()
+							//console.log(this.state.code);
+
+						}
+						
+					}}
+                    className="inputform"
+                  />
+						</Table.Cell>
 				</Table.Row>
 			);
 	}

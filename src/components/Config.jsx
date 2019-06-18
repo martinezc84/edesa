@@ -57,15 +57,15 @@ export default class TipoMandado extends Component {
 	};
 	componentDidMount() {
 		
-		let { tipo } = this.props;
+		
 
 		let user= getUser();
 
 		if(user.group_id != 1){
 			navigate('/app/')
 		}
-			let { guardar, valores, seleccionadosVendidosID } = this.props;
-			if (valores.length === 0) {
+			let { guardar } = this.props;
+		
 				this.setState({
 					loading: true
 				});
@@ -78,20 +78,14 @@ export default class TipoMandado extends Component {
 						this.setState({
 							turnosVendidos: turnosVendidos,
 							loading: false,
-							seleccionadosId: seleccionadosVendidosID,
 							cantidadPaginas: Math.floor(data.recordsTotal / this.state.first) + 1
 						});
 					})
 					.catch((error) => {
 						console.error(error);
 					});
-			} else {
-				this.setState({
-					turnosVendidos: valores,
-					seleccionadosId: seleccionadosVendidosID,
-					cantidadPaginas: Math.floor(valores.length / this.state.first) + 1
-				});
-			}
+			
+			
 		
 	}
 
@@ -126,12 +120,11 @@ export default class TipoMandado extends Component {
 			turnosVendidos,
 			loading,
 			seleccionadosId,
-			paginaSeleccionada,
+			
 			first,
-			cantidadPaginas,
+			
 			offset,
-			column,
-			direction
+			
 		} = this.state;
 
 		if (loading) {
@@ -145,11 +138,7 @@ export default class TipoMandado extends Component {
 						<React.Fragment>
 							<div className="pt-8">
 								<Header>Tipos de Mandado</Header>
-								<div className="inline-block pr-4">
-									<Menu compact>
-										<Menu.Item active>: {turnosVendidos.length}</Menu.Item>
-									</Menu>
-								</div>
+								
 
 							
 								<Table sortable celled>
@@ -181,10 +170,21 @@ export default class TipoMandado extends Component {
 											Correo
 										</Table.Cell>
 										<Table.Cell
+											
+										>
+											Dirección
+										</Table.Cell>
+										<Table.Cell
 										
 										>
 											SMS
 										</Table.Cell>
+										<Table.Cell
+										
+										>
+											Número
+										</Table.Cell>
+										
 										
 										
 									</Table.Header>

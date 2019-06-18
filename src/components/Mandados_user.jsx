@@ -376,7 +376,7 @@ onStart = async (id, tipo)=>{
 		});
 		let fechapartida=[];
 		let frealizado = new Date();
-		let fechastr = frealizado.toLocaleDateString()
+		let fechastr = frealizado.toLocaleDateString('en-US');
 		fechapartida = fechastr.split('/');
 				fechastr = fechapartida[2]+'/'+fechapartida[1]+'/'+fechapartida[0]
 		let fecha = this.state.turnosVendidos.filter((s) => s.id == id);
@@ -485,8 +485,14 @@ onStart = async (id, tipo)=>{
 		}); 
 	}
 
-	tags = (id)=>{
+	tags = (id,mandado)=>{
+		console.log(mandado)
 		this.props.guardar('orden_compra',id)
+		this.props.guardar('idmandado', mandado);
+		let fecha = this.state.turnosVendidos.filter((s) => s.id == mandado);
+		this.props.guardar('fechamandado', fecha);
+		console.log(fecha)
+		this.props.guardar('coordenadas', this.state.latitude+','+this.state.longitude);
 		navigate('/app/bultos/'+id)
 	}
 

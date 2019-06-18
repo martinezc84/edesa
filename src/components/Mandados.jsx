@@ -318,6 +318,8 @@ export default class TipoMandado extends Component {
 			.catch((error) => {
 				console.error(error);
 			});
+
+		
 			//this.props.cambiarStep(3);
 			this.setState({	
 				loading:false,			

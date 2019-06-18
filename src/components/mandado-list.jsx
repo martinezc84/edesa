@@ -16,9 +16,9 @@ empezar=(id, tipo)=>{
     this.props.onStart(id, tipo)
 }
 
-tags=(id)=>{
+tags=(id, mandado)=>{
     //console.log(id)
-    this.props.tags(id)
+    this.props.tags(id, mandado)
 }
 
 borrar=(id)=>{
@@ -97,9 +97,9 @@ render(){
     </UploadBox>)
     }
 
-{val.tipo>4 && sub==1 ? (
+{val.tipo>4 && sub==1 && val.realizado == 0 ? (
     <Button onClick={() => {
-        this.tags(val.zauru_id);
+        this.tags(val.zauru_id, val.id);
     }} >
 Ingresar Bultos
 <Button.Content  >

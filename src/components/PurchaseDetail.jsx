@@ -149,7 +149,7 @@ export default class UnpaidInvoices extends Component {
 	
 			 codigos = [...this.state.productos, nuevo];
 				}
-			console.log(codigos)
+			//console.log(codigos)
 			this.setState({
 				productos:codigos,
 				
@@ -164,10 +164,14 @@ export default class UnpaidInvoices extends Component {
 			this.setState({				
 				visible:false
 			});
-			this.props.cambiarStep(3);
+		
 		}
 
 		Guardar= async ()=>{
+
+			this.setState({
+				loading: true
+			});
 			let codigos = this.state.productos;
 			let detalle =''
 			
@@ -184,7 +188,35 @@ export default class UnpaidInvoices extends Component {
 
 			const data = await Axios.post(ENDPOINTS.editarorden, orden);
 
-			navigate('/app/mandados/')
+			let fechapartida=[];
+			let frealizado = new Date();
+			let fechastr = frealizado.toLocaleDateString('en-US');
+			fechapartida = fechastr.split('/');
+					fechastr = fechapartida[2]+'/'+fechapartida[1]+'/'+fechapartida[0]
+			let fecha = this.props.fechamandado
+			let hours = new Date().getHours(); //Current Hours
+					let min = new Date().getMinutes(); //Current Minutes
+					let sec = new Date().getSeconds(); //Current Seconds
+					let coordenadas=""
+				if (this.props.coordenadas!==undefined){
+					 coordenadas=this.props.coordenadas
+				}else{
+					coordenadas = '0,0';
+				}	
+			await Axios.post(ENDPOINTS.editarmandados,'{"realizado":"1","id":'+this.props.idmandado+', "fecha":"'+fecha[0].fecha+'", "fecha_realizado":"'+fechastr+'", "hora_realizado":"'+hours+':'+min+':'+sec+'","coordenadas":"'+coordenadas+'"}')
+				.then(({ data }) => {
+					console.log(data)
+					
+					
+				})
+				.catch((error) => {
+					console.error(error);
+				});
+				this.setState({
+					loading: false
+				});
+
+			//navigate('/app/mandados/')
 		}
 
 	render() {

@@ -71,7 +71,7 @@ render(){
     ) :('')
     }
 
-{val.realizado == 0  ? (
+{val.realizado == 0 && group_id<3  ? (
 <Button >
      
       <Button.Content onClick={() => {

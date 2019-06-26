@@ -336,7 +336,7 @@ export default class TipoMandado extends Component {
 		let { tipo, guardar, config, general, cobros, entregas, servicios, geo } = this.props;
 		let userdata =getUser();
 
-		if(userdata.group_id>2){
+		if(userdata.group_id>3){
 			navigate('/app/mandadosu')
 		}
 		this.setState({
@@ -509,6 +509,7 @@ export default class TipoMandado extends Component {
 
 	guardarDB =(mandados) =>{
 		//console.log(mandados)
+		if(this.state.userdata.group_id<3){
 		this.setState({
 			loading: true
 		});
@@ -531,6 +532,7 @@ export default class TipoMandado extends Component {
 			this.setState({
 				loading: false
 			});
+		}
 	}
 
 	handleSort = (clickedColumn) => () => {

@@ -84,7 +84,7 @@ export default class Steps extends Component {
 					
 					
 				</Menu.Item>
-				{userdata.group_id < 3 ? (
+				{userdata.group_id < 4 ? (
 				<Menu.Item
 					
 					active={step === 3}

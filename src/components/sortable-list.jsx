@@ -71,7 +71,7 @@ render(){
     ) :('')
     }
 
-{val.realizado == 0 && group_id<3  ? (
+{val.autorizado == 0   ? (
 <Button >
      
       <Button.Content onClick={() => {
@@ -90,7 +90,7 @@ render(){
       </Button.Content>
     </Button>):("")
     }
-    {val.autorizado == 1 && group_id<3  ? (
+    {val.autorizado == 0   ? (
 <Button onClick={() => {
                     this.editar(val.id);
                 }} >

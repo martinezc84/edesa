@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import '../css/style.css';
 import Axios from 'axios';
 import { ENDPOINTS } from '../utils/utils';
-import {  Dropdown } from 'semantic-ui-react';
+import {  Dropdown, TextArea } from 'semantic-ui-react';
 import sortBy from 'lodash/sortBy';
 import { MostrarMensaje } from './Mensajes';
 import Inputdate from './Inputdate_edit';
@@ -25,6 +25,7 @@ export default class UnpaidInvoices extends Component {
 		direccion:null,
 		tel:null,
 		id:null,
+		nota:'',
 		date: new Date(),
 				visible:false,
 				userdata:null,
@@ -130,7 +131,8 @@ export default class UnpaidInvoices extends Component {
 							mandado: mandado,
 							empleadoid:mandado.employee_id,
 							fechamandado:mandado.fecha+" "+mandado.hora,
-							descrip:mandado.descripcion
+							descrip:mandado.descripcion,
+							nota:mandado.nota
 							
 						});
 					})
@@ -187,7 +189,7 @@ export default class UnpaidInvoices extends Component {
 			
 				fecha = fechastr.split('/');
 				fechastr = fecha[2]+'/'+fecha[0]+'/'+fecha[1]
-				const posttext = '{"id":"'+this.props.id+'","fecha": "'+fechastr+'", "hora": "'+horastr+':'+minutes+':00",  "cliente":"","descripcion":"'+this.state.descrip+'","user":"'+this.state.userdata.username+'", "active":"1"}'
+				const posttext = '{"id":"'+this.props.id+'","fecha": "'+fechastr+'", "hora": "'+horastr+':'+minutes+':00",  "descripcion":"'+this.state.descrip+'","user":"'+this.state.userdata.username+'", "nota":"'+this.state.nota+'"}'
 				//console.log(posttext)
 
 				const data = await Axios.post(ENDPOINTS.editarmandados, posttext);
@@ -264,6 +266,17 @@ export default class UnpaidInvoices extends Component {
                     type="text"
                     name="descrip"
                     value={this.state.descrip}
+                    onChange={this.handleInputChange}
+                    className="inputform"
+                  />
+								</label>):('')}
+								{fechamandado!==null ? (
+                <label>
+                  Nota
+                  <TextArea
+                    
+                    name="nota"
+                    value={this.state.nota}
                     onChange={this.handleInputChange}
                     className="inputform"
                   />

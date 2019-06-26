@@ -38,7 +38,7 @@ render(){
    
     const listItems = items.map(val => (
     <li className={(val.tipo == 1) ? 'cobro' : (val.tipo == 3) ? 'soporte':(val.tipo == 5) ? 'compra':''} key={uniqueId()}  data-id={val.id}>
-    {val.listorder} )Hora: {val.hora} Descripción: {val.descripcion} Cliente: {val.cliente} 
+    {val.listorder} )Hora: {val.hora} Descripción: {val.descripcion} Cliente: {val.cliente} <strong>Nota:</strong>{(val.nota!=null ) ?  val.nota :('')}
       {val.hora_inicio !== null ?(' Hora de inicio'+val.hora_inicio):('')}
 
 

@@ -13,6 +13,8 @@ export default class Steps extends Component {
 
 		let userdata = getUser()
 		//console.log(this.props)
+
+		if (userdata.group_id<4) {
 		return (
 			<Menu>
 				{general != null?(
@@ -119,5 +121,20 @@ export default class Steps extends Component {
 			
 			</Menu>
 		);
+				}else{
+					return (
+						<Menu>
+							<Menu.Item
+					
+					active={step === 10}
+					onClick={() => {
+						navigate('/app/mandadosu')
+					}}
+					name={'Tareas'}
+					icon={"list ol"}
+				></Menu.Item>
+						</Menu>
+					)
+				}
 	}
 }

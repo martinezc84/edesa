@@ -16,7 +16,7 @@ export const handleLogin = async ({ username, password }) => {
 
 	await Axios.post(`${ENDPOINTS.login}`,'{"username":"'+username+'","password":"'+password+'"}')
 					.then(({ data }) => {
-						console.log(data)
+						//console.log(data)
 						 setUser({
 							username: data.username,
 							name: data.first_name+' '+data.last_name,
@@ -25,7 +25,13 @@ export const handleLogin = async ({ username, password }) => {
 							eid:data.employee_id,
 							store:data.store_id
 							})
-							navigate(`/app/cobros`)
+
+							if(data.group_id == "4"){
+								navigate(`/app/mandadosu`)
+							}else{
+								navigate(`/app/cobros`)
+							}
+							
 							//return data.group_id
 						
 					})

@@ -91,7 +91,7 @@ export default class Mandados_user extends Component {
 	cargarmandadosweek(semana){
 
 		//console.log(dia)
-		Axios.get(ENDPOINTS.ListaMandados+'?int='+semana+'&dow='+this.state.today)
+		Axios.get(ENDPOINTS.ListaAutorizados+'?int='+semana+'&dow='+this.state.today+'&eid='+this.state.userdata.eid)
 					.then(({ data }) => {
 						//console.log(data)
 						let turnosVendidos = sortBy(data, [ 'listorder' ]);

@@ -44,6 +44,7 @@
 	# Dominio del sitio de las APIs (Backend)
 	GATSBY_ZAURU_PREFIX='https://app.zauru.com'
 	GATSBY_URL_API = 'https://dcgse.com/calendario_api/apical'
+	GATSBY_URL_IMAGES = 'https://dcgse.com/calendario_api/uploads'
 
 	# Locations de los enpoints GET de información a mostrar en los pasos de la app
   GATSBY_ENDPOINT_TIPOS_DE_TURNO='/settings/agencies.json'

@@ -137,6 +137,33 @@ export default class App extends Component {
 			userdata = getUser()
 			this.cargarconfig(userdata.store)
 		
+		}else{
+			this.setState({
+				tiposDeTurno: [],
+		Invoices: [],
+		Purchases:[],
+		transfers: [],
+		turnosNoVendidos: [],
+		tipoSeleccionado: null,
+		casos:[],
+		seleccionadosNoVendidos: {},
+		seleccionadosTransfersID:[],
+		seleccionadosTransfers:[],
+		seleccionadosVendidos: [],
+		seleccionadosVendidosID: [],
+		items: [],
+		config:[],
+		step: 1,
+		general:null,
+		cobros:null,
+		entregas:null,
+		servicios:null,
+		compras:null,
+		geo:false,
+		islogin:false,
+		userdata:{group_id:0},
+		orden_compra:0
+			})
 		}
 
 		this.setState({

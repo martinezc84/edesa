@@ -436,7 +436,7 @@ export default class UnpaidInvoices extends Component {
           <input type="text" value={this.state.buscar} onChange={this.handleChange} />
         </label>
 					{Invoices.length === 0 ? (
-						<Header as="h2">No hay turnos vendidos para ese tipo</Header>
+						<Header as="h2">No hay facturas pendientes</Header>
 					) : (
 						<React.Fragment>
 							

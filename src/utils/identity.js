@@ -54,6 +54,7 @@ export const isLoggedIn = () => {
 }
 
 export const logout = callback => {
+	
   setUser({})
   //callback()
 }

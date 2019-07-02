@@ -262,7 +262,7 @@ export default class App extends Component {
 
 		let unpaidprops = {empleados:this.state.empleados,
 		valores:this.state.Invoices, guardar:this.guardar,seleccionadosVendidosID: this.state.seleccionadosVendidosID,
-		tipo: this.state.tipoSeleccionado}	
+		tipo: this.state.tipoSeleccionado, cargarconfig:this.cargarconfig}	
 		
 		let propscasos = {
 			valores:this.state.casos,

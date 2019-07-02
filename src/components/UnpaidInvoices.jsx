@@ -143,7 +143,7 @@ export default class UnpaidInvoices extends Component {
 				this.setState({
 					loading: true
 				});
-                
+        this.props.cargarconfig()
 				Axios.post(`${ENDPOINTS.UnpaidInvoices}`,'{"valor":"'+buscar+'"}')
 					.then(({ data }) => {
 						//console.log(data)

@@ -70,7 +70,7 @@ export default class TipoMandado extends Component {
 					loading: true
 				});
                 
-				Axios.get(ENDPOINTS.tiposMandado+1)
+				Axios.get(ENDPOINTS.tiposMandado+user.store)
 					.then(({ data }) => {
 						//console.log(data)
 						let turnosVendidos = sortBy(data, [ 'id' ]);

@@ -144,7 +144,7 @@ export default class UnpaidInvoices extends Component {
 			userdata: user
 		});
 
-		
+		this.props.cargarconfig(user.store)
 		
 			let { guardar, valores, seleccionadosVendidosID,  empleados } = this.props;
 			if (valores.length === 0) {

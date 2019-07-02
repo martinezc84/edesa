@@ -305,14 +305,16 @@ export default class App extends Component {
 			servicios:this.state.servicios,
 			compras:this.state.compras,
 			geo:this.state.geo,
-			empleados:this.state.empleados
+			empleados:this.state.empleados,
+			cargarconfig:this.cargarconfig
 		};
 
 		let propspurchase = {
 			seleccionadosVendidosID: this.state.seleccionadosVendidosID,
 			tipo: this.state.tipoSeleccionado,
 			empleados:this.state.empleados,
-			valores:this.state.Purchases
+			valores:this.state.Purchases,
+			cargarconfig:this.cargarconfig
 		};
 
 		let propsdetail = {

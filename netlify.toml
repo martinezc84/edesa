@@ -88,9 +88,9 @@
 	GATSBY_ENDPOINT_PURCHASES_ORDER='/purchases/purchase_orders/'
 
 	# Email y token de autenticación para utilizar las APIs 
-        GATSBY_EMAIL='api@discogua.com.gt'
-        GATSBY_TOKEN='uuvDJ6vscs1ewsxbRVHU'
-				GATSBY_API_KEY='uuvDJ6vscs1ewsxbRVHU'
+        GATSBY_EMAIL='api@cyclo.com.gt'
+        GATSBY_TOKEN='Zs-HsGfE1xHQRtqPMRJ9'
+				GATSBY_API_KEY='Zs-HsGfE1xHQRtqPMRJ9'
 
 	# Variable de entorno para ver los botones de debug. 
 	GATSBY_MODO='PROD' # PROD / DEBUG 

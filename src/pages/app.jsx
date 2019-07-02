@@ -51,10 +51,10 @@ export default class App extends Component {
 		};
 
 
-	cargarconfig = async () => {
+	cargarconfig = async (id) => {
 
 		if (this.state.config.length == 0 ){
-			await Axios.get(ENDPOINTS.tiposMandado+'1').then(({ data }) => {
+			await Axios.get(ENDPOINTS.tiposMandado+id).then(({ data }) => {
 				let conf=[]
 				
 				for (let x=0;x<data.length;x++){
@@ -125,7 +125,7 @@ export default class App extends Component {
 
 	componentDidMount() {
 		let user = isLoggedIn();
-		this.cargarconfig()
+		
 	
 		this.setState({
 			islogin: user
@@ -135,13 +135,14 @@ export default class App extends Component {
 		
 		if(user==true){
 			userdata = getUser()
-			
+			this.cargarconfig(userdata.store)
 		
 		}
 
 		this.setState({
 			userdata: userdata
 		});
+		
 		
 	}
 

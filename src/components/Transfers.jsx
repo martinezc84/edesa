@@ -293,7 +293,7 @@ export default class Transfers extends Component {
 				//console.log(minutes)
 				fecha = fechastr.split('/');
 				fechastr = fecha[2]+'/'+fecha[0]+'/'+fecha[1]
-				const posttext = '{"fecha": "'+fechastr+'", "hora": "'+horastr+':'+minutes+':00",   "cliente":"'+seleccionado.address_to+'","descripcion":"Entrega: Ref'+seleccionado.reference+'","tipo":"2","user":"'+this.state.userdata.username+'","store_id":1,"encargado":"'+nombre.text+'","employee_id":"'+mensajero[0].value+'", "active":"1"}'
+				const posttext = '{"fecha": "'+fechastr+'", "hora": "'+horastr+':'+minutes+':00",   "cliente":"'+seleccionado.address_to+'","descripcion":"Entrega: Ref'+seleccionado.reference+'","tipo":"2","user":"'+this.state.userdata.username+'","store_id":"'+this.state.userdata.store+'","encargado":"'+nombre.text+'","employee_id":"'+mensajero[0].value+'", "active":"1"}'
 				//console.log(posttext)
 
 				const data = await Axios.post(ENDPOINTS.guardarmandados, posttext);

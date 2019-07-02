@@ -70,7 +70,7 @@ export default class Mandados_user extends Component {
 	cargarmandados(dia){
 
 		//console.log(dia)
-		Axios.get(ENDPOINTS.ListaAutorizados+'?int=0&dow='+dia+'&eid='+this.state.userdata.eid)
+		Axios.get(ENDPOINTS.ListaAutorizados+'?int=0&dow='+dia+'&eid='+this.state.userdata.eid+"&store="+this.state.userdata.store)
 					.then(({ data }) => {
 						//console.log(data)
 						let turnosVendidos = sortBy(data, [ 'listorder' ]);
@@ -91,7 +91,7 @@ export default class Mandados_user extends Component {
 	cargarmandadosweek(semana){
 
 		//console.log(dia)
-		Axios.get(ENDPOINTS.ListaAutorizados+'?int='+semana+'&dow='+this.state.today+'&eid='+this.state.userdata.eid)
+		Axios.get(ENDPOINTS.ListaAutorizados+'?int='+semana+'&dow='+this.state.today+'&eid='+this.state.userdata.eid+"&store="+this.state.userdata.store)
 					.then(({ data }) => {
 						//console.log(data)
 						let turnosVendidos = sortBy(data, [ 'listorder' ]);
@@ -147,7 +147,7 @@ export default class Mandados_user extends Component {
 		this.setState({
 			loading: true
 		});
-		await Axios.get(ENDPOINTS.ListaAutorizados+'?int='+this.state.week+'&dow='+this.state.today+'&eid='+this.state.userdata.eid)
+		await Axios.get(ENDPOINTS.ListaAutorizados+'?int='+this.state.week+'&dow='+this.state.today+'&eid='+this.state.userdata.eid+"&store="+this.state.userdata.store)
 		.then(({ data }) => {
 			
 			let turnosVendidos = sortBy(data, [ 'listorder' ]);
@@ -185,7 +185,7 @@ export default class Mandados_user extends Component {
 			console.error(error);
 		});
 	
-		await Axios.get(ENDPOINTS.ListaAutorizados+'?int='+this.state.week+'&dow='+today+'&eid='+this.state.userdata.eid)
+		await Axios.get(ENDPOINTS.ListaAutorizados+'?int='+this.state.week+'&dow='+today+'&eid='+this.state.userdata.eid+"&store="+this.state.userdata.store)
 		.then(({ data }) => {
 			
 			let turnosVendidos = sortBy(data, [ 'listorder' ]);

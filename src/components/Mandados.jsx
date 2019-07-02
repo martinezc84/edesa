@@ -66,7 +66,7 @@ export default class TipoMandado extends Component {
 	cargarmandados(dia){
 
 		//console.log(dia)
-		Axios.get(ENDPOINTS.ListaMandados+'?int='+this.state.week+'&dow='+dia+"&eid="+this.state.empleadosel)
+		Axios.get(ENDPOINTS.ListaMandados+'?int='+this.state.week+'&dow='+dia+"&eid="+this.state.empleadosel+"&store="+this.state.userdata.store)
 					.then(({ data }) => {
 						//console.log(data)
 						let turnosVendidos = sortBy(data, [ 'listorder' ]);
@@ -90,7 +90,7 @@ export default class TipoMandado extends Component {
 	cargarmandadosxfecha(){
 
 		//console.log(dia)
-		Axios.get(ENDPOINTS.mandadosxfecha+'?date='+this.state.fecha+"&eid="+this.state.empleadosel)
+		Axios.get(ENDPOINTS.mandadosxfecha+'?date='+this.state.fecha+"&eid="+this.state.empleadosel+"&store="+this.state.userdata.store)
 					.then(({ data }) => {
 						//console.log(data)
 						let turnosVendidos = sortBy(data, [ 'listorder' ]);
@@ -113,7 +113,7 @@ export default class TipoMandado extends Component {
 	cargarmandadosweek(semana){
 
 		//console.log(dia)
-		Axios.get(ENDPOINTS.ListaMandados+'?int='+semana+'&dow='+this.state.today)
+		Axios.get(ENDPOINTS.ListaMandados+'?int='+semana+'&dow='+this.state.today+"&store="+this.state.userdata.store)
 					.then(({ data }) => {
 						//console.log(data)
 						let turnosVendidos = sortBy(data, [ 'listorder' ]);
@@ -177,7 +177,7 @@ export default class TipoMandado extends Component {
 		this.setState({
 			loading: true
 		});
-		await Axios.get(ENDPOINTS.ListaMandados+'?int='+this.state.week+'&dow='+this.state.today+"&eid="+this.state.empleadosel)
+		await Axios.get(ENDPOINTS.ListaMandados+'?int='+this.state.week+'&dow='+this.state.today+"&eid="+this.state.empleadosel+"&store="+this.state.userdata.store)
 		.then(({ data }) => {
 			
 			let turnosVendidos = sortBy(data, [ 'listorder' ]);
@@ -212,7 +212,7 @@ export default class TipoMandado extends Component {
 			console.error(error);
 		});
 	
-		await Axios.get(ENDPOINTS.ListaMandados+'?int=0&dow='+today+"&eid="+this.state.empleadosel)
+		await Axios.get(ENDPOINTS.ListaMandados+'?int=0&dow='+today+"&eid="+this.state.empleadosel+"&store="+this.state.userdata.store)
 		.then(({ data }) => {
 			
 			let turnosVendidos = sortBy(data, [ 'listorder' ]);

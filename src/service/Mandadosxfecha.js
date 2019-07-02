@@ -20,7 +20,8 @@ exports.handler = async (event, context) => {
 		let date = event.queryStringParameters.date;
 		
 		let eid = event.queryStringParameters.eid;
-		let url = URL+'/xfecha?date='+date+"&eid="+eid;
+		let store = event.queryStringParameters.store;
+		let url = URL+'/xfecha?date='+date+"&eid="+eid+"&store="+store;
 		//let body = JSON.parse(event.body);
 	    //const { valor}  = body;
 		console.log(url)

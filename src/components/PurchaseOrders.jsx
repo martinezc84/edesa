@@ -77,6 +77,13 @@ export default class UnpaidInvoices extends Component {
 		return textresp[0];
 	}
 
+	get_cliente(text){
+		const resp = text.split('vendors/')
+	
+		const textresp =  resp[1].substring(0,6);
+		return textresp;
+	}
+
 	trataEmpleados = (empleados) => {
 		return empleados.map((t) => ({
 			key: t.id,
@@ -190,11 +197,20 @@ export default class UnpaidInvoices extends Component {
 
 						Invoices.map((invoice, i)=> (
 							//console.log(invoice)
+							invoice.ven != '' ? invoice.venid = this.get_cliente(invoice.ven) :invoice.venid = 0
+							//console.log(this.get_cliente(invoice.ven))
+							
+						));
+
+						Invoices.map((invoice, i)=> (
+							//console.log(invoice)
 							invoice.ven != '' ? invoice.ven = this.quitarlink(invoice.ven) :''
 							
 				
 						));
 
+					
+							//console.log(Invoices);
 
 						guardar('Purchases', Invoices);
 						this.setState({
@@ -218,7 +234,7 @@ export default class UnpaidInvoices extends Component {
 					empleados = [...empleados,...resposables];
 
 						
-						console.log(empleados)
+						//console.log(empleados)
 						empleados = sortBy(empleados, [ 'name' ]);	
 						empleados = this.trataEmpleados(empleados)	
 
@@ -405,7 +421,7 @@ export default class UnpaidInvoices extends Component {
 				//console.log(minutes)
 				fecha = fechastr.split('/');
 				fechastr = fecha[2]+'/'+fecha[0]+'/'+fecha[1]
-				const posttext = '{"fecha": "'+fechastr+'", "hora": "'+horastr+':'+minutes+':00",  "cliente":"'+seleccionado.ven+'","descripcion":"Recolecta","tipo":"5","user":"'+this.state.userdata.username+'", "employee_id":"'+mensajero[0].value+'","store_id":"'+this.state.userdata.store+'","encargado":"'+nombre.text+'", "active":"1", "zauru_id":"'+seleccionado.id+'"}'
+				const posttext = '{"fecha": "'+fechastr+'", "hora": "'+horastr+':'+minutes+':00",  "cliente":"'+seleccionado.ven+'","payee_id":"'+seleccionado.venid+'"   ,"descripcion":"Recolecta","tipo":"5","user":"'+this.state.userdata.username+'", "employee_id":"'+mensajero[0].value+'","store_id":"'+this.state.userdata.store+'","encargado":"'+nombre.text+'", "active":"1", "zauru_id":"'+seleccionado.id+'"}'
 				console.log(posttext)
 
 				const data = await Axios.post(ENDPOINTS.guardarmandados, posttext);

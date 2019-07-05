@@ -16,9 +16,9 @@ empezar=(id, tipo)=>{
     this.props.onStart(id, tipo)
 }
 
-tags=(id, mandado)=>{
+tags=(id, mandado, payee)=>{
     //console.log(id)
-    this.props.tags(id, mandado)
+    this.props.tags(id, mandado, payee)
 }
 
 borrar=(id)=>{
@@ -99,7 +99,7 @@ render(){
 
 {val.tipo>4 && sub==1 && val.realizado == 0 ? (
     <Button onClick={() => {
-        this.tags(val.zauru_id, val.id);
+        this.tags(val.zauru_id, val.id, val.payee_id);
     }} >
 Ingresar Bultos
 <Button.Content  >

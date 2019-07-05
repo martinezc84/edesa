@@ -22,8 +22,8 @@ export default class UnpaidInvoices extends Component {
 		first:0,
 		productos:[],
 		orden_compra:0,
-		purchase_id:null
-	
+		purchase_id:null,
+		payee:0
 	};
 
 	setStateAsync(state) {
@@ -50,7 +50,8 @@ export default class UnpaidInvoices extends Component {
 		this.setState({
 			userdata: user,
 			orden_compra:orden_compra,
-			purchase_id:this.props.id
+			purchase_id:this.props.id,
+			payee:this.props.payee
 		});
 
 
@@ -184,7 +185,7 @@ export default class UnpaidInvoices extends Component {
 				
 			}
 
-			let orden = '{"id":'+this.state.purchase_id+',"items":['+detalle+'],"store":"'+this.state.userdata.store+'"}'
+			let orden = '{"id":'+this.state.purchase_id+',"items":['+detalle+'],"store":"'+this.state.userdata.store+'", "payee":"'+this.state.payee+'"}'
 
 			const data = await Axios.post(ENDPOINTS.editarorden, orden);
 

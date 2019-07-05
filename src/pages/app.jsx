@@ -313,7 +313,7 @@ export default class App extends Component {
 			seleccionadosVendidosID: this.state.seleccionadosVendidosID,
 			tipo: this.state.tipoSeleccionado,
 			empleados:this.state.empleados,
-			valores:this.state.Purchases,
+			valores:[],
 			cargarconfig:this.cargarconfig
 		};
 
@@ -339,7 +339,7 @@ export default class App extends Component {
 				<RutaPrivada  path="/app/mandados" component={Mandados} {...propsmandados} guardar={this.guardar}  ></RutaPrivada>
 				<RutaPrivada  path="/app/mandadosu" component={MandadosU} {...propsmandadosu} guardar={this.guardar} ></RutaPrivada>
 				<RutaPrivada  path="/app/firma" component={Firma} id={this.state.idmandado} fecha={this.state.fechamandado} ></RutaPrivada>
-				<RutaPrivada  path="/app/bultos/:id" component={PurchaseDetail} {...propsdetail} ></RutaPrivada>
+				<RutaPrivada  path="/app/bultos/:id/:payee" component={PurchaseDetail} {...propsdetail} ></RutaPrivada>
 				<RutaPrivada  path="/app/config" component={Config} guardar={this.guardar}  ></RutaPrivada>
 				<RutaPrivada  path="/app/mandado/:id" component={Mandado} guardar={this.guardar} ></RutaPrivada>
 				<Login path='/app/login/:error' />

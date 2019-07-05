@@ -485,7 +485,7 @@ onStart = async (id, tipo)=>{
 		}); 
 	}
 
-	tags = (id,mandado)=>{
+	tags = (id,mandado,payee)=>{
 		console.log(mandado)
 		this.props.guardar('orden_compra',id)
 		this.props.guardar('idmandado', mandado);
@@ -493,7 +493,7 @@ onStart = async (id, tipo)=>{
 		this.props.guardar('fechamandado', fecha);
 		console.log(fecha)
 		this.props.guardar('coordenadas', this.state.latitude+','+this.state.longitude);
-		navigate('/app/bultos/'+id)
+		navigate('/app/bultos/'+id+"/"+payee)
 	}
 
 	guardarorden = 	 (mandados) =>{

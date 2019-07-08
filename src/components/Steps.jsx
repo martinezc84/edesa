@@ -8,7 +8,7 @@ export default class Steps extends Component {
 	state = {};
 	
 	render() {
-		let { active: step, tipoSeleccionado: tipo, general, cobros, entregas, servicios, group_id} = this.props;
+		let { active: step, tipoSeleccionado: tipo, general, cobros, entregas, servicios, compras} = this.props;
 		let tipoSeleccionado = tipo !== null;
 
 		let userdata = getUser()
@@ -72,18 +72,21 @@ export default class Steps extends Component {
 					
 				</Menu.Item>):('')
 				}
+				{compras != null?(
 				<Menu.Item
 					
 					active={step === 7}
 					onClick={() => {
 						navigate('/app/compras')
 					}}
-					name={'Compras'}
+					name={compras.name}
 					icon={"tag"}
 				>
 					
 					
-				</Menu.Item>
+				</Menu.Item>):("")
+
+				}
 				{userdata.group_id < 4 ? (
 				<Menu.Item
 					

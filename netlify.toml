@@ -42,7 +42,7 @@
 
 
 	# Dominio del sitio de las APIs (Backend)
-	GATSBY_ZAURU_PREFIX='https://app.zauru.com'
+	GATSBY_ZAURU_PREFIX='https://herokuapp.zauru.com'
 	GATSBY_URL_API = 'https://dcgse.com/calendario_api/apical'
 	GATSBY_URL_IMAGES = 'https://dcgse.com/calendario_api/uploads'
 

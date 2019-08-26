@@ -21,7 +21,7 @@ exports.handler = async (event, context) => {
 		let body = JSON.parse(event.body);
 	    const { valor}  = body;
 
-		let { data } = await axios.post(url, '{"draw":"1", "start":"0", "length":"45","search":{"value":"'+valor+'","regex":"false"},"order":{"0":{"column":3,"dir":"asc"}}}' ,{ headers });
+		let { data } = await axios.post(url, '{"draw":"1", "start":"0", "length":"100","search":{"value":"'+valor+'","regex":"false"},"order":{"0":{"column":3,"dir":"asc"}}}' ,{ headers });
 		return {
 			statusCode: 200,
 			headers:headersr,

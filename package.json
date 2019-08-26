@@ -65,8 +65,7 @@
     "build": "npm run fun && gatsby build",
     "dev": "gatsby develop",
     "start": "npm run develop",
-    "format": "prettier --write \"src/**/*.js\"",
-    "fun": "netlify-lambda build src/service"
+    "format": "prettier --write \"src/**/*.js\""
   },
   "devDependencies": {
     "netlify-lambda": "^1.4.3",

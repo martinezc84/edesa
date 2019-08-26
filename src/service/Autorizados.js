@@ -21,7 +21,7 @@ exports.handler = async (event, context) => {
 		let dow = event.queryStringParameters.dow;
 		let eid = event.queryStringParameters.eid;
 		let store = event.queryStringParameters.store;
-		let url = URL+'?int='+int+"&dow="+dow+"&eid="+eid+"&store="+store;
+		let url = URL+'?int='+int+"&eid="+eid+"&dow="+dow+"&store="+store;
 		//let body = JSON.parse(event.body);
 	    //const { valor}  = body;
 		console.log(url)

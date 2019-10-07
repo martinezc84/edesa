@@ -26,10 +26,10 @@ export const handleLogin = async ({ username, password }) => {
 							store:data.store_id
 							})
 
-							if(data.group_id == "4"){
-								navigate(`/app/mandadosu`)
+							if(data.group_id == "2"){
+								navigate(`/app/ordenesp`)
 							}else{
-								navigate(`/app/cobros`)
+								navigate(`/app/ordenes`)
 							}
 							
 							//return data.group_id

@@ -5,95 +5,61 @@
 
 [build.environment]
   # Dominio del sitio de producción (Frontend)
-	#GATSBY_NFUNC_URL_PREFIX= 'https://heuristic-jang-ecc928.netlify.com'
+	GATSBY_NFUNC_URL_PREFIX= 'http://localhost:9000'
 	
 	# Locations de las netlify functions (Backend) 
 	# Son los mismos nombres de los archivos que hay en la carpeta /src/service
-  GATSBY_URL_TIPOS_DE_TURNO= '/.netlify/functions/tiposMandados'
-	GATSBY_URL_TURNOS_NO_VENDIDOS= '/.netlify/functions/turnosNoVendidos'
-	GATSBY_URL_TURNOS_VENDIDOS= '/.netlify/functions/turnosVendidos'
-	GATSBY_URL_REASIGNAR= '/.netlify/functions/reasignar'
-	GATSBY_URL_UNO= '/.netlify/functions/final1'
-	GATSBY_URL_DOS= '/.netlify/functions/final2'
-	GATSBY_URL_TRES= '/.netlify/functions/final3'
-	GATSBY_URL_CUATRO= '/.netlify/functions/final4'
-	GATSBY_URL_CINCO= '/.netlify/functions/final5'
-	GATSBY_URL_MANDADOS='/.netlify/functions/tiposMandados?id='
-	GATSBY_UNPAID_INVOICES='/.netlify/functions/UnpaidInvoices'
+  
 	GATSBY_URL_EMPLEADOS='/.netlify/functions/empleados'
-	GATSBY_URL_GUARDAR_MANDADO='/.netlify/functions/GuardarMandado'
-	GATSBY_URL_LISTADO_MANDADOS='/.netlify/functions/Mandados'
 	GATSBY_URL_FUNCIONES='/.netlify/functions/Funciones'
-	GATSBY_URL_EDITAR_MANDADO='/.netlify/functions/EditarMandado'
-	GATSBY_URL_EDITAR_MANDADOS='/.netlify/functions/EditarMandadosimple'
 	GATSBY_URL_FIRMA='/.netlify/functions/GuardarImagen'
-	GATSBY_URL_MANDADO='/.netlify/functions/tipoMandado?id='
-	GATSBY_URL_ENTREGAS='/.netlify/functions/Entregas'
-	GATSBY_URL_CASOS='/.netlify/functions/Casos'
 	GATSBY_URL_PHOTO='/.netlify/functions/GuardarPhoto'
-	GATSBY_URL_EDITAR_TIPO_MANDADO='/.netlify/functions/EditarTipoMandado'
-	GATSBY_URL_LOGIN='/.netlify/functions/Login'
-	GATSBY_URL_LISTADO_AUTORIZADOS='/.netlify/functions/Autorizados'
-	GATSBY_URL_PURCHASE_ORDERS='/.netlify/functions/PurchaseOrders'
-	GATSBY_URL_PURCHASE_ORDER='/.netlify/functions/PurchaseOrder'
-	GATSBY_URL_MANDADOINFO='/.netlify/functions/Mandado'
-	GATSBY_URL_LISTADO_MANDADOSXFECHA='/.netlify/functions/Mandadosxfecha'
-	GATSBY_URL_EDITAR_ORDEN='/.netlify/functions/EditarOrden'
+	GATSBY_URL_EDITARFORMULA='/.netlify/functions/EditarFormula'
+	GATSBY_URL_EDITARORDENP='/.netlify/functions/EditarOrdenP'
+	GATSBY_URL_EDITARSECUENCIA='/.netlify/functions/EditarSecuencia'
+	GATSBY_URL_FORMULA='/.netlify/functions/GetFormula'
+	GATSBY_URL_FORMULAS='/.netlify/functions/GetFormulas'
+	GATSBY_URL_MENUS='/.netlify/functions/GetMenus'
+	GATSBY_URL_ORDENESP='/.netlify/functions/GetOrdenesP'
+	GATSBY_URL_ORDENP='/.netlify/functions/GetOrdenP'
+	GATSBY_URL_SECUENCIA='/.netlify/functions/GerSecuencia'
+	GATSBY_URL_SECUENCIAS='/.netlify/functions/GerSecuencias'
+	GATSBY_URL_FORMULAS='/.netlify/functions/GerFormulas'
+	GATSBY_URL_GUARDARORDENP='/.netlify/functions/GuardarOrdenP'
+	GATSBY_URL_GUARDARSECUENCIA='/.netlify/functions/GuardarSecuencia'
+	GATSBY_URL_GUARDARFORMULA='/.netlify/functions/GuardarFormula'
+	
 
 
 	# Dominio del sitio de las APIs (Backend)
 	GATSBY_ZAURU_PREFIX='https://app.zauru.com'
 	GATSBY_URL_API = 'https://dcgse.com/calendario_api/apical'
+	GATSBY_URL_APIP = 'https://dcgse.com/calendario_api/apiprod'
 	GATSBY_URL_IMAGES = 'https://dcgse.com/calendario_api/uploads'
 
 	# Locations de los enpoints GET de información a mostrar en los pasos de la app
-  GATSBY_ENDPOINT_TIPOS_DE_TURNO='/settings/agencies.json'
-	GATSBY_ENDPOINT_TURNOS_NO_VENDIDOS='/inventories/stocks.json?warehouse='
-	GATSBY_ENDPOINT_TURNOS_VENDIDOS='/sales/reports/sold_active_items_with_clients.json?point_of_sale_id='
+	GATSBY_APIP_INDEX = ''
+	GATSBY_APIP_ORDEN = '/orden'
+	GATSBY_APIP_GUARDARORDEN = '/guardarorden'
+	GATSBY_APIP_EDITARORDEN = '/editarorden'
+	GATSBY_APIP_FORMULAS = '/formulas'
+	GATSBY_APIP_FORMULA = '/formula'
+	GATSBY_APIP_GUARDARFORMULA = '/guardarformula'
+	GATSBY_APIP_EDITARFORMULA = '/editarformula'
+	GATSBY_APIP_SECUENCIAS = '/secuencias'
+	GATSBY_APIP_SECUENCIA = '/secuencia'
+	GATSBY_APIP_GUARDARSECUENCIA = '/guardarsecuencia'
+	GATSBY_APIP_EDITARSECUENCIA = '/editarsecuencia'
+	GATSBY_APIP_GROUPMENU = '/groupmenu'
 
-
-	# Locations para la reasignación de turnos
-	GATSBY_ENDPOINT_UNO='/inventories/bookings.json'
-
-	# 1 y 2 construyen https://dominiobackend.com/inventories/bookings/****ID****/deliver.json
-	GATSBY_ENDPOINT_DOS_1='/inventories/bookings/'
-	GATSBY_ENDPOINT_DOS_2='/deliver.json'
-
-	GATSBY_ENDPOINT_TRES='/inventories/bookings.json'
-
-	# 1 y 2 construyen https://dominiobackend.com/inventories/bookings/****ID****/deliver.json
-	GATSBY_ENDPOINT_CUATRO_1='/inventories/bookings/'
-	GATSBY_ENDPOINT_CUATRO_2='/deliver.json'
-
-	# 1 y 2 construyen https://dominiobackend.com/sales/unpaid_invoices/****ID****.json
-	GATSBY_ENDPOINT_CINCO_1='/sales/unpaid_invoices/'
-	GATSBY_ENDPOINT_CINCO_2='.json'
-
-	GATSBY_ENDPOINT_MANDADO='/tipos_mandado?id='
-
-	GATSBY_ENDPOINT_MANDADOS_LIST='/calendario_api/apical'
-
-	GATSBY_ENDPOINT_UNPAID_INVOICES='/sales/unpaid_invoices/datatables.json'
-
-	GATSBY_ENDPOINT_PURCHASES_ORDERS='/purchases/purchase_orders/datatables.json'
-
-	GATSBY_ENDPOINT_ENTREGAS='/inventories/transits'
-
-	GATSBY_ENDPOINT_CASOS='/support/cases/datatables.json'
-	
-	GATSBY_ENDPOINT_EMPLEADOS='/settings/employees/'
-
-	GATSBY_ENDPOINT_AUTORIZADOS_LIST='/autorizados'
-
-	GATSBY_ENDPOINT_PURCHASES_ORDER='/purchases/purchase_orders/'
+   
 
 	# Email y token de autenticación para utilizar las APIs 
-    GATSBY_EMAIL='api@cyclo.com.gt'
-    GATSBY_TOKEN='Zs-HsGfE1xHQRtqPMRJ9'
+        GATSBY_EMAIL='api@cyclo.com.gt'
+        GATSBY_TOKEN='Zs-HsGfE1xHQRtqPMRJ9'
 		GATSBY_API_KEY='Zs-HsGfE1xHQRtqPMRJ9'
 		#GATSBY_EMAIL='api@discogua.com.gt'
-    #GATSBY_TOKEN='uuvDJ6vscs1ewsxbRVHU'
+        #GATSBY_TOKEN='uuvDJ6vscs1ewsxbRVHU'
 		#GATSBY_API_KEY='uuvDJ6vscs1ewsxbRVHU'
-
 	# Variable de entorno para ver los botones de debug. 
 	GATSBY_MODO='PROD' # PROD / DEBUG 

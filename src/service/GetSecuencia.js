@@ -1,7 +1,7 @@
 //@ts-check
 import axios from 'axios';
-import { headers, URLS } from '../utils/utils';
-const URL = URLS.empleados;
+import { headers, APIP_URL } from '../utils/utils';
+const URL = APIP_URL.secuencias;
 const headersr = {
 	'Access-Control-Allow-Origin': '*',
 	'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
@@ -15,7 +15,7 @@ exports.handler = async (event, context) => {
 	try {
 		//@ts-ignore
 		let id = event.queryStringParameters.id;
-		let { data } = await axios.get("https://dcgse.com/calendario_api/apiprod/secuencia?id="+id, { headers });
+		let { data } = await axios.get(URL, { headers });
 		console.log(data)
 		return {
 			statusCode: 200,

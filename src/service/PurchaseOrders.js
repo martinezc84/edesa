@@ -1,7 +1,7 @@
 //@ts-check
 import axios from 'axios';
-import { headers, URLS } from '../utils/utils';
-const URL = URLS.PurchaseOrders;
+import { headers, ZAURU } from '../utils/utils';
+const URL = ZAURU.PurchaseOrders;
 
 const headersr = {
 	'Access-Control-Allow-Origin': '*',

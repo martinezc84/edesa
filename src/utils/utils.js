@@ -19,9 +19,10 @@
 // 	turnosVendidos: `https://zauru.herokuapp.com/sales/reports/sold_active_items_with_clients.json?point_of_sale_id=2505`
 // };
 
-const URL_PREFIX = process.env.GATSBY_NFUNC_URL_PREFIX;
-const URL_PREFIX_API = process.env.GATSBY_URL_API;
-const ZAURU_PREFIX = process.env.GATSBY_ZAURU_PREFIX;
+const URL_PREFIX = process.env.GATSBY_URL;
+const URL_API = process.env.GATSBY_URL_API;
+const URL_APIP = process.env.GATSBY_URL_APIP
+const ZAURU_URL = process.env.GATSBY_ZAURU_URL;
 
 const headers = {
 	Accept: 'application/json',
@@ -30,72 +31,61 @@ const headers = {
 	'X-User-Token': process.env.GATSBY_TOKEN
 };
 
-const NF_ENDPOINTS = {
-	empleados: URL_PREFIX + process.env.GATSBY_URL_EMPLEADOS,
-	tiposDeTurno: URL_PREFIX + process.env.GATSBY_URL_TIPOS_DE_TURNO,
-	turnosNoVendidos: URL_PREFIX + process.env.GATSBY_URL_TURNOS_NO_VENDIDOS,
-	turnosVendidos: URL_PREFIX + process.env.GATSBY_URL_TURNOS_VENDIDOS,
-	REASIGNAR: URL_PREFIX + process.env.GATSBY_URL_REASIGNAR,
-	UNO: URL_PREFIX + process.env.GATSBY_URL_UNO,
-	DOS: URL_PREFIX + process.env.GATSBY_URL_DOS,
-	TRES: URL_PREFIX + process.env.GATSBY_URL_TRES,
-	CUATRO: URL_PREFIX + process.env.GATSBY_URL_CUATRO,
-	CINCO: URL_PREFIX + process.env.GATSBY_URL_CINCO,
-	tiposMandado: URL_PREFIX + process.env.GATSBY_URL_MANDADOS,
-	UnpaidInvoices: URL_PREFIX + process.env.GATSBY_UNPAID_INVOICES,
-	PurchaseOrders: URL_PREFIX + process.env.GATSBY_URL_PURCHASE_ORDERS,
-	PurchaseOrder: URL_PREFIX + process.env.GATSBY_URL_PURCHASE_ORDER,
-	guardarmandados:URL_PREFIX + process.env.GATSBY_URL_GUARDAR_MANDADO,
-	editarmandados:URL_PREFIX + process.env.GATSBY_URL_EDITAR_MANDADO,
-	editarmandadoss:URL_PREFIX + process.env.GATSBY_URL_EDITAR_MANDADOS,
-	ListaMandados:URL_PREFIX + process.env.GATSBY_URL_LISTADO_MANDADOS,
-	ListaAutorizados:URL_PREFIX + process.env.GATSBY_URL_LISTADO_AUTORIZADOS,
+const FUNCIONES = {
+	
 	Funciones:URL_PREFIX + process.env.GATSBY_URL_FUNCIONES,
 	saveimage :URL_PREFIX+process.env.GATSBY_URL_FIRMA,
 	savephoto :URL_PREFIX+process.env.GATSBY_URL_PHOTO,
-	Entregas :URL_PREFIX+process.env.GATSBY_URL_ENTREGAS,
-	Casos :URL_PREFIX+process.env.GATSBY_URL_CASOS,
-	editarTipoMandado: URL_PREFIX+process.env.GATSBY_URL_EDITAR_TIPO_MANDADO,
 	login: URL_PREFIX+process.env.GATSBY_URL_LOGIN,
-	mandado: URL_PREFIX+process.env.GATSBY_URL_MANDADOINFO,
-	mandadosxfecha:URL_PREFIX+process.env.GATSBY_URL_LISTADO_MANDADOSXFECHA,
-	editarorden:URL_PREFIX+process.env.GATSBY_URL_EDITAR_ORDEN
+	editarformula:URL_PREFIX+process.env.GATSBY_URL_EDITARFORMULA,
+	editarorden:URL_PREFIX+process.env.GATSBY_URL_EDITARORDENP,
+	editarsecuencia:URL_PREFIX+process.env.GATSBY_URL_EDITARSECUENCIA,
+	formula:URL_PREFIX+process.env.GATSBY_URL_FORMULA,
+	formulas:URL_PREFIX+process.env.GATSBY_URL_FORMULAS,
+	menus:URL_PREFIX+process.env.GATSBY_URL_MENUS,
+	ordenes:URL_PREFIX+process.env.GATSBY_URL_ORDENESP,
+	orden:URL_PREFIX+process.env.GATSBY_URL_ORDENP,
+	secuencia:URL_PREFIX+process.env.GATSBY_URL_SECUENCIA,
+	secuencias:URL_PREFIX+process.env.GATSBY_URL_SECUENCIAS,
+	formulas:URL_PREFIX+process.env.GATSBY_URL_FORMULAS,
+	guardardaroden:URL_PREFIX+process.env.GATSBY_URL_GUARDARORDENP,
+	guardarsecuencia:URL_PREFIX+process.env.GATSBY_URL_GUARDARSECUENCIA,
+	guardarformula:URL_PREFIX+proccess.env.GATSBY_URL_GUARDARFORMULA
 	
 };
 
-const ZAURU_URL = {
-	tiposDeTurno: ZAURU_PREFIX + process.env.GATSBY_ENDPOINT_TIPOS_DE_TURNO,
-	UnpaidInvoices: ZAURU_PREFIX + process.env.GATSBY_ENDPOINT_UNPAID_INVOICES,
-	PurchaseOrders: ZAURU_PREFIX + process.env.GATSBY_ENDPOINT_PURCHASES_ORDERS,
-	PurchaseOrder: ZAURU_PREFIX + process.env.GATSBY_ENDPOINT_PURCHASES_ORDER,
-	empleados: ZAURU_PREFIX + process.env.GATSBY_ENDPOINT_EMPLEADOS,
-	turnosNoVendidos: ZAURU_PREFIX + process.env.GATSBY_ENDPOINT_TURNOS_NO_VENDIDOS,
-	turnosVendidos: ZAURU_PREFIX + process.env.GATSBY_ENDPOINT_TURNOS_VENDIDOS,
-	UNO: ZAURU_PREFIX + process.env.GATSBY_ENDPOINT_UNO,
-	DOS_1: ZAURU_PREFIX + process.env.GATSBY_ENDPOINT_DOS_1,
-	DOS_2: process.env.GATSBY_ENDPOINT_DOS_2,
-	TRES: ZAURU_PREFIX + process.env.GATSBY_ENDPOINT_TRES,
-	CUATRO_1: ZAURU_PREFIX + process.env.GATSBY_ENDPOINT_CUATRO_1,
-	CUATRO_2: process.env.GATSBY_ENDPOINT_CUATRO_2,
-	CINCO_1: ZAURU_PREFIX + process.env.GATSBY_ENDPOINT_CINCO_1,
-	CINCO_2: process.env.GATSBY_ENDPOINT_CINCO_2,
-	Entregas: ZAURU_PREFIX + process.env.GATSBY_ENDPOINT_ENTREGAS,
-	Casos: ZAURU_PREFIX + process.env.GATSBY_ENDPOINT_CASOS
+const ZAURU = {
+	
+	Casos: ZAURU_URL + process.env.GATSBY_ENDPOINT_CASOS
 	
 };
 
 const API_URL = {
-	tiposMandado: URL_PREFIX_API+process.env.GATSBY_ENDPOINT_MANDADO,
-	tipoMandado: URL_PREFIX+process.env.GATSBY_URL_MANDADO,
-	listadoMandados: URL_PREFIX_API,
-	listadoAutorizados :URL_PREFIX_API+process.env.GATSBY_ENDPOINT_AUTORIZADOS_LIST
+	tiposMandado: URL_API+process.env.GATSBY_ENDPOINT_MANDADO,
+	tipoMandado: URL_API+process.env.GATSBY_URL_MANDADO,
+	listadoMandados: URL_API,
+	listadoAutorizados :URL_API+process.env.GATSBY_ENDPOINT_AUTORIZADOS_LIST
 
 }
 
-//2 https://zauru.herokuapp.com/inventories/bookings/****ID****/deliver.json
-//4 https://zauru.herokuapp.com/inventories/bookings/****ID****/deliver.json
-//5 https://zauru.herokuapp.com/sales/unpaid_invoices/****ID****.json
+const APIP_URL = {
+	ordenes: URL_APIP+process.env.GATSBY_APIP_INDEX,
+	orden: URL_APIP+process.env.GATSBY_APIP_ORDEN,
+	guardarorden: URL_APIP+process.env.GATSBY_APIP_GUARDARORDEN,
+	editarorden: URL_APIP+process.env.GATSBY_APIP_EDITARORDEN,
+	formulas: URL_APIP+process.env.GATSBY_APIP_FORMULAS,
+	formula: URL_APIP+process.env.GATSBY_APIP_FORMULA,
+	guardarformula: URL_APIP+process.env.GATSBY_APIP_GUARDARFORMULA,
+	editarformula: URL_APIP+process.env.GATSBY_APIP_EDITARFORMULA,
+	guardarsecuencia: URL_APIP+process.env.GATSBY_APIP_GUARDARSECUENCIA,
+	editarsecuencia: URL_APIP+process.env.GATSBY_APIP_EDITARSECUENCIA,
+	groupmenu: URL_APIP+process.env.GATSBY_APIP_GROUPMENU,
+	secuencias: URL_APIP+process.env.GATSBY_APIP_SECUENCIAS,
+	secuencia: URL_APIP+process.env.GATSBY_APIP_SECUENCIA,
+
+}
+
 
 const ENV = process.env.GATSBY_ENV;
 
-export { headers,  API_URL as API_URL, ZAURU_URL as URLS, NF_ENDPOINTS as ENDPOINTS, ENV };
+export { headers, ENV, ZAURU, API_URL, APIP_URL, FUNCIONES };

@@ -2,9 +2,8 @@
 import React, { Component } from 'react';
 import '../css/style.css';
 import Axios from 'axios';
-import { ENDPOINTS } from '../utils/utils';
+import { FUNCIONES } from '../utils/utils';
 import { Header, Table, Loader, Pagination, Search, Menu } from 'semantic-ui-react';
-import FilaTipo from './FilaTipo';
 import sortBy from 'lodash/sortBy';
 import {  getUser} from "../utils/identity"
 import { navigate } from '@reach/router';
@@ -70,21 +69,7 @@ export default class TipoMandado extends Component {
 					loading: true
 				});
                 
-				Axios.get(ENDPOINTS.tiposMandado+user.store)
-					.then(({ data }) => {
-						//console.log(data)
-						let turnosVendidos = sortBy(data, [ 'id' ]);
-						guardar('turnosVendidos', turnosVendidos);
-						this.setState({
-							turnosVendidos: turnosVendidos,
-							loading: false,
-							cantidadPaginas: Math.floor(data.recordsTotal / this.state.first) + 1
-						});
-					})
-					.catch((error) => {
-						console.error(error);
-					});
-			
+
 			
 		
 	}
@@ -189,16 +174,7 @@ export default class TipoMandado extends Component {
 										
 									</Table.Header>
 									<Table.Body>
-										{turnosVendidos
-											.slice(offset, first)
-											.map((t) => (
-												<FilaTipo
-													key={t.id}
-													turno={t}
-													seleccionar={this.seleccionar}
-													seleccionado={seleccionadosId.includes(t.id)}
-												/>
-											))}
+										
 									</Table.Body>
 								</Table>
 							</div>

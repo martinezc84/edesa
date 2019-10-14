@@ -2,12 +2,12 @@ let activeEnv = process.env.ACTIVE_ENV || process.env.NODE_ENV || 'development';
 
 module.exports = {
 	siteMetadata: {
-		title: `Control de mandados`,
-		description: `Generar mandados desde documentos en Zauru`,
-		author: `@luispagarcia`,
+		title: `Ordenes de Producción`,
+		description: `Generar ordenes de produccion`,
+		author: `@martinezc84`,
 		titulos:{
-			landing: "Generar mandados desde documentos en Zauru",
-			app: "Generar mandados desde documentos en Zauru"
+			landing: "Generar ordenes de produccion",
+			app: "Generar ordenes de produccion"
 		},
 		env: activeEnv
 	},

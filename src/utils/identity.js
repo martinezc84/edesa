@@ -1,4 +1,4 @@
-import { ENDPOINTS } from '../utils/utils';
+import { FUNCIONES } from '../utils/utils';
 import Axios from 'axios';
 import { navigate } from '@reach/router';
 
@@ -14,9 +14,9 @@ const setUser = user =>
 
 export const handleLogin = async ({ username, password }) => {
 
-	await Axios.post(`${ENDPOINTS.login}`,'{"username":"'+username+'","password":"'+password+'"}')
+	await Axios.post(`${FUNCIONES.login}`,'{"username":"'+username+'","password":"'+password+'"}')
 					.then(({ data }) => {
-						//console.log(data)
+						console.log(data)
 						 setUser({
 							username: data.username,
 							name: data.first_name+' '+data.last_name,
@@ -36,7 +36,7 @@ export const handleLogin = async ({ username, password }) => {
 						
 					})
 					.catch((error) => {
-						//console.error(error);
+						console.error(error);
 
 						navigate(`/app/login/1`)
 

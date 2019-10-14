@@ -32,7 +32,7 @@ const headers = {
 };
 
 const FUNCIONES = {
-	
+	empleados:URL_PREFIX + process.env.GATSBY_URL_EMPLEADOS,
 	Funciones:URL_PREFIX + process.env.GATSBY_URL_FUNCIONES,
 	saveimage :URL_PREFIX+process.env.GATSBY_URL_FIRMA,
 	savephoto :URL_PREFIX+process.env.GATSBY_URL_PHOTO,
@@ -47,24 +47,25 @@ const FUNCIONES = {
 	orden:URL_PREFIX+process.env.GATSBY_URL_ORDENP,
 	secuencia:URL_PREFIX+process.env.GATSBY_URL_SECUENCIA,
 	secuencias:URL_PREFIX+process.env.GATSBY_URL_SECUENCIAS,
-	formulas:URL_PREFIX+process.env.GATSBY_URL_FORMULAS,
 	guardardaroden:URL_PREFIX+process.env.GATSBY_URL_GUARDARORDENP,
 	guardarsecuencia:URL_PREFIX+process.env.GATSBY_URL_GUARDARSECUENCIA,
-	guardarformula:URL_PREFIX+proccess.env.GATSBY_URL_GUARDARFORMULA
+	guardarformula:URL_PREFIX+process.env.GATSBY_URL_GUARDARFORMULA,
+	comprables:URL_PREFIX+process.env.GATSBY_URL_COMPRABLES,
+	vendibles:URL_PREFIX+process.env.GATSBY_URL_VENDIBLES
 	
 };
 
 const ZAURU = {
 	
-	Casos: ZAURU_URL + process.env.GATSBY_ENDPOINT_CASOS
+	empleados: ZAURU_URL + process.env.GATSBY_API_EMPLEADOS,
+	productosvendibles: ZAURU_URL + process.env.GATSBY_API_PRODUCTOSVENDIBLES,
+	productoscomprables: ZAURU_URL + process.env.GATSBY_API_PRODUCTOSCOMPRABLES,
 	
 };
 
 const API_URL = {
-	tiposMandado: URL_API+process.env.GATSBY_ENDPOINT_MANDADO,
-	tipoMandado: URL_API+process.env.GATSBY_URL_MANDADO,
-	listadoMandados: URL_API,
-	listadoAutorizados :URL_API+process.env.GATSBY_ENDPOINT_AUTORIZADOS_LIST
+	
+	empleados:URL_API+process.env.GATSBY_API_EMPLEADOS
 
 }
 

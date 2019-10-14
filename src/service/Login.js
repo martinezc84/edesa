@@ -1,6 +1,6 @@
 //@ts-check
 import axios from 'axios';
-import { headers, URLS } from '../utils/utils';
+import { headers } from '../utils/utils';
 import JSON from 'circular-json';
 
 const headersr = {

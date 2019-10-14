@@ -24,7 +24,6 @@
 	GATSBY_URL_ORDENP='/.netlify/functions/GetOrdenP'
 	GATSBY_URL_SECUENCIA='/.netlify/functions/GerSecuencia'
 	GATSBY_URL_SECUENCIAS='/.netlify/functions/GerSecuencias'
-	GATSBY_URL_FORMULAS='/.netlify/functions/GerFormulas'
 	GATSBY_URL_GUARDARORDENP='/.netlify/functions/GuardarOrdenP'
 	GATSBY_URL_GUARDARSECUENCIA='/.netlify/functions/GuardarSecuencia'
 	GATSBY_URL_GUARDARFORMULA='/.netlify/functions/GuardarFormula'

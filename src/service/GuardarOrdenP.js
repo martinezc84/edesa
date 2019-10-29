@@ -1,10 +1,10 @@
 //@ts-check
 import axios from 'axios';
-import { headers, URLS } from '../utils/utils';
+import { headers, APIP_URL } from '../utils/utils';
 import format from 'date-fns/format';
 import subHours from 'date-fns/sub_hours';
 import JSON from 'circular-json';
-
+const URL = APIP_URL.guardarorden;
 const headersr = {
 	'Access-Control-Allow-Origin': '*',
 	'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
@@ -20,7 +20,7 @@ exports.handler = (event, context, callback) => {
 	}
 	console.log(event.body);
 	
-	let URL = 'https://dcgse.com/calendario_api/apiprod/guardarordenp';
+	
 	
 	return axios
 		.post(URL, event.body, { headers: headers })

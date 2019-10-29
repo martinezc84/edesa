@@ -10,7 +10,7 @@ class Layout extends Component {
 	
 	render() {
 		return (
-			<div>
+			<div className="pt-8 px-8 pb-8">
 				<Header />
 				{isLoggedIn() ? (<Container>
 						<Steps {...this.props} />

@@ -263,7 +263,7 @@ export default class Secuencias extends Component {
 												<FilaSecuencia
 													secuencia={t} 
 													editar={this.editar}
-													
+													key={t.id}
 												/>
 											))}
 									</Table.Body>

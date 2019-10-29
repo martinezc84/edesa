@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import DateTimePicker from 'react-datetime-picker';
+import DateInput from 'semantic-ui-calendar-react';
  
-export default class Inputdate extends Component {
+export default class Inputdatep extends Component {
   state = {
-    date: new Date(),
+    date: '',
     
   }
   
@@ -12,18 +12,19 @@ export default class Inputdate extends Component {
   managedate(date){
   
     this.setState({ date });
-    this.props.guardar(date,this.props.name)
+    this.props.guardar(date,this.props.guardar_id)
   }
  
   render() {
-    let disable = this.props;
+   
     return (
       <div>
-        <DateTimePicker
+        <DateInput
           onChange={this.onChange}
           value={this.state.date}
-          format="yy"
-                   
+          
+          name={this.props.name}
+          iconPosition="left"
          
         />
       </div>

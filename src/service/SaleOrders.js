@@ -1,7 +1,8 @@
 //@ts-check
 import axios from 'axios';
-import { headers, APIP_URL } from '../utils/utils';
-const URL = APIP_URL.ordenes;
+import { headers, ZAURU } from '../utils/utils';
+const URL = ZAURU.ordenesdeventa;
+
 const headersr = {
 	'Access-Control-Allow-Origin': '*',
 	'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
@@ -10,26 +11,25 @@ const headersr = {
 	'Access-Control-Max-Age': '2592000',
 	'Access-Control-Allow-Credentials': 'true',
   };
+
 //@ts-ignore
 exports.handler = async (event, context) => {
 	try {
 		//@ts-ignore
-		let id = event.queryStringParameters.id;
-		let eid = event.queryStringParameters.eid;
-		let lines = event.queryStringParameters.lines;
-		let inicio = event.queryStringParameters.inicio;
-		let estado = event.queryStringParameters.estado;
-		let { data } = await axios.get(URL+"?id="+id+"&eid="+eid+"&lines="+lines+"&inicio="+inicio+"&estado="+estado+"", { headers });
-		console.log(data)
+		let url = `${URL}`;
+		let body = JSON.parse(event.body);
+	    const { valor}  = body;
+		let { data } = await axios.post(url, '{"draw":"1", "start":"0", "length":"40","search":{"value":"'+valor+'","regex":"false"},"order":{"0":{"column":3,"dir":"asc"}}}' ,{ headers });
 		return {
 			statusCode: 200,
-			body: JSON.stringify(data),
-			headers:headersr
+			headers:headersr,
+			body: JSON.stringify(data)
 		};
 	} catch (error) {
 		console.error(error);
 		return {
 			statusCode: 502,
+			headers:headersr,
 			body: JSON.stringify(error)
 		};
 	}

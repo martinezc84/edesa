@@ -5,7 +5,7 @@
 
 [build.environment]
   # Dominio del sitio de producción (Frontend)
-	GATSBY_NFUNC_URL_PREFIX= 'http://localhost:9000'
+	GATSBY_URL= 'http://localhost:9000'
 	
 	# Locations de las netlify functions (Backend) 
 	# Son los mismos nombres de los archivos que hay en la carpeta /src/service
@@ -22,16 +22,21 @@
 	GATSBY_URL_MENUS='/.netlify/functions/GetMenus'
 	GATSBY_URL_ORDENESP='/.netlify/functions/GetOrdenesP'
 	GATSBY_URL_ORDENP='/.netlify/functions/GetOrdenP'
-	GATSBY_URL_SECUENCIA='/.netlify/functions/GerSecuencia'
-	GATSBY_URL_SECUENCIAS='/.netlify/functions/GerSecuencias'
+	GATSBY_URL_SECUENCIA='/.netlify/functions/GetSecuencia'
+	GATSBY_URL_SECUENCIAS='/.netlify/functions/GetSecuencias'
 	GATSBY_URL_GUARDARORDENP='/.netlify/functions/GuardarOrdenP'
 	GATSBY_URL_GUARDARSECUENCIA='/.netlify/functions/GuardarSecuencia'
 	GATSBY_URL_GUARDARFORMULA='/.netlify/functions/GuardarFormula'
-	
-
+	GATSBY_URL_LOGIN='/.netlify/functions/Login'
+	GATSBY_URL_COMPRABLES='/.netlify/functions/ProductosComprables'
+	GATSBY_URL_VENDIBLES='/.netlify/functions/ProductosVendibles'
+	GATSBY_URL_AGENCIAS='/.netlify/functions/Agencias'
+	GATSBY_URL_ORDENESVENTA='/.netlify/functions/SaleOrders'
+	GATSBY_URL_ORDENVENTA='/.netlify/functions/OrdenVenta'
+	GATSBY_URL_EQUIPOS='/.netlify/functions/Equipos'
 
 	# Dominio del sitio de las APIs (Backend)
-	GATSBY_ZAURU_PREFIX='https://app.zauru.com'
+	GATSBY_ZAURU_URL='https://app.zauru.com'
 	GATSBY_URL_API = 'https://dcgse.com/calendario_api/apical'
 	GATSBY_URL_APIP = 'https://dcgse.com/calendario_api/apiprod'
 	GATSBY_URL_IMAGES = 'https://dcgse.com/calendario_api/uploads'
@@ -50,15 +55,24 @@
 	GATSBY_APIP_GUARDARSECUENCIA = '/guardarsecuencia'
 	GATSBY_APIP_EDITARSECUENCIA = '/editarsecuencia'
 	GATSBY_APIP_GROUPMENU = '/groupmenu'
+	GATSBY_APIP_EQUIPOS = '/equipos'
+	
+	#API DE ZAURU
 
+	GATSBY_API_EMPLEADOS='/settings/employees/'	
+	GATSBY_API_PRODUCTOSVENDIBLES='/pos/sale_orders/new.json'
+	GATSBY_API_PRODUCTOSCOMPRABLES='/purchases/purchase_orders/new.json'
+	GATSBY_API_AGENCIAS = '/settings/agencies.json'
+	GATSBY_API_ORDENESDEVENTA='/sales/orders/datatables.json'
+	GATSBY_API_ORDENDEVENTA='/sales/orders/'
    
 
 	# Email y token de autenticación para utilizar las APIs 
-        GATSBY_EMAIL='api@cyclo.com.gt'
-        GATSBY_TOKEN='Zs-HsGfE1xHQRtqPMRJ9'
-		GATSBY_API_KEY='Zs-HsGfE1xHQRtqPMRJ9'
-		#GATSBY_EMAIL='api@discogua.com.gt'
-        #GATSBY_TOKEN='uuvDJ6vscs1ewsxbRVHU'
-		#GATSBY_API_KEY='uuvDJ6vscs1ewsxbRVHU'
+        #GATSBY_EMAIL='api@cyclo.com.gt'
+        #GATSBY_TOKEN='Zs-HsGfE1xHQRtqPMRJ9'
+		#GATSBY_API_KEY='Zs-HsGfE1xHQRtqPMRJ9'
+		GATSBY_EMAIL='api@discogua.com.gt'
+        GATSBY_TOKEN='uuvDJ6vscs1ewsxbRVHU'
+		GATSBY_API_KEY='uuvDJ6vscs1ewsxbRVHU'
 	# Variable de entorno para ver los botones de debug. 
 	GATSBY_MODO='PROD' # PROD / DEBUG 

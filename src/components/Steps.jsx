@@ -12,16 +12,15 @@ export default class Steps extends Component {
 	
 	
 	render() {
-		let { active: step, tipoSeleccionado: tipo, menuitems} = this.props;
-		let tipoSeleccionado = tipo !== null;
-		
+		let {  step, menuitems, borrarmem} = this.props;
+			
 		let userdata = getUser()
 			
 		if (userdata.group_id<4) {
 		return (
 			<Menu>
 				
-				{menuitems === undefined ? (
+				{menuitems.lenght===0 ? (
 					'' ):(menuitems.map((t) => (
 						<Stepitem
 							step={step}
@@ -34,24 +33,15 @@ export default class Steps extends Component {
 										
 				}
 				
-		
+				<Menu.Item
+					
+					onClick={borrarmem}
+					name={'limpiar'}
+					icon={'trash'}
+				></Menu.Item>
 			
 			</Menu>
 		);
-				}else{
-					return (
-						<Menu>
-							<Menu.Item
-					
-					active={step === 10}
-					onClick={() => {
-						navigate('/app/mandadosu')
-					}}
-					name={'Tareas'}
-					icon={"list ol"}
-				></Menu.Item>
-						</Menu>
-					)
 				}
 	}
 }

@@ -2,11 +2,11 @@
 import React from 'react';
 import SweetAlert from 'react-bootstrap-sweetalert'
 
-const MostrarMensaje = ({ mensajes, titulo, visible, onConfirm }) => {
+const Msjerror = ({ mensajes, titulo, visible, onConfirm }) => {
 	return (
 		<React.Fragment>
 			{visible === true ? (
-				<SweetAlert success title={titulo} onConfirm={() => {
+				<SweetAlert error title={titulo} onConfirm={() => {
 					
 					visible=false
 					onConfirm();
@@ -22,4 +22,4 @@ const MostrarMensaje = ({ mensajes, titulo, visible, onConfirm }) => {
 
 
 
-export { MostrarMensaje };
+export { Msjerror };

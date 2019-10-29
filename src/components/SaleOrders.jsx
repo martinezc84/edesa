@@ -1,19 +1,17 @@
 //@ts-check
 import React, { Component } from 'react';
-import netlifyIdentity from 'netlify-identity-widget';
 import '../css/style.css';
 import Axios from 'axios';
-import { ENDPOINTS, API_URL } from '../utils/utils';
+import { FUNCIONES } from '../utils/utils';
 import { Header, Table, Loader, Pagination, Button, Menu, Icon } from 'semantic-ui-react';
-import FilaCompra from './FilaCompra';
+import FilaVenta from './FilaVenta';
 import sortBy from 'lodash/sortBy';
-import { MostrarMensaje } from './Mensajes';
 import { isLoggedIn, logout , getUser} from "../utils/identity"
 import { navigate } from '@reach/router';
 
 
 
-export default class UnpaidInvoices extends Component {
+export default class SaleOrders extends Component {
 	state = {
 		Invoices: [],
 		seleccionados: [],
@@ -93,21 +91,11 @@ export default class UnpaidInvoices extends Component {
 		}));
 	};
 
-	fechain(id){
-		for (var i=0; i<this.state.fechas.length; i++) {
-			//console.log(this.state.fechas[i])
-            if (this.state.fechas[i].id==id){
-				return true;
-			}
-            //a b c
-		}
-		
-		return false;
-	} 
+
 
 	get_id(text){
 		const resp = text.split('-')
-		return resp[3];
+		return resp[2];
 	}
 
 	get_empleado(id){
@@ -122,23 +110,7 @@ export default class UnpaidInvoices extends Component {
 		return null;
 	} 
 
-	guardar = (dte, idf) => {
-		let fechas=[]
-		const data = {dte:dte,id:idf}
 
-		if (this.fechain(idf)) {
-			fechas = this.state.fechas.filter((s) => s.id != idf);
-			fechas = [ ...fechas, data ];
-		}else{
-		fechas = [ ...this.state.fechas, data ]
-			}
-
-		this.setState({
-			fechas})
-
-		 console.log(fechas)
-
-	};
 
 	componentDidMount() {
 		
@@ -151,72 +123,51 @@ export default class UnpaidInvoices extends Component {
 			userdata: user
 		});
 
-		this.props.cargarconfig(user.store)
 		
-			let { guardar, valores, seleccionadosVendidosID,  empleados } = this.props;
+		
+			let { guardar, valores,   empleados } = this.props;
 			if (valores.length === 0) {
 				this.setState({
 					loading: true
 				});
-                
-				Axios.post(`${ENDPOINTS.PurchaseOrders}`,'{"valor":"'+buscar+'"}')
+                console.log(FUNCIONES.ordenesventordenesventaa)
+				Axios.post(`${FUNCIONES.ordenesventa}`,'{"valor":"'+buscar+'"}')
 					.then(({ data }) => {
-						//console.log(data)
 						
+						console.log(data)
 						let Invoices = data.data;
-						//console.log(Invoices)
-						//Invoices = sortBy(Invoices, [ 'id' ]);
+						
 						Invoices.map((invoice, i)=> (
-							//console.log(invoice)
-						 invoice.id =	this.get_id(invoice.DT_RowId)
-							
-				
+						invoice.id =	this.get_id(invoice.DT_RowId)
 						));
 
 
 						Invoices.map((invoice, i)=> (
-							//console.log(invoice)
-							invoice.z != '' ? invoice.z = this.quitarlink(invoice.z) :''
 							
-				
+							invoice.zid != '' ? invoice.zid = this.quitarlink(invoice.zid) :''
 						));
 
 						Invoices.map((invoice, i)=> (
 							//console.log(invoice)
-							invoice.i != '' ? invoice.i = this.quitarlink(invoice.i) :''
-							
-				
+							invoice.onum != '' ? invoice.onum = this.quitarlink(invoice.onum) :''
 						));
 
 						Invoices.map((invoice, i)=> (
 							//console.log(invoice)
 							invoice.ref != '' ? invoice.ref = this.quitarlink(invoice.ref) :''
-							
-				
 						));
 
 						Invoices.map((invoice, i)=> (
 							//console.log(invoice)
-							invoice.ven != '' ? invoice.venid = this.get_cliente(invoice.ven) :invoice.venid = 0
-							//console.log(this.get_cliente(invoice.ven))
-							
+							invoice.cli != '' ? invoice.cli = this.quitarlink(invoice.cli) :''
 						));
 
-						Invoices.map((invoice, i)=> (
-							//console.log(invoice)
-							invoice.ven != '' ? invoice.ven = this.quitarlink(invoice.ven) :''
-							
-				
-						));
-
-					
-							//console.log(Invoices);
-
-						guardar('Purchases', Invoices);
+						console.log(Invoices)
+						guardar('ordenesdeventa', Invoices);
 						this.setState({
 							Invoices: Invoices,
 							loading: false,
-							seleccionadosId: seleccionadosVendidosID,
+							
 							cantidadPaginas: Math.floor(data.recordsTotal / this.state.first) + 1
 						});
 					})
@@ -224,35 +175,12 @@ export default class UnpaidInvoices extends Component {
 						console.error(error);
 					});
 
-					Axios.get(`${ENDPOINTS.empleados}`)
-					.then(({ data }) => {
-						//console.log(data)
-						
-						let empleados = data.filter((d) => d.active === true && d.seller === true && d.inventory_controller === false);
-   					let	resposables = data.filter((d) => d.inventory_controller === true && d.active === true);
-
-					empleados = [...empleados,...resposables];
-
-						
-						//console.log(empleados)
-						empleados = sortBy(empleados, [ 'name' ]);	
-						empleados = this.trataEmpleados(empleados)	
-
-
-						guardar('empleados', empleados);
-						this.setState({
-							empleados: empleados,
-							
-						});
-					})
-					.catch((error) => {
-						console.error(error);
-					});
+					
 			} else {
 				this.setState({
 					empleados:empleados,
 					Invoices: valores,
-					seleccionadosId: seleccionadosVendidosID,
+					
 					cantidadPaginas: Math.floor(valores.length / this.state.first) + 1
 				});
 			}
@@ -331,7 +259,7 @@ export default class UnpaidInvoices extends Component {
 		});
 		
 			
-			Axios.post(`${ENDPOINTS.PurchaseOrders}`,'{"valor":"'+event.target.value+'"}')
+			Axios.post(`${FUNCIONES.ordenesventa}`,'{"valor":"'+event.target.value+'"}')
 				.then(({ data }) => {
 					//console.log(data)
 					
@@ -424,7 +352,7 @@ export default class UnpaidInvoices extends Component {
 				const posttext = '{"fecha": "'+fechastr+'", "hora": "'+horastr+':'+minutes+':00",  "cliente":"'+seleccionado.ven+'","payee_id":"'+seleccionado.venid+'"   ,"descripcion":"Recolecta","tipo":"5","user":"'+this.state.userdata.username+'", "employee_id":"'+mensajero[0].value+'","store_id":"'+this.state.userdata.store+'","encargado":"'+nombre.text+'", "active":"1", "zauru_id":"'+seleccionado.id+'"}'
 				console.log(posttext)
 
-				const data = await Axios.post(ENDPOINTS.guardarmandados, posttext);
+				const data = await Axios.post(FUNCIONES.guardarsecuencia, posttext);
 				console.log(data)
 			} catch (error) {
 				console.error({ error });
@@ -446,6 +374,10 @@ export default class UnpaidInvoices extends Component {
 				visible:false
 			});
 			navigate('/app/manados/')
+		}
+
+		generar = (id)=>{
+			navigate('/app/nuevaorden/'+id)
 		}
 
 	render() {
@@ -507,13 +439,29 @@ export default class UnpaidInvoices extends Component {
 								<Table sortable celled>
 									<Table.Header>
 									<Table.Row>
-										<Table.HeaderCell>SELECT</Table.HeaderCell>
+										<Table.HeaderCell sorted={column === 'zid' ? direction : null}
+											onClick={this.handleSort('zid')}
+											>
+												ID
+										</Table.HeaderCell>
 										
 										<Table.HeaderCell
-											sorted={column === 'i' ? direction : null}
-											onClick={this.handleSort('i')}
+											sorted={column === 'onum' ? direction : null}
+											onClick={this.handleSort('onum')}
 										>
 											ORDEN
+										</Table.HeaderCell>
+										<Table.HeaderCell
+											sorted={column === 'cli' ? direction : null}
+											onClick={this.handleSort('cli')}
+										>
+											CLIENTE
+										</Table.HeaderCell>
+										<Table.HeaderCell
+											sorted={column === 'dte' ? direction : null}
+											onClick={this.handleSort('dte')}
+										>
+											FECHA
 										</Table.HeaderCell>
 										
 										<Table.HeaderCell
@@ -522,32 +470,9 @@ export default class UnpaidInvoices extends Component {
 										>
 											REFERENCIA
 										</Table.HeaderCell>
-										<Table.HeaderCell
-											sorted={column === 'dte' ? direction : null}
-											onClick={this.handleSort('dte')}
-										>
-											FECHA
-										</Table.HeaderCell>
-										<Table.HeaderCell
-											sorted={column === 'o' ? direction : null}
-											onClick={this.handleSort('o')}
-										>
-											ORIGEN
-										</Table.HeaderCell>
-										<Table.HeaderCell
-											sorted={column === 'ven' ? direction : null}
-											onClick={this.handleSort('ven')}
-										>
-											PROVEEDOR
-										</Table.HeaderCell>
-										<Table.HeaderCell>
-											FECHA MANDADO	
 										
-										</Table.HeaderCell>
-										<Table.HeaderCell	>
-											Encargado	
 										
-										</Table.HeaderCell>
+										
 									
 									
 										</Table.Row>
@@ -556,14 +481,10 @@ export default class UnpaidInvoices extends Component {
 										{Invoices
 											.slice(offset, first)
 											.map((t) => (
-												<FilaCompra
-													key={t.id}
-													turno={t}
-													seleccionar={this.seleccionar}
-													seleccionado={seleccionadosId.includes(t.id)}
-													empleados={this.state.empleados} 
-													seleccionaVendedor={this.seleccionaVendedor}
-													guardar={this.guardar}
+												<FilaVenta
+													
+													orden={t}
+													generar={this.generar}
 													
 												/>
 											))}
@@ -572,24 +493,7 @@ export default class UnpaidInvoices extends Component {
 							</div>
 
 							
-								<Button
-									size="massive"
-									primary
-									onClick={() => {
-										this.generar_mandados({
-											// @ts-ignore
-											vendedoresseleccionadosId,
-											vendedoresseleccionados,
-											seleccionadosId,
-											seleccionados
-										});
-									}}								
-									icon
-									labelPosition="left"
-								>
-								<Icon name="cogs" />
-									Generar Mandados
-								</Button>
+								
 
 							
 
@@ -597,7 +501,7 @@ export default class UnpaidInvoices extends Component {
 						</React.Fragment>
 						
 					)}
-					<MostrarMensaje titulo={'Los mandados fueron creados con exito'} mensajes={'Prueba'}  visible={this.state.visible} onConfirm={this.onConfirm} />
+					
 				</React.Fragment>
 				
 			);

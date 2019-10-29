@@ -16,14 +16,14 @@ exports.handler = async (event, context) => {
 		//@ts-ignore
 		let id = event.queryStringParameters.id;
 		let { data } = await axios.get(URL+"?id="+id, { headers });
-		console.log(data)
+		//console.log(data)
 		return {
 			statusCode: 200,
 			body: JSON.stringify(data),
 			headers:headersr
 		};
 	} catch (error) {
-		console.error(error);
+		//console.error(error);
 		return {
 			statusCode: 502,
 			body: JSON.stringify(error)

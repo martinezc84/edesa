@@ -51,7 +51,11 @@ const FUNCIONES = {
 	guardarsecuencia:URL_PREFIX+process.env.GATSBY_URL_GUARDARSECUENCIA,
 	guardarformula:URL_PREFIX+process.env.GATSBY_URL_GUARDARFORMULA,
 	comprables:URL_PREFIX+process.env.GATSBY_URL_COMPRABLES,
-	vendibles:URL_PREFIX+process.env.GATSBY_URL_VENDIBLES
+	vendibles:URL_PREFIX+process.env.GATSBY_URL_VENDIBLES,
+	agencias:URL_PREFIX+process.env.GATSBY_URL_AGENCIAS,
+	ordenesventa:URL_PREFIX+process.env.GATSBY_URL_ORDENESVENTA,
+	ordenventa:URL_PREFIX+process.env.GATSBY_URL_ORDENVENTA,
+	equipos:URL_PREFIX+process.env.GATSBY_URL_EQUIPOS
 	
 };
 
@@ -60,7 +64,9 @@ const ZAURU = {
 	empleados: ZAURU_URL + process.env.GATSBY_API_EMPLEADOS,
 	productosvendibles: ZAURU_URL + process.env.GATSBY_API_PRODUCTOSVENDIBLES,
 	productoscomprables: ZAURU_URL + process.env.GATSBY_API_PRODUCTOSCOMPRABLES,
-	
+	agencias: ZAURU_URL + process.env.GATSBY_API_AGENCIAS,
+	ordenesdeventa: ZAURU_URL + process.env.GATSBY_API_ORDENESDEVENTA,
+	ordendeventa: ZAURU_URL + process.env.GATSBY_API_ORDENDEVENTA,	
 };
 
 const API_URL = {
@@ -83,6 +89,7 @@ const APIP_URL = {
 	groupmenu: URL_APIP+process.env.GATSBY_APIP_GROUPMENU,
 	secuencias: URL_APIP+process.env.GATSBY_APIP_SECUENCIAS,
 	secuencia: URL_APIP+process.env.GATSBY_APIP_SECUENCIA,
+	equipos: URL_APIP+process.env.GATSBY_APIP_EQUIPOS,
 
 }
 

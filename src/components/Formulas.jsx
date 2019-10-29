@@ -4,19 +4,18 @@ import netlifyIdentity from 'netlify-identity-widget';
 import '../css/style.css';
 import Axios from 'axios';
 import { FUNCIONES} from '../utils/utils';
-import { Header, Table, Loader, Pagination, Button, Menu, Icon } from 'semantic-ui-react';
+import { Header, Table, Loader, Pagination,  Menu, Icon } from 'semantic-ui-react';
 import FilaFormula from './FilaFormula';
 import sortBy from 'lodash/sortBy';
 import { MostrarMensaje } from './Mensajes';
 import { isLoggedIn, logout , getUser} from "../utils/identity"
 import { navigate } from '@reach/router';
-
+import { Button} from 'react-bootstrap';
 
 
 export default class Secuencias extends Component {
 	state = {
-		Formulas: [],
-		
+		Formulas: [],		
 		paginaSeleccionada: 1,
 		cantidadPaginas: 0,
 		first: 20,
@@ -41,16 +40,20 @@ export default class Secuencias extends Component {
 	}
 
 	editar(id){
-		navigate('/app/formula/'+id+'/edit')
+		navigate('/app/formula/edit/'+id)
 	}
 
 	ver(id){
-		navigate('/app/formula/'+id+'/view')
+		navigate('/app/formula/view/'+id)
+	}
+
+	newf(){
+		navigate('/app/formula/new/0')
 	}
 
 	componentDidMount() {
 		
-		
+	
 		let user = getUser();
 		this.setState({
 			userdata: user
@@ -58,7 +61,7 @@ export default class Secuencias extends Component {
 
 	
 		
-			let { guardar,  seleccionadosVendidosID,  Formulas } = this.props;
+			let { guardar, load,  Formulas } = this.props;
 			if (Secuencias.length === 0) {
 				this.setState({
 					loading: true
@@ -80,12 +83,14 @@ export default class Secuencias extends Component {
 					.catch((error) => {
 						console.error(error);
 					});
-
+					this.setState({
+						load:load
+					});
 				
 			} else {
 				this.setState({
 					Formulas: Formulas,
-					seleccionadosId: seleccionadosVendidosID,
+					
 					cantidadPaginas: Math.floor(Formulas.length / this.state.first) + 1
 				});
 			}
@@ -128,25 +133,28 @@ export default class Secuencias extends Component {
 		let {
 			Formulas,
 			loading,
-		
-			paginaSeleccionada,
-			first,
-			cantidadPaginas,
-			offset,
 			column,
-			direction
+			direction,
+			
 		} = this.state;
+
+		let show = this.props.show
 
 		if (loading) {
 			return <Loader active inline="centered" />;
 		} else
 			return (
 				<React.Fragment>					
-					{Formulas.length == 0 ? (
+					{Formulas.length == 0? (<React.Fragment>
 						<Header as="h2">No hay Formulas</Header>
+						<Button type="button" variant="primary"  className="submitform" onClick={() => {
+							this.newf();
+						}}	>Nueva Formula</Button></React.Fragment>
 					) : (
 						<React.Fragment>
-							
+							<Button type="button" variant="primary"  className="submitform" onClick={() => {
+							this.newf();
+						}}	>Nueva Formula</Button>
 							<div className="pt-8">
 								<Header>Formulas</Header>
 								<div className="inline-block pr-4">
@@ -156,19 +164,7 @@ export default class Secuencias extends Component {
 								</div>
 
 								<div className="inline-block">
-									<Pagination
-										activePage={paginaSeleccionada}
-										boundaryRange={1}
-										//@ts-ignore
-										onPageChange={this.cambioDePagina}
-										siblingRange={4}
-										totalPages={cantidadPaginas}
-										ellipsisItem={true ? undefined : null}
-										firstItem={true ? undefined : null}
-										lastItem={true ? undefined : null}
-										prevItem={true ? undefined : null}
-										nextItem={true ? undefined : null}
-									/>
+									
 
 
 								</div>
@@ -193,7 +189,9 @@ export default class Secuencias extends Component {
 										</Table.Row>
 									</Table.Header>
 									<Table.Body>
-										{Formulas										
+										{
+											show==true ?
+											Formulas										
 											.map((t) => (
 												<FilaFormula
 													Formula={t} 
@@ -201,7 +199,7 @@ export default class Secuencias extends Component {
 													ver={this.ver}
 													
 												/>
-											))}
+											)):('')}
 									</Table.Body>
 								</Table>
 							</div>

@@ -3,6 +3,7 @@ import { navigate } from 'gatsby';
 import { Layout } from '../components/Layout';
 import gatsbyConfig from '../../gatsby-config';
 import '../css/style.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default class Index extends Component {
 	componentDidMount() {

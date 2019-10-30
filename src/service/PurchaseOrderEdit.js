@@ -1,7 +1,7 @@
 //@ts-check
 import axios from 'axios';
 import { headers, ZAURU } from '../utils/utils';
-const URL = ZAURU.ordenesdecompra;
+const URL = ZAURU.ordendecompra;
 
 const headersr = {
 	'Access-Control-Allow-Origin': '*',
@@ -18,10 +18,10 @@ exports.handler = async (event, context) => {
 		//@ts-ignore
 		
 		let url = `${URL}`;
-		let body = JSON.parse(event.body);
-	    const { valor}  = body;
-
-		let { data } = await axios.post(url, '{"draw":"1", "start":"0", "length":"100",  "search":{"value":"'+valor+'","regex":"false"},"order":{"0":{"column":3,"dir":"desc"}}}' ,{ headers });
+	
+		
+		let id = event.queryStringParameters.id;
+		let { data } = await axios.put(url+id+'.json' ,event.body,{ headers });
 		return {
 			statusCode: 200,
 			headers:headersr,

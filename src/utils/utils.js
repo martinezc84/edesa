@@ -55,7 +55,14 @@ const FUNCIONES = {
 	agencias:URL_PREFIX+process.env.GATSBY_URL_AGENCIAS,
 	ordenesventa:URL_PREFIX+process.env.GATSBY_URL_ORDENESVENTA,
 	ordenventa:URL_PREFIX+process.env.GATSBY_URL_ORDENVENTA,
-	equipos:URL_PREFIX+process.env.GATSBY_URL_EQUIPOS
+	equipos:URL_PREFIX+process.env.GATSBY_URL_EQUIPOS,
+	reservaciones:URL_PREFIX+process.env.GATSBY_URL_RESERVACIONES,
+	items:URL_PREFIX+process.env.GATSBY_URL_ITEMS,
+	PurchaseOrders:URL_PREFIX+process.env.GATSBY_URL_PURCHASES,
+	PurchaseOrder:URL_PREFIX+process.env.GATSBY_URL_PURCHASE,
+	crearitem:URL_PREFIX+process.env.GATSBY_URL_NEWITEM,
+	recibir:URL_PREFIX+process.env.GATSBY_URL_RECEIVEPURCHASE,
+	guardaritem:URL_PREFIX+process.env.GATSBY_URL_GUARDARITEM
 	
 };
 
@@ -66,7 +73,13 @@ const ZAURU = {
 	productoscomprables: ZAURU_URL + process.env.GATSBY_API_PRODUCTOSCOMPRABLES,
 	agencias: ZAURU_URL + process.env.GATSBY_API_AGENCIAS,
 	ordenesdeventa: ZAURU_URL + process.env.GATSBY_API_ORDENESDEVENTA,
-	ordendeventa: ZAURU_URL + process.env.GATSBY_API_ORDENDEVENTA,	
+	ordendeventa: ZAURU_URL + process.env.GATSBY_API_ORDENDEVENTA,
+	reservaciones: ZAURU_URL + process.env.GATSBY_API_RESERVACIONES,
+	items: ZAURU_URL + process.env.GATSBY_API_ITEMS,
+	ordenesdecompra:ZAURU_URL + process.env.GATSBY_API_COMPRAS,
+	ordendecompra:ZAURU_URL + process.env.GATSBY_API_COMPRA,
+	crearitem:ZAURU_URL+process.env.GATSBY_API_ITEM,
+	
 };
 
 const API_URL = {
@@ -90,6 +103,7 @@ const APIP_URL = {
 	secuencias: URL_APIP+process.env.GATSBY_APIP_SECUENCIAS,
 	secuencia: URL_APIP+process.env.GATSBY_APIP_SECUENCIA,
 	equipos: URL_APIP+process.env.GATSBY_APIP_EQUIPOS,
+	guardaritem:URL_APIP+process.env.GATSBY_APIP_GUARDARITEM
 
 }
 

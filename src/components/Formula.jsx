@@ -12,6 +12,7 @@ import FilaPt from './FilaPt';
 import { isLoggedIn, logout , getUser} from "../utils/identity"
 import { navigate } from 'gatsby';
 import { Button, FormControl, Container, Row, Col} from 'react-bootstrap';
+import FilaDesperdicio from './FilaDesperdicio';
 
 const options = [
 	
@@ -33,6 +34,7 @@ export default class Formula extends Component {
 	state = {
 		vendibles:[],
 		insumos:[],
+		desperdicios:[],
 		pts:[],
 		formula:{},
 		tipo_insumo: "",
@@ -47,6 +49,7 @@ export default class Formula extends Component {
 		options:options,
 		unico:false,
 		insumoscont:1,
+		despercont:1,
 		ptcont:1,
 		buttonactive:false,
 		itemst:[],
@@ -109,6 +112,7 @@ export default class Formula extends Component {
 					let to_agency=0
 					
 					let pts = data.pt
+					let desperdicios = data.desperdicios
 					formula.genera_unico ==1 ? unico =true: unico=false;
 					formula.rv ==1 ? rv =true: rv=false;
 					formula.gd ==1 ? gd =true: gd=false;
@@ -127,6 +131,7 @@ export default class Formula extends Component {
 						formula:formula,
 						insumos:insumos,
 						pts:pts,
+						desperdicios:desperdicios,
 						to_agency:to_agency,
 						from_agency:from_agency,
 						id:id
@@ -160,6 +165,7 @@ export default class Formula extends Component {
 				action:action,
 				guardarcantidad:this.guardarcantidad,
 				guardarcantidadpt:this.guardarcantidadpt,
+				guardarcantidadflex:this.guardarcantidadflex,
 				selectAg:this.selecAg
 				
 			});
@@ -181,6 +187,25 @@ export default class Formula extends Component {
 			})
 	};
 
+	
+	SelectItemFlex = (e, item) => {
+		let id = item.id;
+		id = id.toString().split("_");
+		
+			let desperdicios = this.state.desperdicios
+			desperdicios.map((desperdicio, i)=> (
+				//console.log(invoice)
+				desperdicio.id == id[1] ? desperdicio.item_id = item.value : false		
+	
+			));
+			this.setState(
+				{
+					desperdicios:desperdicios
+				})
+		
+		
+	};
+	
 	SelectItem = (e, item) => {
 		let id = item.id;
 		id = id.toString().split("_");
@@ -222,6 +247,33 @@ export default class Formula extends Component {
 			{
                 unico:un,
                
+			})
+	};
+
+	esflexible = (e, item) => {
+		
+		let desperdicios = [];
+		desperdicios = this.state.desperdicios
+		console.log(item)
+		let id = item.id;
+		id = id.toString().split("_");	
+		//console.log(id)	
+		if (item.checked)
+		this.state.desperdicios.map((desperdicio, i)=> (
+			//console.log(invoice)
+			desperdicio.id == id[1] ? desperdicio.flexible = true : false		
+
+		));
+		else
+		desperdicios.map((desperdicio, i)=> (
+			//console.log(invoice)
+			desperdicio.id == id[1] ? desperdicio.flexible = false : false		
+
+		));
+		console.log(desperdicios)
+		this.setState(
+			{
+				desperdicios:desperdicios
 			})
 	};
 
@@ -269,8 +321,23 @@ export default class Formula extends Component {
 		
 	};
 
+	guardarcantidadflex = (id, cantidad) => {
+		let desperdicios = this.state.desperdicios
+		desperdicios.map((desperdicio, i)=> (
+		
+			desperdicio.id == id ? desperdicio.cantidad = cantidad : false		
+
+		));		
+		//console.log(insumos)
+		this.setState(
+			{
+				desperdicios:desperdicios
+			})
+		
+	};
+
 	buscariitem = (id, items) => {
-		console.log(items)
+		//console.log(items)
 		let name = null
 		items.map((item, i)=> (
 		
@@ -390,6 +457,7 @@ export default class Formula extends Component {
 				formula.gd = this.state.gd==true ? "1" : "0"
 				formula.insumos = this.state.insumos
 				formula.pt= this.state.pts
+				formula.desperdicios= this.state.desperdicios
 				formula.store_id=this.state.userdata.store,
 				formula.activa = 1
 				this.props.action=="edit" ? formula.id=this.props.id: null
@@ -407,7 +475,25 @@ export default class Formula extends Component {
 		
 						guardar = linea.item_id>0 ? true : false
 			
-					));	
+					));
+					
+					formula.desperdicios.map((linea, i)=> (
+		
+						guardar = linea.item_id>0 ? true : false
+			
+					));
+
+					formula.desperdicios.map((linea, i)=> (
+		
+						guardar = linea.cantidad>0 ? true : false
+			
+					));
+
+					formula.desperdicios.map((linea, i)=> (
+		
+						linea.flexible = linea.flexible ? 1 : 0
+			
+					));
 					let poststr = JSON.stringify(formula)
 				console.log(poststr)
 				let data;
@@ -532,6 +618,23 @@ export default class Formula extends Component {
 		);		
 			
 		}
+
+		agregar_desperdicio = () =>{
+			let id =this.state.despercont;
+			let desperdicio={id:id,cantidad:1,item_id:0,flexible:false}
+			id++;
+			let desperdicios = [...this.state.desperdicios, desperdicio]
+
+		//console.log(seleccionados)
+		this.setState(
+			{
+				desperdicios:desperdicios,
+				despercont:id
+			}
+			
+		);		
+			
+		}
         
         handleInputChange = event => {
             const target = event.target
@@ -563,12 +666,13 @@ export default class Formula extends Component {
 			insumos,
 			pts,
 			guardarcantidad,
-			guardarcantidadpt,		
+			guardarcantidadpt,
+			guardarcantidadflex,		
 			from_agency,
 			to_agency,
 			selectAg,
 			show,
-            nombre,tipo_insumo,genera_unico,rv,gd, options,  unico, items, tipoinsumo, esunico,gdf, rvf, action
+            nombre,tipo_insumo,genera_unico,rv,gd, options,  unico, items, tipoinsumo, esunico,gdf, rvf, action, desperdicios
 			
 		} = this.state;
 
@@ -690,7 +794,53 @@ export default class Formula extends Component {
 					))}
 			</Table.Body>
 			</Table>
-						
+			{(gd) ? (<React.Fragment>
+			<p >DESPERDICIO</p>
+			<Table sortable celled>
+			<Table.Header>
+			<Table.Row>
+							
+				<Table.HeaderCell
+					
+				>
+					ITEM
+				</Table.HeaderCell>
+				<Table.HeaderCell
+					
+				>
+					FLEXIBLE
+				</Table.HeaderCell>
+				
+				<Table.HeaderCell
+					
+				>
+					CANTIDAD
+				</Table.HeaderCell>
+				
+				</Table.Row>
+			</Table.Header>
+			<Table.Body>
+				{
+					desperdicios
+					.map((t) => (
+						<FilaDesperdicio
+							items={itemst}
+							selectitem={this.SelectItemFlex}
+							id={t.id}
+							flexible={t.flexible}
+							item_id={t.item_id}
+							esflexible={this.esflexible}
+							guardarcantidad={guardarcantidadflex}
+							cantidad={t.cantidad}
+							view={true}
+							buscaritem={this.buscariitem}
+						/>
+					))}
+			</Table.Body>
+			</Table>
+			</React.Fragment>
+			):('')
+			}			
               </div>
 			)
 		else if (action=='edit')
@@ -873,6 +1023,52 @@ export default class Formula extends Component {
 					<Table.Cell></Table.Cell></Table.Row>)}
 			</Table.Body>
 			</Table>
+
+			{(gd) ? (<React.Fragment>
+			<p >DESPERDICIO</p>
+			<Table sortable celled>
+			<Table.Header>
+			<Table.Row>
+							
+				<Table.HeaderCell
+					
+				>
+					ITEM
+				</Table.HeaderCell>
+				<Table.HeaderCell
+					
+				>
+					FLEXIBLE
+				</Table.HeaderCell>
+				
+				<Table.HeaderCell
+					
+				>
+					CANTIDAD
+				</Table.HeaderCell>
+				
+				</Table.Row>
+			</Table.Header>
+			<Table.Body>
+				{
+					desperdicios
+					.map((t) => (
+						<FilaDesperdicio
+							items={itemst}
+							selectitem={this.SelectItemFlex}
+							id={t.id}
+							flexible={t.flexible}
+							item_id={t.item_id}
+							esflexible={this.esflexible}
+							guardarcantidad={guardarcantidadflex}
+							cantidad={t.cantidad}
+						/>
+					))}
+			</Table.Body>
+			</Table>
+			</React.Fragment>
+			):('')
+			}
 			<button type="submit" className="submitform">Guardar</button>
 			</form>
 			<MostrarMensaje titulo={'Sus Datos fueron editados con exito'} mensajes={'Guardar'}  visible={this.state.visible} onConfirm={this.onConfirm} />
@@ -970,7 +1166,10 @@ export default class Formula extends Component {
 										this.agregar_insumo();
 									}}	>Agregar Insumo</Button></Col><Col><Button type="button" variant="primary"  className="submitform" onClick={() => {
 										this.agregar_pt();
-									}}	>Agregar Producto Terminado</Button></Col></Row></React.Fragment>):('')}			
+									}}	>Agregar Producto Terminado</Button></Col></Row></React.Fragment>):('')}
+			{gd ? (<Row><Col><Button type="button" variant="primary"  className="submitform" onClick={() => {
+										this.agregar_desperdicio();
+									}}	>Agregar Desperdicio</Button></Col></Row>):('')}		
 			
 		  
 		  </Container>	
@@ -1053,6 +1252,52 @@ export default class Formula extends Component {
 					))}
 			</Table.Body>
 			</Table>
+
+			{(gd) ? (<React.Fragment>
+			<p >DESPERDICIO</p>
+			<Table sortable celled>
+			<Table.Header>
+			<Table.Row>
+							
+				<Table.HeaderCell
+					
+				>
+					ITEM
+				</Table.HeaderCell>
+				<Table.HeaderCell
+					
+				>
+					FLEXIBLE
+				</Table.HeaderCell>
+				
+				<Table.HeaderCell
+					
+				>
+					CANTIDAD
+				</Table.HeaderCell>
+				
+				</Table.Row>
+			</Table.Header>
+			<Table.Body>
+				{
+					desperdicios
+					.map((t) => (
+						<FilaDesperdicio
+							items={itemst}
+							selectitem={this.SelectItemFlex}
+							id={t.id}
+							flexible={t.flexible}
+							item_id={t.item_id}
+							esflexible={this.esflexible}
+							guardarcantidad={guardarcantidadflex}
+							cantidad={t.cantidad}
+						/>
+					))}
+			</Table.Body>
+			</Table>
+			</React.Fragment>
+			):('')
+			}
 			<button type="submit" className="submitform">Guardar</button>
 			</form>
 			<MostrarMensaje titulo={'Sus Datos fueron guardados con exito'} mensajes={'Guardar'}  visible={this.state.visible} onConfirm={this.onConfirm} />

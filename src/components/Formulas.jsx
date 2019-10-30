@@ -69,7 +69,7 @@ export default class Secuencias extends Component {
                 
 				Axios.get(FUNCIONES.formulas+'?id=3')
 					.then(({ data }) => {
-						console.log(data)
+						//console.log(data)
 						
 						let Formulas = data;						
 
@@ -188,6 +188,7 @@ export default class Secuencias extends Component {
 									
 										</Table.Row>
 									</Table.Header>
+									{Formulas.length>0 ? 
 									<Table.Body>
 										{
 											show==true ?
@@ -200,7 +201,7 @@ export default class Secuencias extends Component {
 													
 												/>
 											)):('')}
-									</Table.Body>
+									</Table.Body> : ''}
 								</Table>
 							</div>
 						</React.Fragment>

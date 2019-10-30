@@ -10,6 +10,8 @@ import Formulas from '../components/Formulas';
 import Formula from '../components/Formula';
 import Config from '../components/Config'
 import OrdenesP from '../components/OrdenesP';
+import OrdenesCompra from '../components/PurchaseOrders';
+import OrdenCompra from '../components/PurchaseDetail';
 import Login from '../components/Login';
 import NuevaOrden from '../components/NuevaOrden';
 import { Router } from "@reach/router"
@@ -364,6 +366,14 @@ export default class App extends Component {
 			empleados:this.state.empleados
 			
 		};
+
+		let propsPOD = {
+			guardarmem:this.guardarmem,
+			getmem:this.getmem,
+			comprables:this.state.comprables,
+			agencias:this.state.agencias,
+			
+		};
 		return (
 			
 			<Layout {...stepsProps}>
@@ -377,6 +387,8 @@ export default class App extends Component {
 			<RutaPrivada  path="/app/ordenesventa" component={SaleOrders} guardar={this.guardar} {...propsov}  ></RutaPrivada>
 			<RutaPrivada  path="/app/nuevaorden/:id" component={NuevaOrden} guardar={this.guardar} {...propson}  ></RutaPrivada>
 			<RutaPrivada  path="/app/ordenesp" component={OrdenesP} guardar={this.guardar} {...propsOP}  ></RutaPrivada>
+			<RutaPrivada  path="/app/ordenescompra" component={OrdenesCompra} guardar={this.guardar} {...propsOP}  ></RutaPrivada>
+			<RutaPrivada  path="/app/ordencompra/:action/:id" component={OrdenCompra} guardar={this.guardar} {...propsPOD}  ></RutaPrivada>
 				<Login path='/app/login/:error' />
 				
 				

@@ -10,7 +10,7 @@
 	# Locations de las netlify functions (Backend) 
 	# Son los mismos nombres de los archivos que hay en la carpeta /src/service
   
-	GATSBY_URL_EMPLEADOS='/.netlify/functions/empleados'
+GATSBY_URL_EMPLEADOS='/.netlify/functions/empleados'
 	GATSBY_URL_FUNCIONES='/.netlify/functions/Funciones'
 	GATSBY_URL_FIRMA='/.netlify/functions/GuardarImagen'
 	GATSBY_URL_PHOTO='/.netlify/functions/GuardarPhoto'
@@ -34,9 +34,16 @@
 	GATSBY_URL_ORDENESVENTA='/.netlify/functions/SaleOrders'
 	GATSBY_URL_ORDENVENTA='/.netlify/functions/OrdenVenta'
 	GATSBY_URL_EQUIPOS='/.netlify/functions/Equipos'
+	GATSBY_URL_RESERVACIONES='/.netlify/functions/Reservaciones'
+	GATSBY_URL_ITEMS='/.netlify/functions/Items'
+	GATSBY_URL_PURCHASES='/.netlify/functions/PurchaseOrders'
+	GATSBY_URL_PURCHASE='/.netlify/functions/PurchaseOrder'
+	GATSBY_URL_RECEIVEPURCHASE='/.netlify/functions/ReceivePurchase'
+	GATSBY_URL_NEWITEM='/.netlify/functions/CrearItem'
+
 
 	# Dominio del sitio de las APIs (Backend)
-	GATSBY_ZAURU_URL='https://app.zauru.com'
+	GATSBY_ZAURU_URL='https://zauru.herokuapp.com'
 	GATSBY_URL_API = 'https://dcgse.com/calendario_api/apical'
 	GATSBY_URL_APIP = 'https://dcgse.com/calendario_api/apiprod'
 	GATSBY_URL_IMAGES = 'https://dcgse.com/calendario_api/uploads'
@@ -56,7 +63,7 @@
 	GATSBY_APIP_EDITARSECUENCIA = '/editarsecuencia'
 	GATSBY_APIP_GROUPMENU = '/groupmenu'
 	GATSBY_APIP_EQUIPOS = '/equipos'
-	
+	GATSBY_APIP_GUARDARITEM = '/guardar_item'
 	#API DE ZAURU
 
 	GATSBY_API_EMPLEADOS='/settings/employees/'	
@@ -65,6 +72,11 @@
 	GATSBY_API_AGENCIAS = '/settings/agencies.json'
 	GATSBY_API_ORDENESDEVENTA='/sales/orders/datatables.json'
 	GATSBY_API_ORDENDEVENTA='/sales/orders/'
+	GATSBY_API_RESERVACIONES='/inventories/bookings.json'
+	GATSBY_API_ITEMS='/settings/items.json'
+	GATSBY_API_COMPRAS='/purchases/purchase_orders/datatables.json'
+	GATSBY_API_COMPRA='/purchases/purchase_orders/'
+	GATSBY_API_ITEM='/settings/items.json'
    
 
 	# Email y token de autenticación para utilizar las APIs 

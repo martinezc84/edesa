@@ -1,17 +1,19 @@
 //@ts-check
 import React, { Component } from 'react';
+import netlifyIdentity from 'netlify-identity-widget';
 import '../css/style.css';
 import Axios from 'axios';
 import { FUNCIONES } from '../utils/utils';
 import { Header, Table, Loader, Pagination, Button, Menu, Icon } from 'semantic-ui-react';
-import FilaOrden from './FilaOrden';
+import FilaCompra from './FilaCompra';
 import sortBy from 'lodash/sortBy';
+import { MostrarMensaje } from './Mensajes';
 import { isLoggedIn, logout , getUser} from "../utils/identity"
 import { navigate } from '@reach/router';
 
 
 
-export default class OrdenesP extends Component {
+export default class UnpaidInvoices extends Component {
 	state = {
 		Invoices: [],
 		seleccionados: [],
@@ -31,8 +33,7 @@ export default class OrdenesP extends Component {
 		fechas:[],
 		date: new Date(),
 		visible:false,
-		userdata:null,
-		Ordenes:[]
+		userdata:null
 	
 	};
 
@@ -42,8 +43,6 @@ export default class OrdenesP extends Component {
 		});
 	}
 
-
-	
 
 
 	// Método para seleccionar o des seleccionar checkbox de turnos
@@ -85,83 +84,34 @@ export default class OrdenesP extends Component {
 		return textresp;
 	}
 
-	trataEmpleados = (empleados) => {
-		return empleados.map((t) => ({
-			key: t.id,
-			value: t.id,
-			text: t.name,
-			todo: t
-		}));
-	};
-
-	buscariitem = (id, items) => {
-		console.log(items)
-		let name = null
-		items.map((item, i)=> (
-		
-			item.key == id  ? name = item.text :  false	
-
-		));		
-		
-		return name
-	};
 	
 
-	get_id(text){
-		const resp = text.split('-')
-		return resp[2];
-	}
-
-	get_empleado(id){
-		for (var i=0; i<this.state.empleados.length; i++) {
-			
-            if (this.state.empleados[i].key==id){
-				//console.log(this.state.empleados[i])
-				return this.state.empleados[i].text;
+	fechain(id){
+		for (var i=0; i<this.state.fechas.length; i++) {
+			//console.log(this.state.fechas[i])
+            if (this.state.fechas[i].id==id){
+				return true;
 			}
             //a b c
 		}
 		
-		return null;
+		return false;
 	} 
 
-	async empleados(){
-		if(this.props.getmem('empleados')===undefined){
-			
-				try {
-					
-					let res = await Axios.get(FUNCIONES.empleados);
-					let empleados = res.data
-					empleados = this.trataEmpleados(empleados)
-					//console.log(res.data)
-					this.props.guardarmem('empleados', empleados);
-					this.props.guardar('empleados', empleados);
-					this.setState({
-						empleados: empleados,
-						
-					});
-
-					//cargar formula
-					return true
-					
-				
-				}catch(error) {
-					console.error(error);
-					return false
-				};
-			}else{
-				//console.log(this.props.getmem('empleados'))
-				this.setState({
-					empleados:this.props.getmem('empleados')
-					
-				});
-				return true
-			}
+	get_id(text){
+		const resp = text.split('-')
+		return resp[3];
 	}
 
-	async componentDidMount() {
+	ver(id){
+		navigate('/app/ordencompra/edit/'+id)
+	}
+
+
+
+	componentDidMount() {
 		
-		let { tipo } = this.props;
+		
 
 		let { buscar } = this.state;
 
@@ -172,42 +122,90 @@ export default class OrdenesP extends Component {
 
 		
 		
-			let { guardar, valores,   empleados } = this.props;
+			let { guardar, valores } = this.props;
 			if (valores.length === 0) {
 				this.setState({
 					loading: true
 				});
-				let res = await this.empleados();
-
-                console.log(FUNCIONES.ordenes)
-				Axios.get(FUNCIONES.ordenes+"?id=3&eid=&lines=10&inicio=0&estado=espera")
+                
+				Axios.post(`${FUNCIONES.PurchaseOrders}`,'{"valor":"'+buscar+'"}')
 					.then(({ data }) => {
-						
 						//console.log(data)
-						let Ordenes = data;			
-						
-						Ordenes.map((orden, i)=> (
-		
-							orden.empleado = this.get_empleado(orden.employee_id)	
+						let Invoices2=[]
+						let Invoices = data.data;
+						//console.log(Invoices)
+						//Invoices = sortBy(Invoices, [ 'id' ]);
+						Invoices.map((invoice, i)=> (
+							//console.log(invoice)
+						 invoice.r2.includes('Recibir') ? Invoices2.push(invoice) : null
+							
 				
-						));	
+						));
 
-						console.log(Ordenes)
-						guardar('Ordenes', Ordenes);
+						Invoices = Invoices2;
+						
+						Invoices.map((invoice, i)=> (
+							//console.log(invoice)
+						 invoice.id =	this.get_id(invoice.DT_RowId)
+							
+				
+						));
+
+
+						Invoices.map((invoice, i)=> (
+							//console.log(invoice)
+							invoice.z != '' ? invoice.z = this.quitarlink(invoice.z) :''
+							
+				
+						));
+
+						Invoices.map((invoice, i)=> (
+							//console.log(invoice)
+							invoice.i != '' ? invoice.i = this.quitarlink(invoice.i) :''
+							
+				
+						));
+
+						Invoices.map((invoice, i)=> (
+							//console.log(invoice)
+							invoice.ref != '' ? invoice.ref = this.quitarlink(invoice.ref) :''
+							
+				
+						));
+
+						Invoices.map((invoice, i)=> (
+							//console.log(invoice)
+							invoice.ven != '' ? invoice.venid = this.get_cliente(invoice.ven) :invoice.venid = 0
+							//console.log(this.get_cliente(invoice.ven))
+							
+						));
+
+						Invoices.map((invoice, i)=> (
+							//console.log(invoice)
+							invoice.ven != '' ? invoice.ven = this.quitarlink(invoice.ven) :''
+							
+				
+						));
+
+					
+							//console.log(Invoices);
+
+						guardar('Purchases', Invoices);
 						this.setState({
-							Ordenes: Ordenes,
-							loading: false,							
-							cantidadPaginas: Math.floor(Ordenes.length / this.state.first) + 1
+							Invoices: Invoices,
+							loading: false,
+							
+							cantidadPaginas: Math.floor(Invoices / this.state.first) + 1
 						});
 					})
 					.catch((error) => {
 						console.error(error);
 					});
 
-					
+				
 			} else {
 				this.setState({
-					empleados:empleados,
+				
 					Invoices: valores,
 					
 					cantidadPaginas: Math.floor(valores.length / this.state.first) + 1
@@ -223,7 +221,7 @@ export default class OrdenesP extends Component {
 		this.setState({ paginaSeleccionada: activePage, offset, first });
 	};
 
-
+	
 
 	handleSort = (clickedColumn) => () => {
 		const { column, Invoices, direction } = this.state;
@@ -259,76 +257,71 @@ export default class OrdenesP extends Component {
 			buscar:event.target.value
 		});
 		
+			
+			Axios.post(`${FUNCIONES.PurchaseOrders}`,'{"valor":"'+event.target.value+'"}')
+				.then(({ data }) => {
+					//console.log(data)
+					
+					let Invoices = data.data;
+					//console.log(Invoices)
+					//Invoices = sortBy(Invoices, [ 'id' ]);
+					Invoices.map((invoice, i)=> (
+						//console.log(invoice)
+					 invoice.id =	this.get_id(invoice.DT_RowId)
+						
+			
+					));
+
+					Invoices.map((invoice, i)=> (
+						//console.log(invoice)
+						invoice.z != '' ? invoice.z = this.quitarlink(invoice.z) :''
+						
+			
+					));
+
+					Invoices.map((invoice, i)=> (
+						//console.log(invoice)
+						invoice.i != '' ? invoice.i = this.quitarlink(invoice.i) :''
+						
+			
+					));
+
+					Invoices.map((invoice, i)=> (
+						//console.log(invoice)
+						invoice.ref != '' ? invoice.ref = this.quitarlink(invoice.ref) :''
+						
+			
+					));
+
+					Invoices.map((invoice, i)=> (
+						//console.log(invoice)
+						invoice.ven != '' ? invoice.ven = this.quitarlink(invoice.ven) :''
+						
+			
+					));
+
+					guardar('Purchases', Invoices);
+					this.setState({
+						Invoices: Invoices,
+						loading: false,
+						cantidadPaginas: Math.floor(Invoices.length / this.state.first) + 1,
+						
+					});
+				})
+				.catch((error) => {
+					console.error(error);
+				});
 		
 	  }
 
-	  generar_mandados = async ({  vendedoresseleccionados, vendedoresseleccionadosid, seleccionadosId,seleccionados,  }) => {
-		await this.setStateAsync({ operando: true });
-		this.setState({
-			loading: true
-		});
-	
-		// Ciclo de llamadas
-		for (let seleccionado of seleccionados) {
-			try {
-				//console.log(seleccionado.id)
-				let mensajero = []
-				mensajero = this.state.vendedoresseleccionados.filter((s) => s.id == seleccionado.id);
-				let fecha = this.state.fechas.filter((s) => s.id == seleccionado.id);
-
-				if(fecha.length==0){
-					const data = {dte:this.state.date,id:seleccionado.id}
-					fecha[0] = data
-				}
-				
-				//console.log(mensajero)
-				// @ts-ignore
-				let nombre  = this.get_empleado(mensajero[0].value)
-				//console.log(nombre)
-				//console.log(fecha)
-				let fechastr = fecha[0].dte.toLocaleDateString('en-US');
-				let horastr = fecha[0].dte.getHours();
-				let minutes = fecha[0].dte.getMinutes();
-				//console.log(fechastr)
-				//console.log(minutes)
-				fecha = fechastr.split('/');
-				fechastr = fecha[2]+'/'+fecha[0]+'/'+fecha[1]
-				const posttext = '{"fecha": "'+fechastr+'", "hora": "'+horastr+':'+minutes+':00",  "cliente":"'+seleccionado.ven+'","payee_id":"'+seleccionado.venid+'"   ,"descripcion":"Recolecta","tipo":"5","user":"'+this.state.userdata.username+'", "employee_id":"'+mensajero[0].value+'","store_id":"'+this.state.userdata.store+'","encargado":"'+nombre.text+'", "active":"1", "zauru_id":"'+seleccionado.id+'"}'
-				console.log(posttext)
-
-				const data = await Axios.post(FUNCIONES.guardarsecuencia, posttext);
-				console.log(data)
-			} catch (error) {
-				console.error({ error });
-				
-			} finally {
-				this.setState({
-					loading: false,
-					visible:true
-				});
-			
-			
-			}
-		}
-		
-		};
-		
-		onConfirm = ()=>{
-			this.setState({				
-				visible:false
-			});
-			navigate('/app/manados/')
-		}
-
-		 async generar  (id) {
-			let res = await Axios.get(FUNCIONES.orden+"?id="+id)
-			console.log(res.data)
-		}
-
 	render() {
 		let {
-			Ordenes,
-			loading,		
+			Invoices,
+			loading,
+			seleccionadosId,
+			seleccionados,
+			vendedoresseleccionadosId,
+			vendedoresseleccionados,
 			paginaSeleccionada,
 			first,
 			cantidadPaginas,
@@ -346,8 +339,8 @@ export default class OrdenesP extends Component {
           Buscar :
           <input type="text" value={this.state.buscar} onChange={this.handleChange} />
         </label>
-					{Ordenes.length === 0 ? (
-						<Header as="h2">No hay Ordenes de producción pendientes</Header>
+					{Invoices.length === 0 ? (
+						<Header as="h2">No hay turnos vendidos para ese tipo</Header>
 					) : (
 						<React.Fragment>
 							
@@ -355,7 +348,7 @@ export default class OrdenesP extends Component {
 								<Header>Facturas Vencidas</Header>
 								<div className="inline-block pr-4">
 									<Menu compact>
-										<Menu.Item active>Cantidad de Ordenes: {Ordenes.length}</Menu.Item>
+										<Menu.Item active>Cantidad de facturas: {Invoices.length}</Menu.Item>
 									</Menu>
 								</div>
 
@@ -380,53 +373,56 @@ export default class OrdenesP extends Component {
 								<Table sortable celled>
 									<Table.Header>
 									<Table.Row>
-																				
+										
+										
 										<Table.HeaderCell
-											sorted={column === 'fecha' ? direction : null}
-											onClick={this.handleSort('fecha')}
+											sorted={column === 'i' ? direction : null}
+											onClick={this.handleSort('i')}
 										>
-											Fecha
-										</Table.HeaderCell>
-										<Table.HeaderCell
-											sorted={column === 'fechahora_entrega' ? direction : null}
-											onClick={this.handleSort('fechahora_entrega')}
-										>
-											Entrega
-										</Table.HeaderCell>
-										<Table.HeaderCell
-											sorted={column === 'descripcion' ? direction : null}
-											onClick={this.handleSort('descripcion')}
-										>
-											Descripción
+											ORDEN
 										</Table.HeaderCell>
 										
 										<Table.HeaderCell
-											sorted={column === 'empleado' ? direction : null}
-											onClick={this.handleSort('empleado')}
+											sorted={column === 'ref' ? direction : null}
+											onClick={this.handleSort('ref')}
 										>
-											Encargado
+											REFERENCIA
 										</Table.HeaderCell>
 										<Table.HeaderCell
-											sorted={column === 'equipo' ? direction : null}
-											onClick={this.handleSort('equipo')}
+											sorted={column === 'dte' ? direction : null}
+											onClick={this.handleSort('dte')}
 										>
-											Equipo
+											FECHA
 										</Table.HeaderCell>
+										<Table.HeaderCell
+											sorted={column === 'o' ? direction : null}
+											onClick={this.handleSort('o')}
+										>
+											ORIGEN
+										</Table.HeaderCell>
+										<Table.HeaderCell
+											sorted={column === 'ven' ? direction : null}
+											onClick={this.handleSort('ven')}
+										>
+											PROVEEDOR
+										</Table.HeaderCell>
+										<Table.HeaderCell>
+											
 										
+										</Table.HeaderCell>
 										
 									
 									
 										</Table.Row>
 									</Table.Header>
 									<Table.Body>
-										{Ordenes
+										{Invoices
 											.slice(offset, first)
 											.map((t) => (
-												<FilaOrden
-													
-													orden={t}
-													generar={this.generar}
-													
+												<FilaCompra
+													key={t.id}
+													turno={t}
+													ver = {this.ver}
 												/>
 											))}
 									</Table.Body>

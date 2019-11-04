@@ -5,7 +5,7 @@
 
 [build.environment]
   # Dominio del sitio de producción (Frontend)
-	GATSBY_URL= 'http://localhost:9000'
+	#GATSBY_URL= 'http://localhost:9000'
 	
 	# Locations de las netlify functions (Backend) 
 	# Son los mismos nombres de los archivos que hay en la carpeta /src/service
@@ -83,8 +83,8 @@ GATSBY_URL_EMPLEADOS='/.netlify/functions/empleados'
         #GATSBY_EMAIL='api@cyclo.com.gt'
         #GATSBY_TOKEN='Zs-HsGfE1xHQRtqPMRJ9'
 		#GATSBY_API_KEY='Zs-HsGfE1xHQRtqPMRJ9'
-		GATSBY_EMAIL='api@discogua.com.gt'
-        GATSBY_TOKEN='uuvDJ6vscs1ewsxbRVHU'
-		GATSBY_API_KEY='uuvDJ6vscs1ewsxbRVHU'
+		#GATSBY_EMAIL='api@discogua.com.gt'
+        #GATSBY_TOKEN='uuvDJ6vscs1ewsxbRVHU'
+		#GATSBY_API_KEY='uuvDJ6vscs1ewsxbRVHU'
 	# Variable de entorno para ver los botones de debug. 
 	GATSBY_MODO='PROD' # PROD / DEBUG 

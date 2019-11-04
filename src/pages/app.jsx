@@ -11,6 +11,7 @@ import Formula from '../components/Formula';
 import Config from '../components/Config'
 import OrdenesP from '../components/OrdenesP';
 import Iniciar from '../components/Iniciar';
+import Terminar from '../components/cerrar';
 import OrdenesCompra from '../components/PurchaseOrders';
 import OrdenCompra from '../components/PurchaseDetail';
 import Transfer from '../components/Transfer';
@@ -408,6 +409,7 @@ export default class App extends Component {
 			<RutaPrivada  path="/app/ordencompra/:action/:id" component={OrdenCompra} guardar={this.guardar} {...propsPOD}  ></RutaPrivada>
 			<RutaPrivada  path="/app/transferencias/:action/:id" component={Transfer} guardar={this.guardar} {...propstrans}  ></RutaPrivada>
 			<RutaPrivada  path="/app/orden/iniciar/:id" component={Iniciar} guardar={this.guardar} {...propsIni}  ></RutaPrivada>
+			<RutaPrivada  path="/app/orden/terminar/:id" component={Terminar} guardar={this.guardar} {...propsIni}  ></RutaPrivada>
 				<Login path='/app/login/:error' />
 				
 				

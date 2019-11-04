@@ -4,15 +4,12 @@ import '../css/style.css';
 import Axios from 'axios';
 import { FUNCIONES } from '../utils/utils';
 import { Loader, Table, Dropdown, TextArea } from 'semantic-ui-react';
-import sortBy from 'lodash/sortBy';
 import { MostrarMensaje } from './Mensajes';
 import { Msjerror } from './Mensajeserror';
-import Inputdate from './Inputdate';
 import FilaDetalle from './FilaDetalleCompra';
 import { isLoggedIn, logout , getUser} from "../utils/identity"
 import { navigate } from 'gatsby';
-import { Button, FormControl, Container, Row, Col} from 'react-bootstrap';
-import {DateInput} from 'semantic-ui-calendar-react';
+import { Button,  Row, Col} from 'react-bootstrap';
 
 
 
@@ -132,7 +129,19 @@ export default class PurchaseDetail extends Component {
 					let orden = data
 					detalle = []
 					for(let linea in detalleinf){
-						linedet = {id:detalleinf[linea].id, name:detalleinf[linea].item.name, reference:detalleinf[linea].reference, item_id:detalleinf[linea].item_id, item_cantidad:detalleinf[linea].booked_quantity,cantidad:detalleinf[linea].booked_quantity, unico:false, series:[],item_category_id:detalleinf[linea].item.item_category_id,product_type:detalleinf[linea].item.product_type,measurement_unit:detalleinf[linea].item.measurement_unit,payee_id:detalleinf[linea].item.payee_id}
+						linedet = {id:detalleinf[linea].id, 
+							name:detalleinf[linea].item.name,
+							unit_cost:detalleinf[linea].unit_cost, 
+							reference:detalleinf[linea].reference, 
+							item_id:detalleinf[linea].item_id, 
+							item_cantidad:detalleinf[linea].booked_quantity,
+							cantidad:detalleinf[linea].booked_quantity, 
+							unico:false, 
+							series:[],
+							item_category_id:detalleinf[linea].item.item_category_id,
+							product_type:detalleinf[linea].item.product_type,
+							measurement_unit:detalleinf[linea].item.measurement_unit,
+							payee_id:detalleinf[linea].item.payee_id}
 						detalle.push(linedet)
 					}
 					//console.log(detalle)
@@ -292,12 +301,13 @@ export default class PurchaseDetail extends Component {
 
 	crear_item=async (data)=>{
 		
-		let string = '{"item":{"name":"'+data.name+'", "code":"'+data.code+'","ean13":"'+data.code+'","item_category_id":"'+data.item_category_id+'", "stockable":"true","measurement_unit":"'+data.measurement_unit+'","purchasable":"true", "product_type":"'+data.product_type+'","weight":"0","payee_id":"'+data.payee_id+'"}}';
+		let string = '{"item":{"name":"'+data.name.replace('"', '\\"')+'", "code":"'+data.code+'","ean13":"'+data.code+'","item_category_id":"'+data.item_category_id+'", "stockable":"true","measurement_unit":"'+data.measurement_unit+'","purchasable":"true", "product_type":"'+data.product_type+'","weight":"0","payee_id":"'+data.payee_id+'"}}';
+		//console.log(string)
 		let res = await Axios.post(FUNCIONES.crearitem, string)
 		//console.log(res.data) 
-		string = '{"code":"'+data.code+'","name":"'+data.name+'","category_id":"'+data.item_category_id+'","id":"'+res.data.id+'","store_id":"'+this.state.userdata.store+'"}'
+		string = '{"code":"'+data.name.replace('"', '\\"')+'","name":"'+data.name.replace('"', '\\"')+'","category_id":"'+data.item_category_id+'","id":"'+res.data.id+'","store_id":"'+this.state.userdata.store+'"}'
 		//console.log(string)
-		res = await Axios.post(FUNCIONES.guardaritem, string) 
+		let res2 = await Axios.post(FUNCIONES.guardaritem, string) 
 		return res.data
 	}	
 	
@@ -318,39 +328,84 @@ export default class PurchaseDetail extends Component {
 				fechastr = fecha[2]+'/'+fecha[0]+'/'+fecha[1]
 				let x=0;
 				let stringdet="";
+				let stringedit="";
 				let detalle = this.state.detalle
 				let nuevositems=[]
+				let edit = false
+				let lineas = 0;
+				let res;
 				for(let linea in detalle){
 					let series = detalle[linea].series
 					if(detalle[linea].unico){
+						edit = true;
 						for(let x = 0 ; x<series.length; x++ ){
-							
-							//detalle[linea].name =detalle[linea].name+"-"+x
 							detalle[linea].code =series[x].serie
 							let res = await this.crear_item(detalle[linea]);
-							nuevositems.push({item_id:res.id})
+							if(lineas>0) stringedit+=","
+							stringedit+='"'+lineas+'":{"item_id":"'+res.id+'", "booked_quantity":"1","reference":"","unit_cost":"'+detalle[linea].unit_cost+'"}'
+							lineas++
 						}
+						stringedit+=","
 
-					}
+						stringedit+='"'+lineas+'":{"id":"'+detalle[linea].id+'", "item_id":"'+detalle[linea].item_id+'","_destroy":"true", "booked_quantity":"0"}'
+						lineas++
+					}else{
 
 					if(x>0) stringdet+=","
+					if(lineas>0) stringedit+=","
 
+					stringedit+='"'+lineas+'":{"id":"'+detalle[linea].id+'", "item_id":"'+detalle[linea].item_id+'","_destroy":"false", "booked_quantity":"'+detalle[linea].cantidad+'"}'	
 					stringdet+='"'+x+'":{"id":"'+detalle[linea].id+'", "item_id":"'+detalle[linea].item_id+'", "booked_quantity":"'+detalle[linea].item_cantidad+'", "delivered_quantity":"'+detalle[linea].cantidad+'"}'
+					lineas++
+					}
+					
+					x++
+					
+				}
+
+				if(edit){
+
+					let stringorden = '{"purchase_order":{"purchase_order_details_attributes":{'+stringedit+'}}}'
+					//console.log(stringorden)
+					res = await Axios.post(FUNCIONES.PurchaseOrderEdit+'?id='+this.props.id, stringorden)
+					
+					res = res.data
+					detalle = res.purchase_order_details;
+					x=0
+					stringdet="";
+					for(let linea in detalle){
+						if(x>0) stringdet+=","
+
+					stringdet+='"'+x+'":{"id":"'+detalle[linea].id+'", "item_id":"'+detalle[linea].item_id+'", "booked_quantity":"'+detalle[linea].booked_quantity+'", "delivered_quantity":"'+detalle[linea].booked_quantity+'"}'
 					x++
 					}
-				
-				let request='{"id":"'+this.state.orden.id+'", "agency_id":"'+this.state.orden.agency_id+'","exchange_rate":"'+this.state.orden.exchange_rate+'","delivery_date":"'+fechastr+'","purchase_order_details_attributes":{'+stringdet+'}}';
-				
+
+					let request='{"id":"'+this.state.orden.id+'", "agency_id":"'+this.state.orden.agency_id+'","exchange_rate":"'+this.state.orden.exchange_rate+'","delivery_date":"'+fechastr+'","purchase_order_details_attributes":{'+stringdet+'}}';
+					//console.log(request)
+					res = await Axios.post(FUNCIONES.recibir, request)
+					this.setState({
+						loading: false,
+						visible:true
+					});
+
+				}else{
+					let request='{"id":"'+this.state.orden.id+'", "agency_id":"'+this.state.orden.agency_id+'","exchange_rate":"'+this.state.orden.exchange_rate+'","delivery_date":"'+fechastr+'","purchase_order_details_attributes":{'+stringdet+'}}';
 					
-				
-				let data;
-					 //data = await Axios.post(FUNCIONES.recibir, request) 
-						//let res =data
+					res = await Axios.post(FUNCIONES.recibir, request) 
 						//console.log(res)
-						
+						this.setState({
+							loading: false,
+							visible:true
+						});
+				}
+					
 
 			} catch (error) {
 				console.error({ error });
+				this.setState({
+					loading: false,
+					visiblee:true
+				});
 				
 			} finally {
 			
@@ -383,7 +438,7 @@ export default class PurchaseDetail extends Component {
 			this.setState({				
 				visible:false
 			});
-			navigate('/app/ordenesp/')
+			navigate('/app/ordenescompra')
 		}
 
 		onConfirme = ()=>{
@@ -391,7 +446,7 @@ export default class PurchaseDetail extends Component {
 			
 				visiblee:false
 			});
-			//navigate('/app/formulas/')
+			navigate('/app/ordenescompra')
 		}
 		
 		handleDateChange = (event, {name, value}) => {

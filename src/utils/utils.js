@@ -62,7 +62,8 @@ const FUNCIONES = {
 	PurchaseOrder:URL_PREFIX+process.env.GATSBY_URL_PURCHASE,
 	crearitem:URL_PREFIX+process.env.GATSBY_URL_NEWITEM,
 	recibir:URL_PREFIX+process.env.GATSBY_URL_RECEIVEPURCHASE,
-	guardaritem:URL_PREFIX+process.env.GATSBY_URL_GUARDARITEM
+	guardaritem:URL_PREFIX+process.env.GATSBY_URL_GUARDARITEM,
+	PurchaseOrderEdit:URL_PREFIX+process.env.GATSBY_URL_EDITPURCHASE
 	
 };
 

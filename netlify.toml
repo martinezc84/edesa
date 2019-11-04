@@ -40,7 +40,7 @@ GATSBY_URL_EMPLEADOS='/.netlify/functions/empleados'
 	GATSBY_URL_PURCHASE='/.netlify/functions/PurchaseOrder'
 	GATSBY_URL_RECEIVEPURCHASE='/.netlify/functions/ReceivePurchase'
 	GATSBY_URL_NEWITEM='/.netlify/functions/CrearItem'
-
+	GATSBY_URL_EDITPURCHASE='/.netlify/functions/PurchaseOrderEdit'
 
 	# Dominio del sitio de las APIs (Backend)
 	GATSBY_ZAURU_URL='https://zauru.herokuapp.com'

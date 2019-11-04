@@ -18,8 +18,7 @@ exports.handler = async (event, context) => {
 		//@ts-ignore
 		
 		let url = `${URL}`;
-	
-		
+			
 		let id = event.queryStringParameters.id;
 		let { data } = await axios.put(url+id+'.json' ,event.body,{ headers });
 		return {

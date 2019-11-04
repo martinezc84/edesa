@@ -4,14 +4,11 @@ import { navigate } from '@reach/router';
 
 
 
-export const transfer = async ({ from, to, data }) => {
+export const transfer = async ({  data }) => {
 
-	await Axios.post(`${FUNCIONES.reservaciones}`,JSON.stringify(data))
+	await Axios.post(`${FUNCIONES.reservaciones}`,data)
 					.then(({ data }) => {
-						console.log(data)				 
-
-							
-						
+						console.log(data)	
 					})
 					.catch((error) => {
 						console.error(error);

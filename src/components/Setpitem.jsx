@@ -10,6 +10,7 @@ export default class Stepitem extends Component {
 			return (
 				<Menu.Item
 					active={step === id}
+					
 					onClick={() => {
 						navigate(ruta)
 					}}

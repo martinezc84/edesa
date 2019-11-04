@@ -1,7 +1,7 @@
 //@ts-check
 import axios from 'axios';
 import { headers, ZAURU } from '../utils/utils';
-const URL = ZAURU.crearitem;
+const URL = ZAURU.reservaciones;
 
 const headersr = {
 	'Access-Control-Allow-Origin': '*',
@@ -18,14 +18,16 @@ exports.handler = async (event, context) => {
 		//@ts-ignore
 		
 		let url = `${URL}`;
-		let { data } = await axios.post(url, event.body ,{ headers });
+	
+		let { data } = await axios.post(url ,event.body,{ headers });
+		console.log(data);
 		return {
 			statusCode: 200,
 			headers:headersr,
-			body: JSON.stringify(data)
+			body: data
 		};
 	} catch (error) {
-		console.error(error);
+		console.log(error.response);
 		return {
 			statusCode: 502,
 			headers:headersr,

@@ -12,6 +12,7 @@ import Config from '../components/Config'
 import OrdenesP from '../components/OrdenesP';
 import OrdenesCompra from '../components/PurchaseOrders';
 import OrdenCompra from '../components/PurchaseDetail';
+import Transfer from '../components/Transfer';
 import Login from '../components/Login';
 import NuevaOrden from '../components/NuevaOrden';
 import { Router } from "@reach/router"
@@ -55,11 +56,12 @@ export default class App extends Component {
 			console.log('cargando zauru')
 			let resp = await this.cargardatoszauru()
 			console.log('cargando menu')
+			console.log(this.getmem('menuitems'))
 			if (this.getmem('menuitems')===undefined){
-				Axios.get(FUNCIONES.menus+'?id='+userdata.store)
+				Axios.get(FUNCIONES.menus+'?id='+userdata.group_id)
 				.then(({ data }) => {
 					
-					//console.log(data)
+					console.log(data)
 					this.setState({
 					menuitems : data,
 					show:true,
@@ -359,6 +361,15 @@ export default class App extends Component {
 			
 		};
 
+		let propstrans = {
+			guardarmem:this.guardarmem,
+			getmem:this.getmem,
+			vendibles:this.state.vendibles,
+			comprables:this.state.comprables,
+			agencias:this.state.agencias,
+			empleados:this.state.empleados
+		};
+
 		let propsOP = {
 			guardarmem:this.guardarmem,
 			getmem:this.getmem,
@@ -389,6 +400,7 @@ export default class App extends Component {
 			<RutaPrivada  path="/app/ordenesp" component={OrdenesP} guardar={this.guardar} {...propsOP}  ></RutaPrivada>
 			<RutaPrivada  path="/app/ordenescompra" component={OrdenesCompra} guardar={this.guardar} {...propsOP}  ></RutaPrivada>
 			<RutaPrivada  path="/app/ordencompra/:action/:id" component={OrdenCompra} guardar={this.guardar} {...propsPOD}  ></RutaPrivada>
+			<RutaPrivada  path="/app/transferencias/:action/:id" component={Transfer} guardar={this.guardar} {...propstrans}  ></RutaPrivada>
 				<Login path='/app/login/:error' />
 				
 				

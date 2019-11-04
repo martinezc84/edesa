@@ -15,8 +15,8 @@ export default class Steps extends Component {
 		let {  step, menuitems, borrarmem} = this.props;
 			
 		let userdata = getUser()
-			console.log('menuitems')
-			console.log(menuitems)
+			//console.log('menuitems')
+			//console.log(menuitems)
 		if (userdata.group_id<4) {
 		return (
 			<Menu size='mini'>

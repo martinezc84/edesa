@@ -10,6 +10,7 @@ import Formulas from '../components/Formulas';
 import Formula from '../components/Formula';
 import Config from '../components/Config'
 import OrdenesP from '../components/OrdenesP';
+import Iniciar from '../components/Iniciar';
 import OrdenesCompra from '../components/PurchaseOrders';
 import OrdenCompra from '../components/PurchaseDetail';
 import Transfer from '../components/Transfer';
@@ -53,15 +54,15 @@ export default class App extends Component {
 		
 		if(user==true){
 			userdata = getUser()
-			console.log('cargando zauru')
+			//console.log('cargando zauru')
 			let resp = await this.cargardatoszauru()
-			console.log('cargando menu')
-			console.log(this.getmem('menuitems'))
+			//console.log('cargando menu')
+			//console.log(this.getmem('menuitems'))
 			if (this.getmem('menuitems')===undefined){
 				Axios.get(FUNCIONES.menus+'?id='+userdata.group_id)
 				.then(({ data }) => {
 					
-					console.log(data)
+					//console.log(data)
 					this.setState({
 					menuitems : data,
 					show:true,
@@ -273,13 +274,13 @@ export default class App extends Component {
 	}
 
 	 async cargardatoszauru() {
-			console.log('vendibles')
+			//console.log('vendibles')
 			let resp = await this.vendibles();
-			console.log('comprables')
+			//console.log('comprables')
 			resp = await this.comprables();
-			console.log('agencias')
+			//console.log('agencias')
 			resp = await this.agencias();
-			console.log('listo')
+			//console.log('listo')
 			//console.log(this.state.vendibles)
 			//console.log(this.state.comprables)
 			//console.log(this.state.agencias)
@@ -385,6 +386,11 @@ export default class App extends Component {
 			agencias:this.state.agencias,
 			
 		};
+
+		let propsIni = {
+		
+			
+		};
 		return (
 			
 			<Layout {...stepsProps}>
@@ -401,6 +407,7 @@ export default class App extends Component {
 			<RutaPrivada  path="/app/ordenescompra" component={OrdenesCompra} guardar={this.guardar} {...propsOP}  ></RutaPrivada>
 			<RutaPrivada  path="/app/ordencompra/:action/:id" component={OrdenCompra} guardar={this.guardar} {...propsPOD}  ></RutaPrivada>
 			<RutaPrivada  path="/app/transferencias/:action/:id" component={Transfer} guardar={this.guardar} {...propstrans}  ></RutaPrivada>
+			<RutaPrivada  path="/app/orden/iniciar/:id" component={Iniciar} guardar={this.guardar} {...propsIni}  ></RutaPrivada>
 				<Login path='/app/login/:error' />
 				
 				

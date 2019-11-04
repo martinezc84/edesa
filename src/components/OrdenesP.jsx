@@ -321,8 +321,15 @@ export default class OrdenesP extends Component {
 		}
 
 		 async generar  (id) {
-			let res = await Axios.get(FUNCIONES.orden+"?id="+id)
-			console.log(res.data)
+			//let res = await Axios.get(FUNCIONES.orden+"?id="+id)
+			//console.log(res.data)
+			navigate('/app/orden/iniciar/'+id)
+		}
+
+		 ver  (id) {
+			//let res = await Axios.get(FUNCIONES.orden+"?id="+id)
+			//console.log(res.data)
+			navigate('/app/orden/'+id)
 		}
 
 	render() {
@@ -426,6 +433,7 @@ export default class OrdenesP extends Component {
 													
 													orden={t}
 													generar={this.generar}
+													ver = {this.ver}
 													
 												/>
 											))}

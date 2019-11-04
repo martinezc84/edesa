@@ -12,7 +12,7 @@ export default class FilaFactura extends Component {
 	
 
 	render() {
-		let { orden, generar } = this.props;
+		let { orden, generar, ver } = this.props;
 
 		
 		//console.log(orden.empleado)
@@ -25,7 +25,22 @@ export default class FilaFactura extends Component {
 					<Table.Cell>{orden.empleado}</Table.Cell>
 					<Table.Cell>{orden.equipo}</Table.Cell>
 					
-					<Table.Cell><Button
+					<Table.Cell>
+					<Button
+								
+								primary
+								onClick={() => {
+									ver(
+										orden.id
+									);
+								}}								
+								icon
+								labelPosition="right"
+							>
+				<Icon name="eye" />
+								Ver
+							</Button>
+						<Button
 								
 								primary
 								onClick={() => {
@@ -37,7 +52,7 @@ export default class FilaFactura extends Component {
 								labelPosition="right"
 							>
 				<Icon name="cogs" />
-								Ejecutar
+								Iniciar
 							</Button></Table.Cell>							
 					
 						

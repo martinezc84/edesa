@@ -90,7 +90,7 @@ export default class Formula extends Component {
 			userdata: getUser()
 		});
 		
-			let { action, comprables, vendibles  } = this.props;
+			let { action, comprables, vendibles, itemst  } = this.props;
 			
 			if(action!='new'){
 				let id = this.props.id
@@ -118,6 +118,9 @@ export default class Formula extends Component {
 					formula.gd ==1 ? gd =true: gd=false;
 					from_agency = parseInt(formula.from_agency);
 					to_agency = parseInt(formula.to_agency);
+					comprables = [...comprables, itemst]
+					comprables = [...comprables, vendibles]
+
 					items = formula.tipo_insumo =='paquete' ? vendibles : comprables	
 					this.setState({
 						items:items,						
@@ -134,13 +137,16 @@ export default class Formula extends Component {
 						desperdicios:desperdicios,
 						to_agency:to_agency,
 						from_agency:from_agency,
-						id:id
+						id:id,
+						vendibles:vendibles,
+						comprables:comprables
 					});
 				})
 				.catch((error) => {
 					console.error(error);
 				});
 			}else{
+				comprables = [...comprables, itemst]
 				this.setState({
 					nombre: "",
 					tipo_insumo:"",
@@ -662,6 +668,7 @@ export default class Formula extends Component {
 		
 
 		let {
+			comprables,
 			buttonactive,
 			insumos,
 			pts,
@@ -782,7 +789,7 @@ export default class Formula extends Component {
 					pts
 					.map((t) => (
 						<FilaPt
-							items={itemst}
+							items={comprables}
 							selectitem={this.SelectItem}
 							linea={t.id}
 							unico={t.unico}
@@ -824,7 +831,7 @@ export default class Formula extends Component {
 					desperdicios
 					.map((t) => (
 						<FilaDesperdicio
-							items={itemst}
+							items={comprables}
 							selectitem={this.SelectItemFlex}
 							id={t.id}
 							flexible={t.flexible}
@@ -1008,7 +1015,7 @@ export default class Formula extends Component {
 					pts
 					.map((t) => (
 						<FilaPt
-							items={itemst}
+							items={comprables}
 							selectitem={this.SelectItem}
 							linea={t.id}
 							unico={t.unico}
@@ -1054,7 +1061,7 @@ export default class Formula extends Component {
 					desperdicios
 					.map((t) => (
 						<FilaDesperdicio
-							items={itemst}
+							items={comprables}
 							selectitem={this.SelectItemFlex}
 							id={t.id}
 							flexible={t.flexible}
@@ -1240,7 +1247,7 @@ export default class Formula extends Component {
 					pts
 					.map((t) => (
 						<FilaPt
-							items={itemst}
+							items={comprables}
 							selectitem={this.SelectItem}
 							linea={t.id}
 							unico={t.unico}
@@ -1283,7 +1290,7 @@ export default class Formula extends Component {
 					desperdicios
 					.map((t) => (
 						<FilaDesperdicio
-							items={itemst}
+							items={comprables}
 							selectitem={this.SelectItemFlex}
 							id={t.id}
 							flexible={t.flexible}

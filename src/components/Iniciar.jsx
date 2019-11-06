@@ -2,8 +2,8 @@
 import React, { Component } from 'react';
 import '../css/style.css';
 import Axios from 'axios';
-import { FUNCIONES } from '../utils/utils';
-import { Header, Table, Dropdown, Checkbox } from 'semantic-ui-react';
+import { FUNCIONES, production } from '../utils/utils';
+import { Header, Table, Loader} from 'semantic-ui-react';
 import sortBy from 'lodash/sortBy';
 import { MostrarMensaje } from './Mensajes';
 import { Msjerror } from './Mensajeserror';
@@ -30,7 +30,7 @@ export default class Iniciar extends Component {
 		ptcont:1,
 		buttonactive:false,
 		itemst:[],
-		
+		date:new Date().toLocaleDateString('en-GB'),
 				
 	};
 	
@@ -61,7 +61,8 @@ export default class Iniciar extends Component {
 	componentDidMount() {
 	
 		this.setState({
-			userdata: getUser()
+			userdata: getUser(),
+			loading:true
 		});
 		
 			let { action, comprables, vendibles  } = this.props;
@@ -79,28 +80,34 @@ export default class Iniciar extends Component {
 					let series=[]
 					let recurso
 					let serie
-					
+					let ids=1
+					let from_agency
 					for(let linea in detalle){
+						detalle[linea].generar=true
 						formula_id = detalle[linea].formula_id
 
 						formulas.map((formu, i)=> (		
 						formu.id == formula_id ? formula= formu : null 					
 						));	
-							console.log(formula)
+						 from_agency=formula.from_agency
 						if (formula.rv==1){	
+						detalle[linea].generar=false						
 							console.log("recurso variable")						
 							for(let insumo in formula.insumos){
-								recurso = {id:formula.insumos[insumo].id, producto:formula.insumos[insumo].name, cantidad:(detalle[linea].cantidad*formula.insumos[insumo].cantidad)}
+								recurso = {id:ids, item_id:formula.insumos[insumo].item_id,  producto:formula.insumos[insumo].name, cantidad:(detalle[linea].cantidad*formula.insumos[insumo].cantidad)}
 								recursos.push(recurso)
+								ids++
 							}
 						}
 
 						for(let insumo in formula.insumos){
 							if (formula.insumos[insumo].unico==1){
+								detalle[linea].generar=false
 								console.log("es unico")	
 								for (let y=0; y<formula.insumos[insumo].cantidad;y++){
-									serie = {id:formula.insumos[insumo].id, producto:formula.insumos[insumo].name, serie:""}
+									serie = {id:ids, lineid:detalle[linea].id, producto:formula.insumos[insumo].name, serie:""}
 									series.push(serie)
+									ids++
 								}
 							}
 						}
@@ -113,6 +120,7 @@ export default class Iniciar extends Component {
 						formulas,
 						series,
 						recursos,
+						from_agency:from_agency
 						
 					});
 				})
@@ -121,7 +129,7 @@ export default class Iniciar extends Component {
 				});
 		
 			this.setState ({
-				
+				loading:false,
 				action:action,
 				guardarcantidad:this.guardarcantidad,
 				guardarcantidadpt:this.guardarcantidadpt,
@@ -165,6 +173,18 @@ export default class Iniciar extends Component {
 		
 	};
 
+	get_item=async (serie)=>{
+		
+		
+		let res = await Axios.get(FUNCIONES.itemserie+"?serie="+serie)
+		//console.log(res.data) 
+		if(res.data!=null){
+			return res.data
+		}else{
+			return null
+		}
+	}	
+
 	buscariitem = (id, items) => {
 		//console.log(items)
 		let name = null
@@ -194,106 +214,135 @@ export default class Iniciar extends Component {
 	};
 	
 	
-	  guardar_formula = async () => {
+	  iniciar = async () => {
 	
-		/*this.setState({
-			visible: false
-        });*/
+		this.setState({
+			loading: true
+        });
         
        
-	
+		let detalle= this.state.detalle
+		let recursos =  this.state.recursos
+		let series = this.state.series
+		let orden = this.state.orden
 		// Ciclo de llamadas
 		
 			try {
 							
-				let guardar =true;
-				let formula ={}
-				formula.tipo_insumo = this.state.tipo_insumo
-				formula.nombre = this.state.nombre
-				formula.from_agency = this.state.from_agency
-				formula.to_agency = this.state.to_agency
-				formula.genera_unico = this.state.unico==true ? "1" : "0"
-				formula.rv = this.state.rv==true ? "1" : "0"
-				formula.gd = this.state.gd==true ? "1" : "0"
-				formula.insumos = this.state.insumos
-				formula.pt= this.state.pts
-				formula.desperdicios= this.state.desperdicios
-				formula.store_id=this.state.userdata.store,
-				formula.activa = 1
-				this.props.action=="edit" ? formula.id=this.props.id: null
-				//console.log(formula)
-				if((formula.nombre!=="") && (formula.from_agency>0) && (formula.to_agency>0) && (formula.insumos.length>0) && (formula.pt.length>0) ){
+				let booking ={
 					
-
-					formula.pt.map((linea, i)=> (
-		
-						guardar = linea.item_id>0 ? true : false
-			
-					));	
-
-					formula.insumos.map((linea, i)=> (
-		
-						guardar = linea.item_id>0 ? true : false
-			
-					));
-					
-					formula.desperdicios.map((linea, i)=> (
-		
-						guardar = linea.item_id>0 ? true : false
-			
-					));
-
-					formula.desperdicios.map((linea, i)=> (
-		
-						guardar = linea.cantidad>0 ? true : false
-			
-					));
-
-					formula.desperdicios.map((linea, i)=> (
-		
-						linea.flexible = linea.flexible ? 1 : 0
-			
-					));
-					let poststr = JSON.stringify(formula)
-				console.log(poststr)
-				let data;
-
-				if(this.props.action=="new"){
-				guardar ?  data = await Axios.post(FUNCIONES.guardarformula, poststr) : null
-				}else{
-				guardar ?  data = await Axios.post(FUNCIONES.editarformula, poststr) : null
+					booker_id:orden.employee_id,
+					planned_delivery:this.state.date,
+					movements_attributes:"|insumos|",
+					needs_transport:0,
+					//agency_from_id:this.state.from_agency,
+					agency_to_id:production,
+					reference:orden.descripcion,
+					memo:"",
+					payee_id:393185
 				}
-				//console.log(data.data)
-				let res =data.data
-				console.log(res.data)
-				if (res.data.id!==undefined){
-					this.setState({
-					
-						visible:true,
-						
-					});
-				}else{
-					this.setState({
-					
-						visiblee:true,
-						errormsj:"Sus datos no se guardaron, contacte al Administrador"
-					});
-				}
-
-					
-				}else{
-					this.setState({
-					
-						visiblee:true,
-						errormsj:"Llene todos los datos del formulario"
-					});
-				}
-			
 				
-			
-				//console.log(data)
+
+				let x=0
+					let stringdet="{"
+					let stringorden=""
+					let itemserie
+					let formula_id
+					let formula={}
+					let error = {error:false,msj:""}
+
+					for (let linea in detalle){
+						let formulas = this.state.formulas
+						if(detalle[linea].generar){
+							formula_id = detalle[linea].formula_id
+
+							formulas.map((formu, i)=> (		
+							formu.id == formula_id ? formula= formu : null 					
+							));	
+							
+
+							for(let insumo in formula.insumos){
+								if(x>0) stringdet+=","
+								stringdet+='"'+x+'":{"item_id":"'+formula.insumos[insumo].item_id+'", "booked_quantity":"'+(detalle[linea].cantidad*formula.insumos[insumo].cantidad)+'"}'
+								x++
+							}
+
+							
+						}
+					}
+
+					for (let linea in recursos){
+						if(x>0) stringdet+=","
+								stringdet+='"'+x+'":{"item_id":"'+recursos[linea].item_id+'", "booked_quantity":"'+recursos[linea].cantidad+'"}'
+								x++
+					}
+					let y=0;
+					for (let linea in series){
+						itemserie= await this.get_item(series[linea].serie)
+						if(itemserie!==undefined){
+						if(x>0) stringdet+=","
+						if(y>0) stringorden+=","
+								stringdet+='"'+x+'":{"item_id":"'+itemserie+'", "booked_quantity":"1"}'
+								stringorden+='"'+y+'":{"id":"'+series[linea].lineid+'", "serie":"'+series[linea].serie+'"}'
+								x++
+								y++
+						}else{
+						itemserie= await this.get_item(series[linea].serie)
+							error = {error:true,msj:"No se encontro el numero de serie "+series[linea].serie}
+							
+						}
+					}
+					stringdet+="}"
+
+					if(error.error){
+						this.setState(
+							{
+								loading: false,
+								visiblee:true,
+								errormsj:error.msj
+							})
+					}else{
+						booking.agency_from_id=this.state.from_agency
+						let shipment = {shipment:booking}
+						let poststr = JSON.stringify(shipment)
+						poststr= poststr.replace('"|insumos|"',stringdet)
+						console.log(poststr)
+						let res = await Axios.post(`${FUNCIONES.reservaciones}`,poststr)
+						
+
+							if (res.data.id!==undefined){
+								let resp = await Axios.post(FUNCIONES.deliver+"?id="+res.data.id)
+								 resp = await Axios.post(`${FUNCIONES.editarorden}`,'{"id":'+this.state.orden.id+', "estado":"iniciada","detalle":{'+stringorden+'}}')
+								this.setState({
+									loading: false,
+									visible:true,
+									
+								});
+							}else{
+								this.setState({
+									loading: false,
+									visiblee:true,
+									errormsj:"Sus datos no se guardaron, contacte al Administrador"
+								});	
+							}
+
+							
+							//console.log(data)	
+						
+						
+						
+					}
+
+					
+
 			} catch (error) {
-				console.error({ error });
+				//console.error(error.response.data );
+				this.setState({
+					loading: false,
+					visiblee:true,
+					errormsj:"Sus datos no se guardaron, contacte al Administrador \n "+JSON.stringify(error.response.data)
+				});	
+				
 				
 			} finally {
 				
@@ -311,7 +360,7 @@ export default class Iniciar extends Component {
 				visible:false,
 				
 			});
-			navigate('/app/formulas/')
+			navigate('/app/ordenesp/')
 		}
 
 		onConfirme = ()=>{
@@ -323,9 +372,29 @@ export default class Iniciar extends Component {
 		}
         
         handleInputChange = event => {
-            const target = event.target
+
+			const target = event.target
             const value = target.value
-            const name = target.name
+			const name = target.name
+			const id = target.id
+			//console.log(id)
+			if(name=='serie'){
+				let series = this.state.series
+				series.map((serie, i)=> (
+				
+					serie.id == id ? serie.serie = value : false		
+		
+				));		
+				
+			}else{
+				let recursos = this.state.recursos
+				recursos.map((recurso, i)=> (
+				
+					recurso.id == id ? recurso.cantidad = value : false		
+		
+				));	
+
+			}
         
             this.setState({
               [name]: value,
@@ -335,7 +404,7 @@ export default class Iniciar extends Component {
           handleSubmit = event => {
 			  //console.log("enviando info")
             event.preventDefault()
-            this.guardar_formula()
+            this.iniciar()
             //alert(`Welcome ${this.state.firstName} ${this.state.lastName}!`)
 					}
 					
@@ -348,12 +417,14 @@ export default class Iniciar extends Component {
 
 		let {
 				
-			series, recursos
+			series, recursos, loading
            
 			
 		} = this.state;
 
-	
+		if (loading) {
+			return <Loader active inline="centered" />;
+		} else
 		
 			return(
 				<div >
@@ -442,8 +513,11 @@ export default class Iniciar extends Component {
 					))}
 			</Table.Body>
 			</Table></React.Fragment>):('')}
-			
+			<button type="submit" className="submitform">Iniciar</button>
 			</form>	
+			<MostrarMensaje titulo={'Sus Datos fueron guardados con exito'} mensajes={'Guardar'}  visible={this.state.visible} onConfirm={this.onConfirm} />
+			<Msjerror titulo={this.state.errormsj} mensajes={'Error'}  visible={this.state.visiblee} onConfirm={this.onConfirme} />
+			
               </div>
 			)
 		

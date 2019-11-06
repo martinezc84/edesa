@@ -305,7 +305,7 @@ export default class PurchaseDetail extends Component {
 		//console.log(string)
 		let res = await Axios.post(FUNCIONES.crearitem, string)
 		//console.log(res.data) 
-		string = '{"code":"'+data.name.replace('"', '\\"')+'","name":"'+data.name.replace('"', '\\"')+'","category_id":"'+data.item_category_id+'","id":"'+res.data.id+'","store_id":"'+this.state.userdata.store+'"}'
+		string = '{"code":"'+data.code+'","name":"'+data.name.replace('"', '\\"')+'","category_id":"'+data.item_category_id+'","id":"'+res.data.id+'","store_id":"'+this.state.userdata.store+'", "details":null}'
 		//console.log(string)
 		let res2 = await Axios.post(FUNCIONES.guardaritem, string) 
 		return res.data

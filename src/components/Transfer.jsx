@@ -4,7 +4,7 @@ import '../css/style.css';
 import Axios from 'axios';
 import { FUNCIONES } from '../utils/utils';
 
-import {  Table, Dropdown, } from 'semantic-ui-react';
+import {  Table, Dropdown, Loader} from 'semantic-ui-react';
 
 import { MostrarMensaje } from './Mensajes';
 import { Msjerror } from './Mensajeserror';
@@ -17,6 +17,7 @@ import {DateInput} from 'semantic-ui-calendar-react';
 export default class Formula extends Component {
 	state = {
 		vendibles:[],
+		loading:false,
 		insumos:[],
 		from_agency: 0,
 		to_agency:0,
@@ -304,7 +305,7 @@ export default class Formula extends Component {
 	  guardar_formula = async () => {
 	
 		this.setState({
-			//visible: true
+			loading: true
         });
         
        
@@ -319,11 +320,12 @@ export default class Formula extends Component {
 					booker_id:this.state.empleado,
 					planned_delivery:this.state.date,
 					movements_attributes:"|insumos|",
-					needs_transport:1,
+					needs_transport:0,
 					agency_from_id:this.state.from_agency,
 					agency_to_id:this.state.to_agency,
 					reference:this.state.nombre,
-					memo:""
+					memo:"",
+					payee_id:393185
 				}
 				let shipment = {shipment:booking}
 				if((booking.reference!=="")  ){
@@ -346,31 +348,33 @@ export default class Formula extends Component {
 
 				await Axios.post(`${FUNCIONES.reservaciones}`,poststr)
 				.then(({ data }) => {
-					console.log(data)	
+
+					Axios.post(FUNCIONES.deliver+"?id="+data.id)
+
+					this.setState({
+						loading:false,
+						visible:true,
+						
+					});
+					//console.log(data)	
 				})
 				.catch((error) => {
-					console.error(error);
+					//console.error(error);
 
-					if (data.id!==undefined){
+					
 						this.setState({
-						
-							visible:true,
-							
-						});
-					}else{
-						this.setState({
-						
+							loading:false,
 							visiblee:true,
-							errormsj:"Sus datos no se guardaron, contacte al Administrador"
+							errormsj:"Sus datos no se guardaron, contacte al Administrador \n"+JSON.stringify(error.response.data)
 						});
-					}
+					
 
 				
 				});
 					
 				}else{
 					this.setState({
-					
+						loading:false,
 						visiblee:true,
 						errormsj:"Llene todos los datos del formulario"
 					});
@@ -381,6 +385,11 @@ export default class Formula extends Component {
 				//console.log(data)
 			} catch (error) {
 				console.error({ error });
+				this.setState({
+					loading:false,
+					visiblee:true,
+					errormsj:"Sus datos no se guardaron, contacte al Administrador \n"+JSON.stringify(error.response.data)
+				});
 				
 			} finally {
 				
@@ -398,7 +407,7 @@ export default class Formula extends Component {
 				visible:false,
 				
 			});
-			navigate('/app/formulas/')
+			navigate('/app/ordenesp/')
 		}
 
 		onConfirme = ()=>{
@@ -472,13 +481,15 @@ export default class Formula extends Component {
 			guardarcantidad,				
 			from_agency,
 			to_agency,
-            nombre, items, action, empleado, empleados
+            nombre, items, action, empleado, empleados, loading
 			
 		} = this.state;
 
 	
 		
-	
+		if (loading) {
+			return <Loader active inline="centered" />;
+		} else
 		
 		if(action=='view')
 			return(
@@ -608,7 +619,7 @@ export default class Formula extends Component {
 			
 
 			
-			<button type="submit" className="submitform">Guardar</button>
+			<button type="submit" className="submitform">Iniciar</button>
 			</form>
 			<MostrarMensaje titulo={'Sus Datos fueron guardados con exito'} mensajes={'Guardar'}  visible={this.state.visible} onConfirm={this.onConfirm} />
 			<Msjerror titulo={this.state.errormsj} mensajes={'Error'}  visible={this.state.visiblee} onConfirm={this.onConfirme} />

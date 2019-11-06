@@ -29,7 +29,7 @@ exports.handler = async (event, context) => {
 		return {
 			statusCode: 502,
 			headers:headersr,
-			body: JSON.stringify(error)
+			body: JSON.stringify(error.response.data)
 		};
 	}
 };

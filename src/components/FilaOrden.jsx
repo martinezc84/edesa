@@ -12,7 +12,7 @@ export default class FilaFactura extends Component {
 	
 
 	render() {
-		let { orden, generar, ver } = this.props;
+		let { orden, generar, ver, estado, terminar } = this.props;
 
 		
 		//console.log(orden.empleado)
@@ -40,6 +40,7 @@ export default class FilaFactura extends Component {
 				<Icon name="eye" />
 								Ver
 							</Button>
+						{(estado=='espera') ?
 						<Button
 								
 								primary
@@ -53,7 +54,20 @@ export default class FilaFactura extends Component {
 							>
 				<Icon name="cogs" />
 								Iniciar
-							</Button></Table.Cell>							
+						</Button> : (estado=='espera') ? <Button
+								
+								class="ui orange button"
+								onClick={() => {
+									terminar(
+										orden.id
+									);
+								}}								
+								icon
+								labelPosition="right"
+							>
+				<Icon name="tasks" />
+								Terminar
+						</Button> : ('')}</Table.Cell>							
 					
 						
 				</Table.Row>

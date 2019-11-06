@@ -10,6 +10,7 @@ import Formulas from '../components/Formulas';
 import Formula from '../components/Formula';
 import Config from '../components/Config'
 import OrdenesP from '../components/OrdenesP';
+import OrdenP from '../components/OrdenP';
 import Iniciar from '../components/Iniciar';
 import Terminar from '../components/cerrar';
 import OrdenesCompra from '../components/PurchaseOrders';
@@ -48,7 +49,8 @@ export default class App extends Component {
 		
 	
 		this.setState({
-			islogin: user
+			islogin: user,
+			loading:true
 		});
 
 		let userdata={group_id:0}
@@ -96,7 +98,8 @@ export default class App extends Component {
 		}
 
 		this.setState({
-			userdata: userdata
+			userdata: userdata,
+			loading:false
 		});
 		
 		
@@ -326,7 +329,8 @@ export default class App extends Component {
 			step: step,
 			menuitems:menuitems,
 			group_id:userdata.group_id,
-			borrarmem:this.borrarmem
+			borrarmem:this.borrarmem,
+			loading:this.state.loading
 			
 		};		
 		
@@ -410,6 +414,7 @@ export default class App extends Component {
 			<RutaPrivada  path="/app/transferencias/:action/:id" component={Transfer} guardar={this.guardar} {...propstrans}  ></RutaPrivada>
 			<RutaPrivada  path="/app/orden/iniciar/:id" component={Iniciar} guardar={this.guardar} {...propsIni}  ></RutaPrivada>
 			<RutaPrivada  path="/app/orden/terminar/:id" component={Terminar} guardar={this.guardar} {...propsIni}  ></RutaPrivada>
+			<RutaPrivada  path="/app/ordenp/:action/:id" component={OrdenP} guardar={this.guardar} {...propson}  ></RutaPrivada>
 				<Login path='/app/login/:error' />
 				
 				

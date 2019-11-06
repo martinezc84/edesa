@@ -8,11 +8,13 @@ export default function HTML(props) {
 				<meta charSet="utf-8" />
 				<meta httpEquiv="x-ua-compatible" content="ie=edge" />
 				<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+				
 				<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
 				
 				  <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript">  
 </script>
 				  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+				  
 				{props.headComponents}
 			</head>
 			<body {...props.bodyAttributes}>

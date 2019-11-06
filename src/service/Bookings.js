@@ -18,20 +18,20 @@ exports.handler = async (event, context) => {
 		//@ts-ignore
 		
 		let url = `${URL}`;
-	
+		//console.log(event.body);
 		let { data } = await axios.post(url ,event.body,{ headers });
-		console.log(data);
+		//console.log(data);
 		return {
 			statusCode: 200,
 			headers:headersr,
-			body: data
+			body: JSON.stringify(data)
 		};
 	} catch (error) {
-		console.log(error.response);
+		//console.log(error.response.data);
 		return {
 			statusCode: 502,
 			headers:headersr,
-			body: JSON.stringify(error)
+			body: JSON.stringify(error.response.data)
 		};
 	}
 };

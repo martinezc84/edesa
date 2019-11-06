@@ -2,17 +2,12 @@
 import React, { Component } from 'react';
 import '../css/style.css';
 import Axios from 'axios';
-import { FUNCIONES } from '../utils/utils';
-import { Header, Table, Dropdown, Checkbox } from 'semantic-ui-react';
-import sortBy from 'lodash/sortBy';
-import { MostrarMensaje } from './Mensajes';
-import { Msjerror } from './Mensajeserror';
-import FilaInsumo from './FilaInsumo';
-import FilaPt from './FilaPt';
+import { FUNCIONES, descarte, production } from '../utils/utils';
+import { Header, Table, Dropdown, Checkbox, Loader } from 'semantic-ui-react';
+
 import { isLoggedIn, logout , getUser} from "../utils/identity"
 import { navigate } from 'gatsby';
-import { Button, FormControl, Container, Row, Col} from 'react-bootstrap';
-import FilaDesperdicio from './FilaDesperdicio';
+import Barcode from 'react-barcode'
 
 
 
@@ -30,7 +25,8 @@ export default class Iniciar extends Component {
 		ptcont:1,
 		buttonactive:false,
 		itemst:[],
-		
+		loading:false,
+		date:new Date().toLocaleDateString('en-GB'),
 				
 	};
 	
@@ -58,19 +54,21 @@ export default class Iniciar extends Component {
 
 	
 
-	componentDidMount() {
+	async componentDidMount() {
 	
 		this.setState({
-			userdata: getUser()
+			userdata: getUser(),
+			loading:true
 		});
-		
+		let to_agency
 			let { action, comprables, vendibles  } = this.props;
 		
 				let id = this.props.id
-				let formula
+				let formula={}
 				let formula_id
-				Axios.get(FUNCIONES.orden+"?id="+id)
-				.then(({ data }) => {
+				let resp = await Axios.get(FUNCIONES.orden+"?id="+id)
+				if (resp.data.id!=undefined){
+					let data = resp.data
 					//console.log(data)
 					let orden =data
 					let detalle = data.detalle
@@ -79,29 +77,46 @@ export default class Iniciar extends Component {
 					let referencias=[]
 					let desperdiciol
 					let refer
+					let ids=1
+					
 					
 					for(let linea in detalle){
 						formula_id = detalle[linea].formula_id
-
+						detalle[linea].generar=true
 						formulas.map((formu, i)=> (		
 						formu.id == formula_id ? formula= formu : null 					
 						));	
-							console.log(formula)
+						to_agency=formula.to_agency
+							//console.log(formula)
 						if (formula.gd==1){	
-							console.log("genera desperdicio")						
+							//console.log("genera desperdicio")						
 							for(let desperdicio in formula.desperdicios){
-								desperdiciol = {id:formula.desperdicios[desperdicio].id, producto:formula.desperdicios[desperdicio].name, cantidad:(formula.desperdicios[desperdicio].cantidad)}
+								desperdiciol = {id:ids, producto:formula.desperdicios[desperdicio].name, cantidad:(formula.desperdicios[desperdicio].cantidad), item_id:formula[desperdicio].item_id}
 								desperdicios.push(desperdiciol)
+								ids++
 							}
 						}
-
-						if (formula.genera_unico==1){	
-							console.log("genera unico")						
+						let x=1
+						let exist =true
+						let code
+						if (formula.genera_unico==1){
+							detalle[linea].generar=false
+							//console.log("genera unico")						
 							for(let lineapt in formula.pt){
 								let lineas = formula.pt[lineapt].cantidad * detalle[linea].cantidad
+								
+
 								for (let y=0; y<lineas;y++){
-								refer = {id:formula.pt[lineapt].id, producto:formula.pt[lineapt].name, referencia:(formula.pt[lineapt].referencia)}
+									exist = true
+								while(exist!==false){
+									exist = await this.get_item(detalle[linea].serie+"-"+x)
+									code = detalle[linea].serie+"-"+x
+									x++
+								}
+								refer = {id:ids, codigo:code, producto:formula.pt[lineapt].name, referencia:(formula.pt[lineapt].referencia),item_id:formula.pt[lineapt].item_id}
 								referencias.push(refer)
+								ids++
+								//x++
 								}
 							}
 						}
@@ -114,20 +129,19 @@ export default class Iniciar extends Component {
 						formulas,
 						referencias,
 						desperdicios,
+						to_agency,
+						
 						
 					});
-				})
-				.catch((error) => {
-					console.error(error);
-				});
+				}
 		
 			this.setState ({
-				
+				to_agency:to_agency,
 				action:action,
 				guardarcantidad:this.guardarcantidad,
 				guardarcantidadpt:this.guardarcantidadpt,
 				guardarcantidadflex:this.guardarcantidadflex,
-				
+				loading:false
 			});
 					
 					
@@ -193,108 +207,162 @@ export default class Iniciar extends Component {
 				pts:pts
 			})
 	};
+
+	crear_item=async (data)=>{
+		
+		let string = '{"item":{"name":"'+data.name.replace('"', '\\"')+'", "code":"'+data.code+'","ean13":"'+data.code+'","item_category_id":"'+data.item_category_id+'", "stockable":"true","measurement_unit":"'+data.measurement_unit+'","purchasable":"true", "product_type":"'+data.product_type+'","weight":"0","payee_id":"'+data.payee_id+'"}}';
+		//console.log(string)
+		let res = await Axios.post(FUNCIONES.crearitem, string)
+		//console.log(res.data) 
+		string = '{"code":"'+data.code+'","name":"'+data.name.replace('"', '\\"')+'","category_id":"'+data.item_category_id+'","id":"'+res.data.id+'","store_id":"'+this.state.userdata.store+'", "details":"'+this.state.orden.id+'"}'
+		//console.log(string)
+		let res2 = await Axios.post(FUNCIONES.guardaritem, string) 
+		return res.data
+	}	
+
+	get_itemz=async (id)=>{
+		
+	
+		let res = await Axios.get(FUNCIONES.itemzauru+"?id="+id )
+		//sconsole.log(res.data) 
+		
+		return res.data
+	}	
+
+	get_item=async (serie)=>{
+		
+		
+		let res = await Axios.get(FUNCIONES.itemserie+"?serie="+serie)
+		//console.log(res.data) 
+		if(res.data!=null){
+			return res.data
+		}else{
+			return null
+		}
+	}
 	
 	
 	  guardar_formula = async () => {
 	
-		/*this.setState({
-			visible: false
-        });*/
-        
-       
+		this.setState({
+			loading: true
+		});
+
+		let orden = this.state.orden
+		let detalle = this.state.detalle
+		let booking ={
+					
+			booker_id:orden.employee_id,
+			planned_delivery:this.state.date,
+			movements_attributes:"|insumos|",
+			needs_transport:0,
+			agency_from_id:production,
+			agency_to_id:this.state.to_agency,
+			reference:orden.descripcion,
+			memo:"",
+			payee_id:393185
+		}
+
+	
+	   let iteminfo
+	   let stringdet = "{"
+	   let stringdesper = "{"
+	   let generadescarte =false
 	
 		// Ciclo de llamadas
 		
 			try {
+					let referencias = this.state.referencias
+					let desperdicios = this.state.desperdicios
+					let x = 0
+					let y=0
+					if(desperdicios.length>0){
+						generadescarte=true
+						for(let desper in desperdicios){
+							if(y>0) stringdesper+=","
+							stringdesper+='"'+y+'":{"item_id":"'+desperdicios[desper].item_id+'", "booked_quantity":"'+desperdicios[desper].cantidad+'"}'
+						}
+					}
+					stringdesper+="}"
+					//console.log(referencias)
+					for(let refer in referencias){
+						iteminfo = await this.get_itemz(referencias[refer].item_id)
+						//console.log(iteminfo)
+						let newitem = {name:iteminfo.name+"-"+referencias[refer].referencia, code:referencias[refer].codigo,  item_category_id:iteminfo.item_category_id,measurement_unit:iteminfo.measurement_unit, product_type:iteminfo.product_type, payee_id:iteminfo.payee_id }
+						//console.log(JSON.stringify(newitem)) 
+						let itemdata  = await this.crear_item(newitem)
+						//let itemdata={id:1587455}
+						if(x>0) stringdet+=","
+						stringdet+='"'+x+'":{"item_id":"'+itemdata.id+'", "booked_quantity":"1"}'
+						x++
+					}
+					let formula_id
+					let formula={}
+					for(let linea in detalle){
+						let formulas = this.state.formulas
+						if(detalle[linea].generar){
+							formula_id = detalle[linea].formula_id
+
+							formulas.map((formu, i)=> (		
+							formu.id == formula_id ? formula= formu : null 					
+							));	
+
 							
-				let guardar =true;
-				let formula ={}
-				formula.tipo_insumo = this.state.tipo_insumo
-				formula.nombre = this.state.nombre
-				formula.from_agency = this.state.from_agency
-				formula.to_agency = this.state.to_agency
-				formula.genera_unico = this.state.unico==true ? "1" : "0"
-				formula.rv = this.state.rv==true ? "1" : "0"
-				formula.gd = this.state.gd==true ? "1" : "0"
-				formula.insumos = this.state.insumos
-				formula.pt= this.state.pts
-				formula.desperdicios= this.state.desperdicios
-				formula.store_id=this.state.userdata.store,
-				formula.activa = 1
-				this.props.action=="edit" ? formula.id=this.props.id: null
-				//console.log(formula)
-				if((formula.nombre!=="") && (formula.from_agency>0) && (formula.to_agency>0) && (formula.insumos.length>0) && (formula.pt.length>0) ){
-					
+							for(let ptl in formula.pt){
 
-					formula.pt.map((linea, i)=> (
-		
-						guardar = linea.item_id>0 ? true : false
-			
-					));	
+								if(x>0) stringdet+=","
+								stringdet+='"'+x+'":{"item_id":"'+formula.pt[ptl].item_id+'", "booked_quantity":"'+(detalle[linea].cantidad*formula.pt[ptl].cantidad)+'"}'
+								x++
+							}
+						}
+					}
+						stringdet+="}"
+						let shipment = {shipment:booking}
+						let poststr = JSON.stringify(shipment)
+						poststr= poststr.replace('"|insumos|"',stringdet)
+						console.log(poststr)
 
-					formula.insumos.map((linea, i)=> (
-		
-						guardar = linea.item_id>0 ? true : false
-			
-					));
-					
-					formula.desperdicios.map((linea, i)=> (
-		
-						guardar = linea.item_id>0 ? true : false
-			
-					));
+						if(generadescarte){
+							let bookingd = booking
+							bookingd.movements_attributes="|descarte|"
+							bookingd.agency_to_id = descarte
+							let shipmentd = {shipment:booking}
+							let poststrd = JSON.stringify(shipmentd)
+							poststrd= poststrd.replace('"|descarte|"',stringdesper)
+							let resd = await Axios.post(`${FUNCIONES.reservaciones}`,poststrd)
+							if (resd.data.id!==undefined){
+								resd = await Axios.post(FUNCIONES.deliver+"?id="+resd.data.id)
+							}
 
-					formula.desperdicios.map((linea, i)=> (
-		
-						guardar = linea.cantidad>0 ? true : false
-			
-					));
+							console.log(poststrd)
+						}
 
-					formula.desperdicios.map((linea, i)=> (
-		
-						linea.flexible = linea.flexible ? 1 : 0
-			
-					));
-					let poststr = JSON.stringify(formula)
-				console.log(poststr)
-				let data;
+						let res = await Axios.post(`${FUNCIONES.reservaciones}`,poststr)
 
-				if(this.props.action=="new"){
-				guardar ?  data = await Axios.post(FUNCIONES.guardarformula, poststr) : null
-				}else{
-				guardar ?  data = await Axios.post(FUNCIONES.editarformula, poststr) : null
-				}
-				//console.log(data.data)
-				let res =data.data
-				console.log(res.data)
-				if (res.data.id!==undefined){
-					this.setState({
-					
-						visible:true,
-						
-					});
-				}else{
-					this.setState({
-					
-						visiblee:true,
-						errormsj:"Sus datos no se guardaron, contacte al Administrador"
-					});
-				}
-
-					
-				}else{
-					this.setState({
-					
-						visiblee:true,
-						errormsj:"Llene todos los datos del formulario"
-					});
-				}
-			
+						if (res.data.id!==undefined){
+								let resp = await Axios.post(FUNCIONES.deliver+"?id="+res.data.id)
+								 resp = await Axios.post(`${FUNCIONES.editarorden}`,'{"id":'+this.state.orden.id+', "estado":"finalizada","detalle":{}}')
+								this.setState({
+									loading: false,
+									visible:true,
+									
+								});
+							}else{
+								this.setState({
+									loading: false,
+									visiblee:true,
+									errormsj:"Sus datos no se guardaron, contacte al Administrador"
+								});	
+							}
 				
 			
-				//console.log(data)
 			} catch (error) {
 				console.error({ error });
+				this.setState({
+					loading: false,
+					visiblee:true,
+					errormsj:"Sus datos no se guardaron, contacte al Administrador"
+				});	
 				
 			} finally {
 				
@@ -326,11 +394,37 @@ export default class Iniciar extends Component {
         handleInputChange = event => {
             const target = event.target
             const value = target.value
-            const name = target.name
+			const name = target.name
+			let id = target.id
+			if(name=='refer'){
+				let referencias = this.state.referencias
+				id = id.split("_")
+				
+				referencias.map((ref, i)=> (
+		
+					ref.id == id[1]  ? ref.referencia = value :  false	
+		
+				));	
+				//console.log(referencias)
+				this.setState({
+					referencias
+				  })
+
+			}else{
+				let desperdicios = this.state.desperdicios
+				id = id.split("_")
+				desperdicios.map((desp, i)=> (
+		
+					desp.id == id  ? desp.cantidad = value :  false	
+		
+				));	
+
+				this.setState({
+					desperdicios
+				  })
+			}
         
-            this.setState({
-              [name]: value,
-            })
+            
           }
         
           handleSubmit = event => {
@@ -349,12 +443,14 @@ export default class Iniciar extends Component {
 
 		let {
 				
-			referencias, desperdicios
+			referencias, desperdicios, loading
            
 			
 		} = this.state;
 
-	
+			if (loading) {
+			return <Loader active inline="centered" />;
+				} else
 		
 			return(
 				<div >
@@ -386,6 +482,11 @@ export default class Iniciar extends Component {
 						<Table.Row>
 										
 					<Table.Cell>{t.producto}</Table.Cell>
+					<Table.Cell><Barcode
+				  value={t.codigo}
+				  format="EAN13"
+				  /></Table.Cell>
+					 
 					<Table.Cell>{<input
 					autoFocus
                     type="text"
@@ -394,7 +495,9 @@ export default class Iniciar extends Component {
                     value={t.cantidad}
 					onChange={this.handleInputChange}				
                     className="inputform"
-                  />}</Table.Cell>
+				  />}
+				 
+				  </Table.Cell>
 											
 					
 						
@@ -443,7 +546,7 @@ export default class Iniciar extends Component {
 					))}
 			</Table.Body>
 			</Table></React.Fragment>):('')}
-			
+			<button type="submit" className="submitform">Terminar</button>
 			</form>	
               </div>
 			)

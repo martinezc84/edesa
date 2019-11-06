@@ -1,7 +1,7 @@
 //@ts-check
 import axios from 'axios';
 import { headers, ZAURU } from '../utils/utils';
-const URL = ZAURU.ordendecompra;
+const URL = ZAURU.deliver;
 
 const headersr = {
 	'Access-Control-Allow-Origin': '*',
@@ -18,21 +18,21 @@ exports.handler = async (event, context) => {
 		//@ts-ignore
 		
 		let url = `${URL}`;
-	
-		
+		//console.log(event.body);
 		let id = event.queryStringParameters.id;
-		let { data } = await axios.get(url+id+'.json' ,{ headers });
+		let { data } = await axios.get(url+id+"/deliver.json" ,{ headers });
+		//console.log(data);
 		return {
 			statusCode: 200,
 			headers:headersr,
 			body: JSON.stringify(data)
 		};
 	} catch (error) {
-		console.error(error);
+		console.log(error.response);
 		return {
 			statusCode: 502,
 			headers:headersr,
-			body: JSON.stringify(error.response.data)
+			body: JSON.stringify(error)
 		};
 	}
 };

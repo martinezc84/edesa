@@ -36,7 +36,7 @@ export default class FilaDetalle extends Component {
 		
 		
 	//console.log(item_id)
-	if (view) 
+
 			return (
 				<Table.Row>
 					{ from_orden ? (
@@ -78,29 +78,7 @@ export default class FilaDetalle extends Component {
 			</Table.Cell>
 				</Table.Row>
 			)
-	else
-	return (
-		<Table.Row>
-			
-			<Table.Cell>
-				
-			
-			</Table.Cell>
-			
-			<Table.Cell>
-			
-			
-			
-			</Table.Cell>
-			<Table.Cell>
-			
-			<label>
-		  Es único?
-		 
-		</label>
-			</Table.Cell>
-		</Table.Row>
-	)
+	
 	
 		
 	}

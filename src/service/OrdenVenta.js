@@ -25,7 +25,7 @@ exports.handler = async (event, context) => {
 		console.error(error);
 		return {
 			statusCode: 502,
-			body: JSON.stringify(error)
+			body: JSON.stringify(error.response.data)
 		};
 	}
 };

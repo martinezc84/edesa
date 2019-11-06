@@ -32,7 +32,8 @@ export default class OrdenesP extends Component {
 		date: new Date(),
 		visible:false,
 		userdata:null,
-		Ordenes:[]
+		Ordenes:[],
+		estado:'espera'
 	
 	};
 
@@ -179,7 +180,7 @@ export default class OrdenesP extends Component {
 				});
 				let res = await this.empleados();
 
-                console.log(FUNCIONES.ordenes)
+                //console.log(FUNCIONES.ordenes)
 				Axios.get(FUNCIONES.ordenes+"?id=3&eid=&lines=10&inicio=0&estado=espera")
 					.then(({ data }) => {
 						
@@ -192,7 +193,7 @@ export default class OrdenesP extends Component {
 				
 						));	
 
-						console.log(Ordenes)
+						//console.log(Ordenes)
 						guardar('Ordenes', Ordenes);
 						this.setState({
 							Ordenes: Ordenes,
@@ -208,7 +209,7 @@ export default class OrdenesP extends Component {
 			} else {
 				this.setState({
 					empleados:empleados,
-					Invoices: valores,
+					Ordenes: valores,
 					
 					cantidadPaginas: Math.floor(valores.length / this.state.first) + 1
 				});
@@ -312,6 +313,33 @@ export default class OrdenesP extends Component {
 		}
 		
 		};
+
+		cargarordenes = (estado)=>{
+			Axios.get(FUNCIONES.ordenes+"?id=3&eid=&lines=10&inicio=0&estado="+estado)
+			.then(({ data }) => {
+				
+				//console.log(data)
+				let Ordenes = data;			
+				
+				Ordenes.map((orden, i)=> (
+
+					orden.empleado = this.get_empleado(orden.employee_id)	
+		
+				));	
+
+				//console.log(Ordenes)
+				
+				this.setState({
+					Ordenes: Ordenes,
+					estado:estado,
+					loading: false,							
+					cantidadPaginas: Math.floor(Ordenes.length / this.state.first) + 1
+				});
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+		}
 		
 		onConfirm = ()=>{
 			this.setState({				
@@ -326,10 +354,20 @@ export default class OrdenesP extends Component {
 			navigate('/app/orden/iniciar/'+id)
 		}
 
+		async continuar  (id) {
+			//let res = await Axios.get(FUNCIONES.orden+"?id="+id)
+			//console.log(res.data)
+			navigate('/app/orden/terminar/'+id)
+		}
+
 		 ver  (id) {
 			//let res = await Axios.get(FUNCIONES.orden+"?id="+id)
 			//console.log(res.data)
-			navigate('/app/orden/'+id)
+			navigate('/app/ordenp/view/'+id)
+		}
+
+		newo(){
+			navigate('/app/nuevaorden/0')
 		}
 
 	render() {
@@ -341,7 +379,8 @@ export default class OrdenesP extends Component {
 			cantidadPaginas,
 			offset,
 			column,
-			direction
+			direction,
+			estado
 		} = this.state;
 
 		if (loading) {
@@ -354,12 +393,74 @@ export default class OrdenesP extends Component {
           <input type="text" value={this.state.buscar} onChange={this.handleChange} />
         </label>
 					{Ordenes.length === 0 ? (
+						<React.Fragment>
+						<Button type="button" variant="primary"  className="submitform" onClick={() => {
+						this.newo();
+					}}	>Nueva Orden</Button>
+					<Menu size='mini' class="ui two item menu">
+							<Menu.Item
+							class="ui blue button"
+							active={estado=='espera'}
+							onClick={() => {
+								this.cargarordenes('espera')
+								
+							}}
+							name="En espera"
+						></Menu.Item>
+						<Menu.Item
+						class="ui orange button"
+						active={estado=='iniciada'}
+							onClick={() => {
+								this.cargarordenes('iniciada')
+							}}
+							name="Iniciadas"
+						></Menu.Item>
+						<Menu.Item
+						class="ui black button"
+						active={estado=='finalizada'}
+							onClick={() => {
+								this.cargarordenes('finalizada')
+							}}
+							name="Finalizadas"
+						></Menu.Item>
+						
+						</Menu>
 						<Header as="h2">No hay Ordenes de producción pendientes</Header>
+						</React.Fragment>
 					) : (
 						<React.Fragment>
-							
+							<Button type="button" variant="primary"  className="submitform" onClick={() => {
+							this.newo();
+						}}	>Nueva Orden</Button>
+						<Menu size='mini' class="ui two item menu">
+							<Menu.Item
+							active={estado=='espera'}
+							class="ui blue button"
+							onClick={() => {
+								this.cargarordenes('espera')
+							}}
+							name="En espera"
+						></Menu.Item>
+						<Menu.Item
+						class="ui orange button"
+						active={estado=='iniciada'}
+							onClick={() => {
+								this.cargarordenes('iniciada')
+							}}
+							name="Iniciadas"
+						></Menu.Item>
+						<Menu.Item
+						class="ui orange button"
+						active={estado=='iniciada'}
+							onClick={() => {
+								this.cargarordenes('finalizada')
+							}}
+							name="Finalizadas"
+						></Menu.Item>
+						
+						</Menu>
 							<div className="pt-8">
-								<Header>Facturas Vencidas</Header>
+								<Header>Ordenes de Producción</Header>
 								<div className="inline-block pr-4">
 									<Menu compact>
 										<Menu.Item active>Cantidad de Ordenes: {Ordenes.length}</Menu.Item>
@@ -430,22 +531,16 @@ export default class OrdenesP extends Component {
 											.slice(offset, first)
 											.map((t) => (
 												<FilaOrden
-													
+													estado={estado}
 													orden={t}
 													generar={this.generar}
 													ver = {this.ver}
-													
+													terminar={this.continuar}
 												/>
 											))}
 									</Table.Body>
 								</Table>
 							</div>
-
-							
-								
-
-							
-
 							
 						</React.Fragment>
 						

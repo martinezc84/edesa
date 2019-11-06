@@ -9,26 +9,15 @@ import { MostrarMensaje } from './Mensajes';
 import { Msjerror } from './Mensajeserror';
 import Inputdate from './Inputdate';
 import FilaDetalle from './FilaDetalle';
+import Barcode from 'react-barcode'
 import { isLoggedIn, logout , getUser} from "../utils/identity"
 import { navigate } from 'gatsby';
 import { Button, FormControl, Container, Row, Col} from 'react-bootstrap';
-import {DateInput} from 'semantic-ui-calendar-react';
 
-const options = [
-	
-	{
-		key: 'paquete',
-		text: 'PAQUETE',
-		value: 'paquete',
-	  },
-	  {
-		key: 'items',
-		text: 'ITEMS',
-		value: 'items',
-	  },
-]
 
-export default class NuevaOrden extends Component {
+
+
+export default class OrdenP extends Component {
 	state = {
 		loafing:false,
 		from_agency: 0,
@@ -38,6 +27,8 @@ export default class NuevaOrden extends Component {
 		buttonactive:false,
 		items:[],
 		detalle:[],
+		equipos:[],
+		empleados:[],
 		id:0,
 		show:false,
 		getmem:null,
@@ -49,13 +40,23 @@ export default class NuevaOrden extends Component {
 		guardar:true,
 		visilee:false,
 		defaultdate: new Date(),
-		descripcion:""
+		descripcion:"",
+		fechahora_entrega:new Date(),
+		orden:{fecha:'',fechahora_entrega:'',employee_id:0,descripcion:'',},
+		itemsgenerados:[]
 
 				
 	};
 	 
-	
-    
+	printOrder = () => {
+		const printableElements = document.getElementById('barcodes').innerHTML;
+		const orderHtml = '<html><head><title></title></head><body>' + printableElements + '</body></html>'
+		const oldPage = document.body.innerHTML;
+		document.body.innerHTML = orderHtml;
+		window.print();
+		document.body.innerHTML = oldPage
+	}
+   
 
 	setStateAsync(state) {
 		return new Promise((resolve) => {
@@ -89,6 +90,8 @@ export default class NuevaOrden extends Component {
 
 	};
 
+	
+
 	trataEquipo= (empleados) => {
 		return empleados.map((t) => ({
 			key: t.id,
@@ -113,7 +116,7 @@ export default class NuevaOrden extends Component {
 						
 						let Formulas = res.data;						
 						Formulas = this.trataFormulas(Formulas)
-						//console.log(Formulas)
+						console.log(Formulas)
 						this.setState({
 							Formulas: Formulas,
 							
@@ -199,7 +202,7 @@ export default class NuevaOrden extends Component {
 		});
 
 		let userdata={group_id:0}
-
+		let itemsgenerados=[]
 		userdata = getUser()
 
 		this.setState({
@@ -215,46 +218,52 @@ export default class NuevaOrden extends Component {
 				res = await this.equipos();
 				res = await this.formulas();
 				let id = parseInt(this.props.id)
+				
 				let detalle = []
 				let linedet
-				console.log(id)
+				//console.log(id)
+
 				if(id>0){
-				Axios.get(FUNCIONES.ordenventa+"?id="+id)
-				.then(({ data }) => {
-					console.log(data)
-					let detalleinf = data.invoice_details
-					let orden_id = data.id
-					detalle = []
-					for(let linea in detalleinf){
-						linedet = {id:detalleinf[linea].id,  formula_id:0,item_bundle_name:detalleinf[linea].item_bundle_name,item_cantidad:detalleinf[linea].quantity,cantidad:0}
-						detalle.push(linedet)
+			try {
+			   let resp =await Axios.get(FUNCIONES.orden+"?id="+id)
+					let data =resp.data
+					//console.log(data)
+					let from_orden
+				
+					let orden =data
+					let detalle = data.detalle
+					//let formulas = data.formulas
+					let recursos=[]
+					let series=[]
+					
+					let from_agency
+					for(let linea in detalle){
+						detalle[linea].item_bundle_name!=""? from_orden=true: null
+									
 					}
-					//console.log(detalle)
-						this.setState({
-							detalle:detalle,
-							guardarcantidad:this.guardarcantidad,
-							orden_id:orden_id,
-							from_orden:true
-					});
-				})
-				.catch((error) => {
-					console.error(error);
-				});
-				}else{
-					linedet = {id:1,  formula_id:0,item_bundle_name:"",item_cantidad:0,cantidad:0}
-						detalle.push(linedet)
-						this.setState({
-							detalle:detalle,
-							guardarcantidad:this.guardarcantidad,
-							orden_id:1,
+					if (action=="view"){
+						resp = await Axios.get(FUNCIONES.itemsorden+"?id="+id)
+						 itemsgenerados = resp.data
+					}
+
+					this.setState({
+						orden,
+						detalle,
+						//formulas,
+						series,
+						recursos,
+						from_agency:from_agency,
+						from_orden:from_orden,
+						fechahora_entrega:new Date(orden.fechahora_entrega),
+						itemsgenerados:itemsgenerados
 					});
 				}
+				catch(error)  {
+					console.error(error);
+				};
+				}
 			
-					
-					
-					this.setStateAsync({show:true})			
-			
-    
+					this.setStateAsync({show:true})	
 }
 
 
@@ -270,18 +279,23 @@ export default class NuevaOrden extends Component {
 
 	Selectequipo = (e, item) => {
 		//console.log(item)
+		let orden = this.state.orden
+
+		orden.equipo_id = item.value
 		this.setState(
 			{
-                equipo_id:item.value
+               orden:orden
 			})
 		
 	};
 
 	Selectempleado = (e, item) => {
-		
+		let orden = this.state.orden
+
+		orden.employee_id = item.value
 		this.setState(
 			{
-                empleado:parseInt(item.value)
+                orden:orden
 			})
 		
 	};
@@ -363,8 +377,29 @@ export default class NuevaOrden extends Component {
 		return name
 	};
 
+	buscarempleado = (id) => {
+		let name = null
+		id = parseInt(id)
+		this.state.empleados.map((empleado, i)=> (
+		
+			empleado.key == id  ? name = empleado.text :  false	
 
+		));		
+		
+		return name
+	};
 
+	buscareequipo = (id) => {
+		let name = null
+		id = parseInt(id)
+		this.state.equipos.map((equipo, i)=> (
+		
+			equipo.key == id  ? name = equipo.text :  false	
+
+		));		
+		
+		return name
+	};
 	
 
 	tipoinsumo = (e, item) => {
@@ -384,8 +419,6 @@ export default class NuevaOrden extends Component {
 			items:items,
 			buttonactive:true,
 		});
-		
-		
 	};
 
 	selecAg = (e, item) => {
@@ -395,12 +428,7 @@ export default class NuevaOrden extends Component {
 			[item.name]:item.value		
 			
 		});
-		
-
-		
 	};
-
-	
 	
 	  guardar_orden = async () => {
 	
@@ -414,22 +442,21 @@ export default class NuevaOrden extends Component {
 		
 			try {
 				let guardar=true;			
-				let orden ={}
-				orden.fecha = this.state.date
-				orden.fechahora_entrega = this.state.fechahora_entrega
-				orden.orden_id = this.state.orden_id
-				orden.equipo_id = this.state.equipo_id
-				orden.employee_id = this.state.empleado
-				orden.store_id =this.state.userdata.store
-				orden.descripcion = this.state.descripcion
+				let fechahora_entrega = this.state.fechahora_entrega
 				let lineasaproducir=[]
 				this.state.detalle.map((linea, i)=> (
 						
 					linea.formula_id>0 ? lineasaproducir.push(linea) : false
 		
 				));	
-				orden.detalle = lineasaproducir
-				console.log(orden)
+				let orden  = this.state.orden
+				//console.log(orden)
+
+				orden.detalle.map((linea, i)=> (
+					//console.log(invoice)
+					delete linea.nombre		
+		
+				));
 				
 				
 				if((orden.fecha!=="") && (orden.descripcion!="") && (orden.fechahora_entrega!==undefined) && (orden.orden_id>0) && (orden.equipo_id!="")&& (orden.detalle.length>0)  ){
@@ -441,23 +468,27 @@ export default class NuevaOrden extends Component {
 					));	
 
 					
-					let fecha = orden.fecha.split('-');
-					orden.fecha = fecha[2]+'/'+fecha[1]+'/'+fecha[0]
-					let fechastr = orden.fechahora_entrega.toLocaleDateString('en-US');
-					let horastr = orden.fechahora_entrega.getHours();
-					let minutes = orden.fechahora_entrega.getMinutes();
+					delete orden.fecha_crea
+					delete orden.formulas
+					delete orden.fecha
+					//let fecha = orden.fecha.split('-');
+					//orden.fecha = fecha[2]+'/'+fecha[1]+'/'+fecha[0]
+					//orden.fechahora_entrega = new Date(orden.fechahora_entrega)
+					let fechastr = fechahora_entrega.toLocaleDateString('en-US');
+					let horastr = fechahora_entrega.getHours();
+					let minutes = fechahora_entrega.getMinutes();
 					//console.log(fechastr)
 					//console.log(minutes)
-					fecha = fechastr.split('/');
+					let fecha = fechastr.split('/');
 					orden.fechahora_entrega = fecha[2]+'/'+fecha[0]+'/'+fecha[1]+" "+horastr+":"+minutes
 					let poststr = JSON.stringify(orden)
-					console.log(poststr)
-					console.log(orden.fechahora_entrega)
+					//console.log(poststr)
+					//console.log(orden)
 					let data;
-						guardar ?  data = await Axios.post(FUNCIONES.guardardaroden, poststr) : null
+						guardar ?  data = await Axios.post(FUNCIONES.editarorden, poststr) : null
 						let res =data.data
-						console.log(res.data)
-						if (res.data.id!==undefined){
+						//console.log(res)
+						if (res.response!==undefined){
 							this.setState({
 								loading:false,
 								visible:true,
@@ -525,12 +556,29 @@ export default class NuevaOrden extends Component {
 			});
 			//navigate('/app/formulas/')
 		}
+
+		codigos = ()=>{
+			this.setState({				
+			
+				action:"pdf"
+			});
+		
+		}
+
+		regresar = ()=>{
+			this.setState({				
+			
+				action:"view"
+			});
+			
+		}
 		
 		handleDateChange = (event, {name, value}) => {
-			console.log(value)
-			if (this.state.hasOwnProperty(name)) {
-			  this.setState({ [name]: value });
-			}
+			let orden = this.state.orden
+			orden.fecha = value
+			this.setState({				
+				orden:orden
+			});
 		  }
 
 		
@@ -538,10 +586,12 @@ export default class NuevaOrden extends Component {
         handleInputChange = event => {
             const target = event.target
             const value = target.value
-            const name = target.name
+			const name = target.name
+			let orden = this.state.orden
+			orden.descripcion = value
         
             this.setState({
-              [name]: value,
+              orden:orden
             })
           }
         
@@ -554,9 +604,10 @@ export default class NuevaOrden extends Component {
 					
 		saveDate = (date, name) => {
 			
-			this.setState({
-				[name]: date
-			  })
+			
+			this.setState({				
+				fechahora_entrega:date
+			});
 					  }
 				
 
@@ -565,10 +616,11 @@ export default class NuevaOrden extends Component {
 		let { items, itemst, agencias } = this.props
 		
 		items = [items,...itemst]
-		let {
-		loading, guardarcantidad,equipos, action, Selectequipo, Selectempleado, equipo_id, empleados, empleado, detalle, item_id, Formulas, from_orden
-			
+		let { orden, fechahora_entrega,
+		loading, pdf, itemsgenerados ,equipos, action, Selectequipo, Selectempleado, equipo_id, empleados, empleado, detalle,  Formulas, from_orden
+		
 		} = this.state;
+		orden.employee_id = parseInt(orden.employee_id.toString())
 		if (loading) {
 			return <Loader active inline="centered" />;
 		} else
@@ -576,67 +628,23 @@ export default class NuevaOrden extends Component {
 			if(action=='view')
 				return(
 					<div >
-				
-							
-				</div>
-				)
-			else if (action=='edit')
-				return (
-					<div >
-					
-				</div>
-					
-				
-			)
-			else
-			return(
-				<div >
-					<form onSubmit={this.handleSubmit}>
-					<Row><Col> <label>Fecha<DateInput
-							name="date"
-							placeholder="Date"
-							value={this.state.date}
-							iconPosition="left"
-							onChange={this.handleDateChange}
-							/>
+
+	<Button type="button" variant="primary"  className="submitform" onClick={() => {
+							this.codigos();
+						}}	>CODIGOS DE BARRA</Button>
+						
+						<form onSubmit={this.handleSubmit}>
+					<Row><Col> <label>Fecha: {orden.fecha}
 						</label></Col>
 						
-			<Col> <label>Fecha y hora de entrega<Inputdate
-			date={""}
-			//guardar={this.props.guardar}
-			name={"fechahora_entrega"}
-			guardar={this.saveDate}
-			
-	/></label></Col><Col><label>Equipo<Dropdown
-						value={equipo_id}
-						placeholder='Equipo'
-						onChange={Selectequipo}					
-						selection
-						options={equipos}
-						className="ui segment"
-					/></label></Col><Row></Row>
-					<Col><label>Empleado<Dropdown
-					value={empleado}
-					placeholder='Equipo'
-					onChange={Selectempleado}				
-					selection
-					search
-					options={empleados}
-					className="ui segment"
-				/></label></Col></Row>
+			<Col> <label>Fecha y hora de entrega: {orden.fechahora_entrega}</label></Col><Col><label>Equipo:</label>{this.buscareequipo(orden.equipo_id)}</Col><Row></Row>
+					<Col><label>Empleado: </label>{this.buscarempleado(orden.employee_id)}</Col></Row>
 				<Row>
 					<Col>
-					<TextArea 
-					placeholder='Descripción' 
-					name={"descripcion"} 
-					className="ui segment" 
-					rows="3" 
-					onChange={this.handleInputChange} />
+					Descripción: {orden.descripcion}
 					</Col>
 					</Row>
-					{!from_orden ? ( <React.Fragment> <Row><Col><Button type="button" variant="secondary"  className="submitform" onClick={() => {
-											this.agregar_linea();
-										}}	>Agregar linea</Button></Col></Row></React.Fragment>):('')}	
+					
 					<p >INSUMOS</p>
 				<Table sortable celled>
 				<Table.Header>
@@ -661,6 +669,109 @@ export default class NuevaOrden extends Component {
 				</Table.Header>
 				<Table.Body>
 					{
+					
+						detalle
+						.map((t) => (
+							<Table.Row>
+								{ from_orden ? (	
+								<Table.Cell>									
+								{t.item_bundle_name}
+								</Table.Cell>):('')
+								}							
+								{ from_orden ? (	
+								<Table.Cell>									
+								{t.item_cantidad}
+								</Table.Cell>):('')
+								}
+								<Table.Cell>
+								{t.nombre}
+							
+								</Table.Cell>
+								<Table.Cell>
+								{t.cantidad}
+							
+								</Table.Cell>
+						</Table.Row>
+						))
+						}
+				</Table.Body>
+				</Table>
+				</form>
+			
+				
+				
+				<MostrarMensaje titulo={'Sus Datos fueron guardados con exito'} mensajes={'Guardar'}  visible={this.state.visible} onConfirm={this.onConfirm} />
+				<Msjerror titulo={this.state.errormsj} mensajes={'Error'}  visible={this.state.visiblee} onConfirm={this.onConfirme} />
+				</div>
+				)
+			else if (action=='edit')
+				return (
+					<div >
+					<div >
+						<form onSubmit={this.handleSubmit}>
+					<Row><Col> <label>Fecha:
+						</label>{orden.fecha}</Col>
+						
+			<Col> <label>Fecha y hora de entrega: </label><Inputdate
+			date={fechahora_entrega}
+			//guardar={this.props.guardar}
+			name={"fechahora_entrega"}
+			guardar={this.saveDate}
+			
+	/></Col><Col><label>Equipo:</label><Dropdown
+						value={orden.equipo_id}
+						placeholder='Equipo'
+						onChange={Selectequipo}					
+						selection
+						options={equipos}
+						className="ui segment"
+					/></Col><Row></Row>
+					<Col><label>Empleado: </label><Dropdown
+					value={orden.employee_id}
+					placeholder='Equipo'
+					onChange={Selectempleado}				
+					selection
+					search
+					options={empleados}
+					className="ui segment"
+				/></Col></Row>
+				<Row>
+					<Col>
+					Descripción:<TextArea 
+					placeholder='Descripción' 
+					name={"descripcion"} 
+					className="ui segment" 
+					rows="3" 
+					value={orden.descripcion}
+					onChange={this.handleInputChange} />
+					</Col>
+					</Row>
+					
+					<p >INSUMOS</p>
+				<Table sortable celled>
+				<Table.Header>
+				<Table.Row>
+					{ from_orden ? (
+					<Table.HeaderCell>
+						SOLICITADO
+					</Table.HeaderCell>	):('')
+					}	
+					{ from_orden ? (		
+					<Table.HeaderCell>
+						CANTIDAD SOLICITADA
+					</Table.HeaderCell>):('')
+					}
+					<Table.HeaderCell>
+						A PRODUCIR
+					</Table.HeaderCell>
+					<Table.HeaderCell>
+						CANTIDAD
+					</Table.HeaderCell>
+					</Table.Row>
+				</Table.Header>
+				<Table.Body>
+					{
+					
 						detalle
 						.map((t) => (
 							<FilaDetalle
@@ -669,25 +780,48 @@ export default class NuevaOrden extends Component {
 								view={true}
 								id={t.id}
 								selectitem={this.selectitem}
-								item={t.item_id}
+								item_id={t.formula_id}
 								formulas={Formulas}
 								cantidad={t.cantidad}
-								guardarcantidad={guardarcantidad}
-								from_orden={from_orden}
-								
+								guardarcantidad={this.guardarcantidad}
+								from_orden={from_orden}							
 								
 							/>
-						))}
+						))
+						}
 				</Table.Body>
 				</Table>
-				
-				<Button type="submit" variant="primary" className="submitform" 	>Generar</Button>
+				<Button type="submit" variant="primary" className="submitform" 	>Guardar</Button>
 				</form>
 				<MostrarMensaje titulo={'Sus Datos fueron guardados con exito'} mensajes={'Guardar'}  visible={this.state.visible} onConfirm={this.onConfirm} />
 				<Msjerror titulo={this.state.errormsj} mensajes={'Error'}  visible={this.state.visiblee} onConfirm={this.onConfirme} />
 				</div>
-			
+				</div>
+					
+				
 			)
+			else if (action=='pdf')
+			return (
+				<div>
+					<Button type="button" variant="primary"  className="submitform" onClick={() => {
+							this.regresar();
+						}}	>Regresr</Button>
+					<Button type="button" variant="primary"  className="submitform"onClick={() => this.printOrder()}>Imprimir</Button>
+				<div id="barcodes">
+				{itemsgenerados.map((t, i)=> (
+					<Row><Col><Barcode
+					value={t.code}
+					format="CODE128"
+					/></Col></Row>
+		
+				))}
+				</div>
+				</div>
+			)
+			else
+
+			return <Loader active inline="centered" />;
+			
 	
 }
 }

@@ -1,8 +1,7 @@
 //@ts-check
 import axios from 'axios';
-import { headers, ZAURU } from '../utils/utils';
-const URL = ZAURU.ordendecompra;
-
+import { headers, APIP_URL } from '../utils/utils';
+const URL = APIP_URL.itemorden;
 const headersr = {
 	'Access-Control-Allow-Origin': '*',
 	'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
@@ -11,28 +10,24 @@ const headersr = {
 	'Access-Control-Max-Age': '2592000',
 	'Access-Control-Allow-Credentials': 'true',
   };
-
 //@ts-ignore
 exports.handler = async (event, context) => {
 	try {
 		//@ts-ignore
-		
-		let url = `${URL}`;
-	
-		
+		console.log(URL)
 		let id = event.queryStringParameters.id;
-		let { data } = await axios.get(url+id+'.json' ,{ headers });
+		let { data } = await axios.get(URL+"?id="+id, { headers });
+		//console.log(data)
 		return {
 			statusCode: 200,
-			headers:headersr,
-			body: JSON.stringify(data)
+			body: JSON.stringify(data),
+			headers:headersr
 		};
 	} catch (error) {
-		console.error(error);
+		//console.error(error);
 		return {
 			statusCode: 502,
-			headers:headersr,
-			body: JSON.stringify(error.response.data)
+			body: JSON.stringify(error)
 		};
 	}
 };

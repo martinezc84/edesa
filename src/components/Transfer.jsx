@@ -95,7 +95,7 @@ export default class Formula extends Component {
 				});
 			}
 
-			let items = [...comprables, vendibles]
+			let items = comprables
 			this.setState ({
 				esunico:this.esunico,
 				items:items,

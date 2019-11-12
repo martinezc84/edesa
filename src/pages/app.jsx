@@ -86,6 +86,7 @@ export default class App extends Component {
 					})
 			}
 		}else{
+			this.borrarmem()
 			this.setState({
 				tiposDeTurno: [],
 				show:true,
@@ -115,7 +116,11 @@ export default class App extends Component {
 		window.localStorage.setItem(state, JSON.stringify(valores))
 	};
 
-	borrarmem=()=>{
+	borrarmem= async ()=>{
+		this.setState({
+			
+			loading:true
+		});
 		//console.log('borrando')
 		window.localStorage.removeItem("agencias")
 		window.localStorage.removeItem("vendibles")
@@ -123,7 +128,35 @@ export default class App extends Component {
 		window.localStorage.removeItem("menuitems")
 		window.localStorage.removeItem("equipos")
 		window.localStorage.removeItem("empleados")
+
+		let userdata = getUser()
+			//console.log('cargando zauru')
+			let resp = await this.cargardatoszauru()
+			//console.log('cargando menu')
+			//console.log(this.getmem('menuitems'))
+			if (this.getmem('menuitems')===undefined){
+				Axios.get(FUNCIONES.menus+'?id='+userdata.group_id)
+				.then(({ data }) => {
+					
+					//console.log(data)
+					this.setState({
+					menuitems : data,
+					show:true,
+					})
+					this.guardarmem("menuitems",data)
+				})
+				.catch((error) => {
+					console.error(error);
+					this.setState({
+						menuitems : []
+					})
+				});
+				this.setState({
+			
+					loading:false
+				});
 	}
+}
 
 	getmem =(state)=>{
 		

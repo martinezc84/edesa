@@ -340,15 +340,15 @@ export default class UnpaidInvoices extends Component {
           <input type="text" value={this.state.buscar} onChange={this.handleChange} />
         </label>
 					{Invoices.length === 0 ? (
-						<Header as="h2">No hay turnos vendidos para ese tipo</Header>
+						<Header as="h2">No hay  O/C </Header>
 					) : (
 						<React.Fragment>
 							
 							<div className="pt-8">
-								<Header>Facturas Vencidas</Header>
+								<Header>Ordenes de compra autorizadas</Header>
 								<div className="inline-block pr-4">
 									<Menu compact>
-										<Menu.Item active>Cantidad de facturas: {Invoices.length}</Menu.Item>
+										<Menu.Item active>Cantidad de O/C: {Invoices.length}</Menu.Item>
 									</Menu>
 								</div>
 
@@ -428,13 +428,6 @@ export default class UnpaidInvoices extends Component {
 									</Table.Body>
 								</Table>
 							</div>
-
-							
-								
-
-							
-
-							
 						</React.Fragment>
 						
 					)}

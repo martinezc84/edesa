@@ -29,7 +29,7 @@ export const handleLogin = async ({ username, password }) => {
 							if(data.group_id == "2"){
 								navigate(`/app/ordenesp`)
 							}else{
-								navigate(`/app/ordenes`)
+								navigate(`/app/`)
 							}
 							
 							//return data.group_id

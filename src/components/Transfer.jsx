@@ -95,7 +95,7 @@ export default class Formula extends Component {
 				});
 			}
 
-			let items = comprables
+			let items = [...comprables, vendibles]
 			this.setState ({
 				esunico:this.esunico,
 				items:items,
@@ -552,7 +552,7 @@ export default class Formula extends Component {
 					  value={from_agency}
 					placeholder='Agencia'
 					onChange={this.selectAg}
-					
+					search
 					selection
 					options={agencias}
 					className="mr-sm-2"
@@ -564,7 +564,7 @@ export default class Formula extends Component {
 					  value={to_agency}
 					placeholder='Agencia'
 					onChange={this.selectAg}
-				
+					search
 					selection
 					options={agencias}
 					className="mr-sm-2"
@@ -574,7 +574,7 @@ export default class Formula extends Component {
 
 			 <React.Fragment> <Row><Col><Button type="button" variant="primary"  className="submitform" onClick={() => {
 										this.agregar_item();
-									}}	>Agregar Item</Button></Col></Row></React.Fragment>
+									}}	>Agregar Insumo</Button></Col></Row></React.Fragment>
 			
 			
 		  

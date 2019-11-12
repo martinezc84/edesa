@@ -62,22 +62,23 @@ export default class App extends Component {
 			//console.log('cargando menu')
 			//console.log(this.getmem('menuitems'))
 			if (this.getmem('menuitems')===undefined){
-				Axios.get(FUNCIONES.menus+'?id='+userdata.group_id)
-				.then(({ data }) => {
-					
+				try{
+				let res = await  Axios.get(FUNCIONES.menus+'?id='+userdata.group_id)
+				
+					let data =res.data;
 					//console.log(data)
 					this.setState({
 					menuitems : data,
 					show:true,
 					})
 					this.guardarmem("menuitems",data)
-				})
-				.catch((error) => {
+				
+				}catch(error)  {
 					console.error(error);
 					this.setState({
 						menuitems : []
 					})
-				});
+				}
 			
 			}else{
 				this.setState({

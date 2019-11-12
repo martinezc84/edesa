@@ -17,7 +17,7 @@ export default class Steps extends Component {
 		let userdata = getUser()
 			//console.log('menuitems')
 			//console.log(menuitems)
-		if (userdata.group_id<4) {
+		
 		return (
 			<Menu size='mini'>
 				
@@ -43,6 +43,6 @@ export default class Steps extends Component {
 			
 			</Menu>
 		);
-				}
+				
 	}
 }

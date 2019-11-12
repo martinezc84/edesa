@@ -574,7 +574,7 @@ export default class Formula extends Component {
 
 			 <React.Fragment> <Row><Col><Button type="button" variant="primary"  className="submitform" onClick={() => {
 										this.agregar_item();
-									}}	>Agregar Insumo</Button></Col></Row></React.Fragment>
+									}}	>Agregar Item</Button></Col></Row></React.Fragment>
 			
 			
 		  

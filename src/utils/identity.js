@@ -23,13 +23,14 @@ export const handleLogin = async ({ username, password }) => {
 							email: data.email,
 							group_id:data.group_id,
 							eid:data.employee_id,
-							store:data.store_id
+							store:data.store_id,
+							redirect:data.avatar
 							})
 
 							if(data.group_id == "2"){
 								navigate(`/app/ordenesp`)
 							}else{
-								navigate(`/app/`)
+								navigate(data.avatar)
 							}
 							
 							//return data.group_id

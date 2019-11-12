@@ -4,7 +4,8 @@ import '../css/style.css';
 import Axios from 'axios';
 import { FUNCIONES, descarte, production } from '../utils/utils';
 import { Header, Table, Dropdown, Checkbox, Loader } from 'semantic-ui-react';
-
+import { MostrarMensaje } from './Mensajes';
+import { Msjerror } from './Mensajeserror';
 import { isLoggedIn, logout , getUser} from "../utils/identity"
 import { navigate } from 'gatsby';
 import Barcode from 'react-barcode'
@@ -17,6 +18,7 @@ export default class Iniciar extends Component {
 	state = {
 		referencias:[],
 		desperdicios:[],
+		rendimientos:[],
 		formulas:[],
 		detalle:[],
 		orden:null,
@@ -75,6 +77,8 @@ export default class Iniciar extends Component {
 					let formulas = data.formulas
 					let desperdicios=[]
 					let referencias=[]
+					let rendimientos=[]
+					let rendimiento
 					let desperdiciol
 					let refer
 					let ids=1
@@ -120,6 +124,22 @@ export default class Iniciar extends Component {
 								}
 							}
 						}
+						
+						exist =true
+						
+
+						if (formula.rv==1){
+							detalle[linea].generar=false
+							//console.log("genera unico")						
+							for(let lineapt in formula.pt){
+								let lineas = formula.pt[lineapt].cantidad * detalle[linea].cantidad
+									
+								rendimiento = {id:ids,producto:formula.pt[lineapt].name, cantidad:lineas,item_id:formula.pt[lineapt].item_id}
+								rendimientos.push(rendimiento)
+								ids++
+							
+							}
+						}
 					}
 
 
@@ -129,6 +149,7 @@ export default class Iniciar extends Component {
 						formulas,
 						referencias,
 						desperdicios,
+						rendimientos,
 						to_agency,
 						
 						
@@ -267,13 +288,17 @@ export default class Iniciar extends Component {
 	   let iteminfo
 	   let stringdet = "{"
 	   let stringdesper = "{"
+	   let stringrend = "{"
 	   let generadescarte =false
+	   let generarendimiento =false
+	   let errorgen = false
 	
 		// Ciclo de llamadas
 		
 			try {
 					let referencias = this.state.referencias
 					let desperdicios = this.state.desperdicios
+					let rendimientos = this.state.rendimientos
 					let x = 0
 					let y=0
 					if(desperdicios.length>0){
@@ -284,6 +309,15 @@ export default class Iniciar extends Component {
 						}
 					}
 					stringdesper+="}"
+					if(rendimientos.length>0){
+						generarendimiento=true
+						for(let rend in rendimientos){
+							if(y>0) stringrend+=","
+							stringrend+='"'+y+'":{"item_id":"'+rendimientos[rend].item_id+'", "booked_quantity":"'+rendimientos[rend].cantidad+'"}'
+							y++
+						}
+					}
+					stringrend+="}"
 					//console.log(referencias)
 					for(let refer in referencias){
 						iteminfo = await this.get_itemz(referencias[refer].item_id)
@@ -298,9 +332,11 @@ export default class Iniciar extends Component {
 					}
 					let formula_id
 					let formula={}
+					let generardetalle = false
 					for(let linea in detalle){
 						let formulas = this.state.formulas
 						if(detalle[linea].generar){
+							generardetalle = true
 							formula_id = detalle[linea].formula_id
 
 							formulas.map((formu, i)=> (		
@@ -320,7 +356,7 @@ export default class Iniciar extends Component {
 						let shipment = {shipment:booking}
 						let poststr = JSON.stringify(shipment)
 						poststr= poststr.replace('"|insumos|"',stringdet)
-						console.log(poststr)
+						
 
 						if(generadescarte){
 							let bookingd = booking
@@ -332,13 +368,33 @@ export default class Iniciar extends Component {
 							let resd = await Axios.post(`${FUNCIONES.reservaciones}`,poststrd)
 							if (resd.data.id!==undefined){
 								resd = await Axios.post(FUNCIONES.deliver+"?id="+resd.data.id)
+							}else{
+								errorgen=true
 							}
 
 							console.log(poststrd)
 						}
 
-						let res = await Axios.post(`${FUNCIONES.reservaciones}`,poststr)
-
+						if(generarendimiento){
+							let bookingd = booking
+							bookingd.movements_attributes="|rendimiento|"
+							
+							let shipmentd = {shipment:booking}
+							let poststrd = JSON.stringify(shipmentd)
+							poststrd= poststrd.replace('"|rendimiento|"',stringrend)
+							console.log(poststrd)
+							let resd = await Axios.post(`${FUNCIONES.reservaciones}`,poststrd)
+							if (resd.data.id!==undefined){
+								resd = await Axios.post(FUNCIONES.deliver+"?id="+resd.data.id)
+							}else{
+								errorgen=true
+							}
+							
+						}
+						if (generardetalle){
+							console.log(poststr)
+							let res = await Axios.post(`${FUNCIONES.reservaciones}`,poststr)
+						
 						if (res.data.id!==undefined){
 								let resp = await Axios.post(FUNCIONES.deliver+"?id="+res.data.id)
 								 resp = await Axios.post(`${FUNCIONES.editarorden}`,'{"id":'+this.state.orden.id+', "estado":"finalizada","detalle":{}}')
@@ -354,6 +410,24 @@ export default class Iniciar extends Component {
 									errormsj:"Sus datos no se guardaron, contacte al Administrador"
 								});	
 							}
+						}else{
+							if(errorgen){
+								
+								this.setState({
+									loading: false,
+									visiblee:true,
+									errormsj:"Sus datos no se guardaron, contacte al Administrador"
+								});	
+
+							}else{
+								this.setState({
+									loading: false,
+									visible:true,
+									
+								});
+							}
+
+						}
 				
 			
 			} catch (error) {
@@ -380,7 +454,7 @@ export default class Iniciar extends Component {
 				visible:false,
 				
 			});
-			navigate('/app/formulas/')
+			navigate('/app/ordenesp/')
 		}
 
 		onConfirme = ()=>{
@@ -410,12 +484,26 @@ export default class Iniciar extends Component {
 					referencias
 				  })
 
-			}else{
+			}else if (name=='rendimiento'){
+				let rendimientos = this.state.rendimientos
+				id = id.split("_")
+				rendimientos.map((desp, i)=> (
+		
+					desp.id == id[1]  ? desp.cantidad = value :  false	
+		
+				));	
+
+				this.setState({
+					rendimientos
+				  })
+			}
+			
+			else{
 				let desperdicios = this.state.desperdicios
 				id = id.split("_")
 				desperdicios.map((desp, i)=> (
 		
-					desp.id == id  ? desp.cantidad = value :  false	
+					desp.id == id[1]  ? desp.cantidad = value :  false	
 		
 				));	
 
@@ -443,7 +531,7 @@ export default class Iniciar extends Component {
 
 		let {
 				
-			referencias, desperdicios, loading
+			referencias, desperdicios, loading, rendimientos
            
 			
 		} = this.state;
@@ -546,8 +634,52 @@ export default class Iniciar extends Component {
 					))}
 			</Table.Body>
 			</Table></React.Fragment>):('')}
+
+			{  (rendimientos.length>0)?(<React.Fragment>
+			<p >RENDIMIENTOS</p>
+			<Table sortable celled>
+			<Table.Header>
+			<Table.Row>
+				<Table.HeaderCell
+				>
+					ITEM
+				</Table.HeaderCell>
+				
+				<Table.HeaderCell
+				>
+					CANTIDAD
+				</Table.HeaderCell>
+				
+				</Table.Row>
+			</Table.Header>
+			<Table.Body>
+				{
+					rendimientos
+					.map((t) => (
+						<Table.Row>
+										
+					<Table.Cell>{t.producto}</Table.Cell>
+					<Table.Cell>{<input
+					autoFocus
+                    type="number"
+					name="rendimiento"
+					id={"rendi_"+t.id}
+                    value={t.serie}
+					onChange={this.handleInputChange}				
+                    className="inputform"
+                  />}</Table.Cell>
+											
+					
+						
+				</Table.Row>
+					))}
+			</Table.Body>
+			</Table></React.Fragment>):('')}
 			<button type="submit" className="submitform">Terminar</button>
 			</form>	
+			<MostrarMensaje titulo={'Sus Datos fueron guardados con exito'} mensajes={'Guardar'}  visible={this.state.visible} onConfirm={this.onConfirm} />
+			<Msjerror titulo={this.state.errormsj} mensajes={'Error'}  visible={this.state.visiblee} onConfirm={this.onConfirme} />
+			
               </div>
 			)
 		

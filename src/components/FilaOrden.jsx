@@ -54,7 +54,7 @@ export default class FilaFactura extends Component {
 							>
 				<Icon name="cogs" />
 								Iniciar
-						</Button> : (estado=='espera') ? <Button
+						</Button> : (estado=='iniciada') ? <Button
 								
 								class="ui orange button"
 								onClick={() => {

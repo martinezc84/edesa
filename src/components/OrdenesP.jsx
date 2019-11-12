@@ -314,7 +314,9 @@ export default class OrdenesP extends Component {
 		
 		};
 
-		cargarordenes = (estado)=>{
+		cargarordenes = async (estado)=>{
+
+			let res = await this.empleados();
 			Axios.get(FUNCIONES.ordenes+"?id=3&eid=&lines=10&inicio=0&estado="+estado)
 			.then(({ data }) => {
 				

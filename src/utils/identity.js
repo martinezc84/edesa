@@ -54,7 +54,12 @@ export const isLoggedIn = () => {
 }
 
 export const logout = callback => {
-	
+	window.localStorage.removeItem("agencias")
+		window.localStorage.removeItem("vendibles")
+		window.localStorage.removeItem("comprables")
+		window.localStorage.removeItem("menuitems")
+		window.localStorage.removeItem("equipos")
+		window.localStorage.removeItem("empleados")
   setUser({})
   //callback()
 }

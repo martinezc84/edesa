@@ -3,13 +3,12 @@ import React, { Component } from 'react';
 import '../css/style.css';
 import Axios from 'axios';
 import { FUNCIONES } from '../utils/utils';
-import { Loader, Table, Dropdown, TextArea } from 'semantic-ui-react';
+import { Loader, Table, Grid, Button } from 'semantic-ui-react';
 import { MostrarMensaje } from './Mensajes';
 import { Msjerror } from './Mensajeserror';
 import FilaDetalle from './FilaDetalleCompra';
 import { isLoggedIn, logout , getUser} from "../utils/identity"
 import { navigate } from 'gatsby';
-import { Button,  Row, Col} from 'react-bootstrap';
 
 
 
@@ -499,13 +498,13 @@ export default class PurchaseDetail extends Component {
 			return(
 				<div >
 					<form onSubmit={this.handleSubmit}>
-					<Row><Col> <label>Orden {orden.id_number}
-						</label></Col>
-						<Col> <label>Proveedor {orden.payee.name}
-						</label></Col>
-						<Col> <label>Fecha {orden.issue_date}
-						</label></Col>
-		</Row>
+					<Grid.Row><Grid.Column> <label>Orden {orden.id_number}
+						</label></Grid.Column>
+						<Grid.Column> <label>Proveedor {orden.payee.name}
+						</label></Grid.Column>
+						<Grid.Column> <label>Fecha {orden.issue_date}
+						</label></Grid.Column>
+		</Grid.Row>
 		
 						
 					<p >DETALLE</p>

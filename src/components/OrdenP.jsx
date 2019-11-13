@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import '../css/style.css';
 import Axios from 'axios';
 import { FUNCIONES } from '../utils/utils';
-import { Loader, Table, Dropdown, TextArea } from 'semantic-ui-react';
+import { Loader, Table, Dropdown, TextArea, Button, Grid } from 'semantic-ui-react';
 import sortBy from 'lodash/sortBy';
 import { MostrarMensaje } from './Mensajes';
 import { Msjerror } from './Mensajeserror';
@@ -12,7 +12,6 @@ import FilaDetalle from './FilaDetalle';
 import Barcode from 'react-barcode'
 import { isLoggedIn, logout , getUser} from "../utils/identity"
 import { navigate } from 'gatsby';
-import { Button, FormControl, Container, Row, Col} from 'react-bootstrap';
 
 
 
@@ -634,16 +633,16 @@ export default class OrdenP extends Component {
 						}}	>CODIGOS DE BARRA</Button>
 						
 						<form onSubmit={this.handleSubmit}>
-					<Row><Col> <label>Fecha: {orden.fecha}
-						</label></Col>
+					<Grid.Row><Grid.Column> <label>Fecha: {orden.fecha}
+						</label></Grid.Column>
 						
-			<Col> <label>Fecha y hora de entrega: {orden.fechahora_entrega}</label></Col><Col><label>Equipo:</label>{this.buscareequipo(orden.equipo_id)}</Col><Row></Row>
-					<Col><label>Empleado: </label>{this.buscarempleado(orden.employee_id)}</Col></Row>
-				<Row>
-					<Col>
+			<Grid.Column> <label>Fecha y hora de entrega: {orden.fechahora_entrega}</label></Grid.Column><Grid.Column><label>Equipo:</label>{this.buscareequipo(orden.equipo_id)}</Grid.Column><Grid.Row></Grid.Row>
+					<Grid.Column><label>Empleado: </label>{this.buscarempleado(orden.employee_id)}</Grid.Column></Grid.Row>
+				<Grid.Row>
+					<Grid.Column>
 					Descripción: {orden.descripcion}
-					</Col>
-					</Row>
+					</Grid.Column>
+					</Grid.Row>
 					
 					<p >INSUMOS</p>
 				<Table sortable celled>
@@ -709,24 +708,24 @@ export default class OrdenP extends Component {
 					<div >
 					<div >
 						<form onSubmit={this.handleSubmit}>
-					<Row><Col> <label>Fecha:
-						</label>{orden.fecha}</Col>
+					<Grid.Row><Grid.Column> <label>Fecha:
+						</label>{orden.fecha}</Grid.Column>
 						
-			<Col> <label>Fecha y hora de entrega: </label><Inputdate
+			<Grid.Column> <label>Fecha y hora de entrega: </label><Inputdate
 			date={fechahora_entrega}
 			//guardar={this.props.guardar}
 			name={"fechahora_entrega"}
 			guardar={this.saveDate}
 			
-	/></Col><Col><label>Equipo:</label><Dropdown
+	/></Grid.Column><Grid.Column><label>Equipo:</label><Dropdown
 						value={orden.equipo_id}
 						placeholder='Equipo'
 						onChange={Selectequipo}					
 						selection
 						options={equipos}
 						className="ui segment"
-					/></Col><Row></Row>
-					<Col><label>Empleado: </label><Dropdown
+					/></Grid.Column><Grid.Row></Grid.Row>
+					<Grid.Column><label>Empleado: </label><Dropdown
 					value={orden.employee_id}
 					placeholder='Equipo'
 					onChange={Selectempleado}				
@@ -734,9 +733,9 @@ export default class OrdenP extends Component {
 					search
 					options={empleados}
 					className="ui segment"
-				/></Col></Row>
-				<Row>
-					<Col>
+				/></Grid.Column></Grid.Row>
+				<Grid.Row>
+					<Grid.Column>
 					Descripción:<TextArea 
 					placeholder='Descripción' 
 					name={"descripcion"} 
@@ -744,8 +743,8 @@ export default class OrdenP extends Component {
 					rows="3" 
 					value={orden.descripcion}
 					onChange={this.handleInputChange} />
-					</Col>
-					</Row>
+					</Grid.Column>
+					</Grid.Row>
 					
 					<p >INSUMOS</p>
 				<Table sortable celled>
@@ -809,10 +808,10 @@ export default class OrdenP extends Component {
 					<Button type="button" variant="primary"  className="submitform"onClick={() => this.printOrder()}>Imprimir</Button>
 				<div id="barcodes">
 				{itemsgenerados.map((t, i)=> (
-					<Row><Col><Barcode
+					<Grid.Row><Grid.Column><Barcode
 					value={t.code}
 					format="CODE128"
-					/></Col></Row>
+					/></Grid.Column></Grid.Row>
 		
 				))}
 				</div>

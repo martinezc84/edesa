@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import '../css/style.css';
 import Axios from 'axios';
 import { FUNCIONES } from '../utils/utils';
-import { Loader, Table, Dropdown, TextArea } from 'semantic-ui-react';
+import { Loader, Table, Dropdown, TextArea, Grid, Button } from 'semantic-ui-react';
 import sortBy from 'lodash/sortBy';
 import { MostrarMensaje } from './Mensajes';
 import { Msjerror } from './Mensajeserror';
@@ -11,7 +11,6 @@ import Inputdate from './Inputdate';
 import FilaDetalle from './FilaDetalle';
 import { isLoggedIn, logout , getUser} from "../utils/identity"
 import { navigate } from 'gatsby';
-import { Button, FormControl, Container, Row, Col} from 'react-bootstrap';
 import {DateInput} from 'semantic-ui-calendar-react';
 
 const options = [
@@ -592,30 +591,37 @@ export default class NuevaOrden extends Component {
 			return(
 				<div >
 					<form onSubmit={this.handleSubmit}>
-					<Row><Col> <label>Fecha<DateInput
+						<Grid columns={3}>
+					<Grid.Row>
+						<Grid.Column> <label>Fecha<DateInput
 							name="date"
 							placeholder="Date"
 							value={this.state.date}
 							iconPosition="left"
 							onChange={this.handleDateChange}
 							/>
-						</label></Col>
+						</label></Grid.Column>
 						
-			<Col> <label>Fecha y hora de entrega<Inputdate
+			<Grid.Column> <label>Fecha y hora de entrega<Inputdate
 			date={""}
 			//guardar={this.props.guardar}
 			name={"fechahora_entrega"}
 			guardar={this.saveDate}
 			
-	/></label></Col><Col><label>Equipo<Dropdown
+	/></label></Grid.Column>
+	        <Grid.Column><label>Equipo<Dropdown
 						value={equipo_id}
 						placeholder='Equipo'
 						onChange={Selectequipo}					
 						selection
 						options={equipos}
 						className="ui segment"
-					/></label></Col><Row></Row>
-					<Col><label>Empleado<Dropdown
+					/></label></Grid.Column></Grid.Row>
+					
+						</Grid>
+					<Grid columns={1}>
+					<Grid.Row>
+					<Grid.Column><label>Empleado: <Dropdown
 					value={empleado}
 					placeholder='Equipo'
 					onChange={Selectempleado}				
@@ -623,20 +629,22 @@ export default class NuevaOrden extends Component {
 					search
 					options={empleados}
 					className="ui segment"
-				/></label></Col></Row>
-				<Row>
-					<Col>
+				/></label></Grid.Column>
+					</Grid.Row>
+				    <Grid.Row>
+					<Grid.Column>	
 					<TextArea 
 					placeholder='Descripción' 
 					name={"descripcion"} 
 					className="ui segment" 
 					rows="3" 
 					onChange={this.handleInputChange} />
-					</Col>
-					</Row>
-					{!from_orden ? ( <React.Fragment> <Row><Col><Button type="button" variant="secondary"  className="submitform" onClick={() => {
+					</Grid.Column>
+					</Grid.Row>
+					</Grid>
+					{!from_orden ? ( <React.Fragment><Grid> <Grid.Row><Grid.Column><Button type="button" variant="secondary"  className="submitform" onClick={() => {
 											this.agregar_linea();
-										}}	>Agregar linea</Button></Col></Row></React.Fragment>):('')}	
+										}}	>Agregar linea</Button></Grid.Column></Grid.Row></Grid></React.Fragment>):('')}	
 					<p >INSUMOS</p>
 				<Table sortable celled>
 				<Table.Header>

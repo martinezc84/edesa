@@ -1,16 +1,14 @@
 //@ts-check
 import React, { Component } from 'react';
-import netlifyIdentity from 'netlify-identity-widget';
 import '../css/style.css';
 import Axios from 'axios';
 import { FUNCIONES} from '../utils/utils';
-import { Header, Table, Loader, Pagination,  Menu, Icon } from 'semantic-ui-react';
+import { Header, Table, Loader, Pagination,  Menu, Icon, Button } from 'semantic-ui-react';
 import FilaFormula from './FilaFormula';
 import sortBy from 'lodash/sortBy';
 import { MostrarMensaje } from './Mensajes';
 import { isLoggedIn, logout , getUser} from "../utils/identity"
 import { navigate } from '@reach/router';
-import { Button} from 'react-bootstrap';
 
 
 export default class Secuencias extends Component {

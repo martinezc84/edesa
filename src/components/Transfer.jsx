@@ -4,14 +4,13 @@ import '../css/style.css';
 import Axios from 'axios';
 import { FUNCIONES } from '../utils/utils';
 
-import {  Table, Dropdown, Loader} from 'semantic-ui-react';
+import {  Table, Dropdown, Loader, Grid, Button} from 'semantic-ui-react';
 
 import { MostrarMensaje } from './Mensajes';
 import { Msjerror } from './Mensajeserror';
 import FilaTransfer from './FilaTransfer';
 import {  getUser} from "../utils/identity"
 import { navigate } from 'gatsby';
-import { Button, FormControl, Container, Row, Col} from 'react-bootstrap';
 import {DateInput} from 'semantic-ui-calendar-react';
 
 export default class Formula extends Component {
@@ -506,9 +505,9 @@ export default class Formula extends Component {
 		return(
 			<div >
 				<form onSubmit={this.handleSubmit}>
-				<Container>
-		<Row>
-			<Col> 
+				<Grid>
+		<Grid.Row>
+			<Grid.Column> 
 				<label>Fecha
 					<DateInput
 							name="date"
@@ -522,19 +521,19 @@ export default class Formula extends Component {
 							initialDat={this.state.date}
 							/>
 				</label>
-			</Col>
+			</Grid.Column>
 						
-		</Row>
+		</Grid.Row>
 			
 							{nombre!==null ? (
-			<Row><Col>
+			<Grid.Row><Grid.Column>
 			<label>
 			  Nombre
-			  <FormControl type="text" placeholder="Nombre"  name="nombre"
+			  <input type="text" placeholder="Nombre"  name="nombre"
                      className="mr-sm-2" value={this.state.nombre}
 				onChange={this.handleInputChange} />
-			</label></Col>
-			<Col><label>Empleado<Dropdown
+			</label></Grid.Column>
+			<Grid.Column><label>Empleado<Dropdown
 					value={empleado}
 					placeholder='Empleado'
 					onChange={this.Selectempleado}				
@@ -542,11 +541,11 @@ export default class Formula extends Component {
 					search
 					options={empleados}
 					className="ui segment"
-				/></label></Col></Row>):("")
+				/></label></Grid.Column></Grid.Row>):("")
 							}
 	
 		
-			<Row><Col><label>
+			<Grid.Row><Grid.Column><label>
 			  Origen
 			  <Dropdown
 					  value={from_agency}
@@ -558,7 +557,7 @@ export default class Formula extends Component {
 					className="mr-sm-2"
 					name="from_agency"
 				/>
-			</label></Col><Col><label>
+			</label></Grid.Column><Grid.Column><label>
 			  Destino
 			  <Dropdown
 					  value={to_agency}
@@ -570,15 +569,15 @@ export default class Formula extends Component {
 					className="mr-sm-2"
 					name="to_agency"
 				/>
-			</label></Col></Row>
+			</label></Grid.Column></Grid.Row>
 
-			 <React.Fragment> <Row><Col><Button type="button" variant="primary"  className="submitform" onClick={() => {
+			 <React.Fragment> <Grid.Row><Grid.Column><Button type="button" variant="primary"  className="submitform" onClick={() => {
 										this.agregar_item();
-									}}	>Agregar Insumo</Button></Col></Row></React.Fragment>
+									}}	>Agregar Insumo</Button></Grid.Column></Grid.Row></React.Fragment>
 			
 			
 		  
-		  </Container>	
+		  </Grid>	
 					<br></br>	<br></br>	
 		 
 								<p >ITEMS</p>

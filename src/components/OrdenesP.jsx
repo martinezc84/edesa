@@ -399,9 +399,9 @@ export default class OrdenesP extends Component {
 						<Button type="button" variant="primary"  className="submitform" onClick={() => {
 						this.newo();
 					}}	>Nueva Orden</Button>
-					<Menu size='mini' class="ui two item menu">
+					<Menu  inverted  widths={3}>
 							<Menu.Item
-							class="ui blue button"
+							color={"blue"}
 							active={estado=='espera'}
 							onClick={() => {
 								this.cargarordenes('espera')
@@ -410,7 +410,7 @@ export default class OrdenesP extends Component {
 							name="En espera"
 						></Menu.Item>
 						<Menu.Item
-						class="ui orange button"
+						color={"orange"}
 						active={estado=='iniciada'}
 							onClick={() => {
 								this.cargarordenes('iniciada')
@@ -418,7 +418,7 @@ export default class OrdenesP extends Component {
 							name="Iniciadas"
 						></Menu.Item>
 						<Menu.Item
-						class="ui black button"
+						
 						active={estado=='finalizada'}
 							onClick={() => {
 								this.cargarordenes('finalizada')
@@ -434,17 +434,17 @@ export default class OrdenesP extends Component {
 							<Button type="button" variant="primary"  className="submitform" onClick={() => {
 							this.newo();
 						}}	>Nueva Orden</Button>
-						<Menu size='mini' class="ui two item menu">
+						<Menu inverted  widths={3}>
 							<Menu.Item
 							active={estado=='espera'}
-							class="ui blue button"
+							color={"blue"}
 							onClick={() => {
 								this.cargarordenes('espera')
 							}}
 							name="En espera"
 						></Menu.Item>
 						<Menu.Item
-						class="ui orange button"
+						color={"orange"}
 						active={estado=='iniciada'}
 							onClick={() => {
 								this.cargarordenes('iniciada')
@@ -452,8 +452,8 @@ export default class OrdenesP extends Component {
 							name="Iniciadas"
 						></Menu.Item>
 						<Menu.Item
-						class="ui orange button"
-						active={estado=='iniciada'}
+						
+						active={estado=='finalizada'}
 							onClick={() => {
 								this.cargarordenes('finalizada')
 							}}

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import '../css/style.css';
 import Axios from 'axios';
 import { FUNCIONES, production } from '../utils/utils';
-import { Header, Table, Loader} from 'semantic-ui-react';
+import { Header, Table, Loader, Grid, Button} from 'semantic-ui-react';
 import sortBy from 'lodash/sortBy';
 import { MostrarMensaje } from './Mensajes';
 import { Msjerror } from './Mensajeserror';
@@ -11,8 +11,6 @@ import FilaInsumo from './FilaInsumo';
 import FilaPt from './FilaPt';
 import { isLoggedIn, logout , getUser} from "../utils/identity"
 import { navigate } from 'gatsby';
-import { Button, FormControl, Container, Row, Col} from 'react-bootstrap';
-import FilaDesperdicio from './FilaDesperdicio';
 
 
 

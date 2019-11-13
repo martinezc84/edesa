@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import '../css/style.css';
 import Axios from 'axios';
 import { FUNCIONES } from '../utils/utils';
-import { Header, Table, Dropdown, Checkbox } from 'semantic-ui-react';
+import { Header, Table, Dropdown, Checkbox, Grid, Button } from 'semantic-ui-react';
 import sortBy from 'lodash/sortBy';
 import { MostrarMensaje } from './Mensajes';
 import { Msjerror } from './Mensajeserror';
@@ -11,7 +11,6 @@ import FilaInsumo from './FilaInsumo';
 import FilaPt from './FilaPt';
 import { isLoggedIn, logout , getUser} from "../utils/identity"
 import { navigate } from 'gatsby';
-import { Button, FormControl, Container, Row, Col} from 'react-bootstrap';
 import FilaDesperdicio from './FilaDesperdicio';
 
 const options = [
@@ -854,19 +853,19 @@ export default class Formula extends Component {
 			return (
 				<div >
 				<form onSubmit={this.handleSubmit}>
-				<Container>
+				<Grid>
 			
 							{nombre!==null ? (
-			<Row><Col>
+			<Grid.Row><Grid.Column>
 			<label>
 			  Nombre
-			  <FormControl type="text" placeholder="Nombre"  name="nombre"
+			  <input type="text" placeholder="Nombre"  name="nombre"
                      className="mr-sm-2" value={this.state.nombre}
 				onChange={this.handleInputChange} />
-			</label></Col></Row>):("")
+			</label></Grid.Column></Grid.Row>):("")
 							}
 			{tipo_insumo!==null ? (
-			<Row><Col><label>
+			<Grid.Row><Grid.Column><label>
 			  Insumo
 			  <Dropdown
 					value={tipo_insumo}
@@ -877,39 +876,39 @@ export default class Formula extends Component {
 					options={options}
 					className="mr-sm-2"
 				/>
-			</label></Col></Row>):('')}
-			<Row>
+			</label></Grid.Column></Grid.Row>):('')}
+			<Grid.Row>
 			{genera_unico!==null ? (
-			<Col><label>
+			<Grid.Column><label>
 			  Genera Items únicos?
 			  <Checkbox
 						onChange={esunico}
 						toggle
 						checked={unico}
 					/>
-			</label></Col>):('')}
+			</label></Grid.Column>):('')}
 
 			{rv!==null ? (
-			<Col><label>
+			<Grid.Column><label>
 			  Recurso Variable?
 			  <Checkbox
 						onChange={rvf}
 						toggle
 						checked={rv}
 					/>
-			</label></Col>):('')}
+			</label></Grid.Column>):('')}
 
 			{gd!==null ? (
-			<Col><label>
+			<Grid.Column><label>
 			  Genera Desperdicio?
 			  <Checkbox
 						onChange={gdf}
 						toggle
 						checked={gd}
 					/>
-			</label></Col>):('')}
-			</Row>
-			<Row><Col><label>
+			</label></Grid.Column>):('')}
+			</Grid.Row>
+			<Grid.Row><Grid.Column><label>
 			  Origen
 			  { from_agency!==0 && agencias !=[] ? (
 			  <Dropdown
@@ -923,7 +922,7 @@ export default class Formula extends Component {
 					name="from_agency"
 					value={from_agency}
 				/>):('')}
-			</label></Col><Col><label>
+			</label></Grid.Column><Grid.Column><label>
 			  Destino
 			  { to_agency!==0 && agencias !=[] ? (
 			  <Dropdown
@@ -936,16 +935,16 @@ export default class Formula extends Component {
 					className="mr-sm-2"
 					name="to_agency"
 			  />):('')}
-			</label></Col></Row>
+			</label></Grid.Column></Grid.Row>
 
-			{buttonactive ? ( <React.Fragment> <Row><Col><Button type="button" variant="primary"  className="submitform" onClick={() => {
+			{buttonactive ? ( <React.Fragment> <Grid.Row><Grid.Column><Button type="button"   onClick={() => {
 										this.agregar_insumo();
-									}}	>Agregar Insumo</Button></Col><Col><Button type="button" variant="primary"  className="submitform" onClick={() => {
+									}}	>Agregar Insumo</Button></Grid.Column><Grid.Column><Button type="button"    onClick={() => {
 										this.agregar_pt();
-									}}	>Agregar Producto Terminado</Button></Col></Row></React.Fragment>):('')}			
+									}}	>Agregar Producto Terminado</Button></Grid.Column></Grid.Row></React.Fragment>):('')}			
 			
 		  
-		  </Container>	
+		  </Grid>	
 					<br></br>	<br></br>	
 		 
 								<p >INSUMOS</p>
@@ -1076,7 +1075,7 @@ export default class Formula extends Component {
 			</React.Fragment>
 			):('')
 			}
-			<button type="submit" className="submitform">Guardar</button>
+			<button type="submit" >Guardar</button>
 			</form>
 			<MostrarMensaje titulo={'Sus Datos fueron editados con exito'} mensajes={'Guardar'}  visible={this.state.visible} onConfirm={this.onConfirm} />
 			<Msjerror titulo={this.state.errormsj} mensajes={'Error'}  visible={this.state.visiblee} onConfirm={this.onConfirme} />
@@ -1088,19 +1087,19 @@ export default class Formula extends Component {
 		return(
 			<div >
 				<form onSubmit={this.handleSubmit}>
-				<Container>
+				<Grid>
 			
 							{nombre!==null ? (
-			<Row><Col>
+			<Grid.Row columns={1}><Grid.Column>
 			<label>
 			  Nombre
-			  <FormControl type="text" placeholder="Nombre"  name="nombre"
+			  <input type="text" placeholder="Nombre"  name="nombre"
                      className="mr-sm-2" value={this.state.nombre}
 				onChange={this.handleInputChange} />
-			</label></Col></Row>):("")
+			</label></Grid.Column></Grid.Row>):("")
 							}
 			{tipo_insumo!==null ? (
-			<Row><Col><label>
+			<Grid.Row columns={1}><Grid.Column><label>
 			  Insumo
 			  <Dropdown
 					value={tipo_insumo}
@@ -1111,75 +1110,75 @@ export default class Formula extends Component {
 					options={options}
 					className="mr-sm-2"
 				/>
-			</label></Col></Row>):('')}
-			<Row>
+			</label></Grid.Column></Grid.Row>):('')}
+			<Grid.Row columns={3}>
 			{genera_unico!==null ? (
-			<Col><label>
+			<Grid.Column><label>
 			  Genera Items únicos?
 			  <Checkbox
 						onChange={esunico}
 						toggle
 						checked={unico}
 					/>
-			</label></Col>):('')}
+			</label></Grid.Column>):('')}
 
 			{rv!==null ? (
-			<Col><label>
+			<Grid.Column><label>
 			  Recurso Variable?
 			  <Checkbox
 						onChange={rvf}
 						toggle
 						checked={rv}
 					/>
-			</label></Col>):('')}
+			</label></Grid.Column>):('')}
 
 			{gd!==null ? (
-			<Col><label>
+			<Grid.Column><label>
 			  Genera Desperdicio?
 			  <Checkbox
 						onChange={gdf}
 						toggle
 						checked={gd}
 					/>
-			</label></Col>):('')}
-			</Row>
-			<Row><Col><label>
+			</label></Grid.Column>):('')}
+			</Grid.Row>
+			<Grid.Row columns={2}><Grid.Column><label>
 			  Origen
 			  <Dropdown
 					  value={from_agency}
 					placeholder='Agencia'
 					onChange={selectAg}
-					fluid
+					search
 					selection
 					options={agencias}
 					className="mr-sm-2"
 					name="from_agency"
 				/>
-			</label></Col><Col><label>
+			</label></Grid.Column><Grid.Column><label>
 			  Destino
 			  <Dropdown
 					  value={to_agency}
 					placeholder='Agencia'
 					onChange={selectAg}
-					fluid
+					search
 					selection
 					options={agencias}
 					className="mr-sm-2"
 					name="to_agency"
 				/>
-			</label></Col></Row>
+			</label></Grid.Column></Grid.Row>
 
-			{buttonactive ? ( <React.Fragment> <Row><Col><Button type="button" variant="primary"  className="submitform" onClick={() => {
+			{buttonactive ? ( <React.Fragment> <Grid.Row columns={2}><Grid.Column><Button className="submitform" type="button"   onClick={() => {
 										this.agregar_insumo();
-									}}	>Agregar Insumo</Button></Col><Col><Button type="button" variant="primary"  className="submitform" onClick={() => {
+									}}	>Agregar Insumo</Button></Grid.Column><Grid.Column><Button  className="submitform" type="button"    onClick={() => {
 										this.agregar_pt();
-									}}	>Agregar Producto Terminado</Button></Col></Row></React.Fragment>):('')}
-			{gd ? (<Row><Col><Button type="button" variant="primary"  className="submitform" onClick={() => {
+									}}	>Agregar Producto Terminado</Button></Grid.Column></Grid.Row></React.Fragment>):('')}
+			{gd ? (<Grid.Row columns={1}><Grid.Column><Button type="button"   className="submitform" onClick={() => {
 										this.agregar_desperdicio();
-									}}	>Agregar Desperdicio</Button></Col></Row>):('')}		
+									}}	>Agregar Desperdicio</Button></Grid.Column></Grid.Row>):('')}		
 			
 		  
-		  </Container>	
+		  </Grid>	
 					<br></br>	<br></br>	
 		 
 								<p >INSUMOS</p>

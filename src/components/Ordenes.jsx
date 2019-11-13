@@ -1,19 +1,15 @@
 //@ts-check
 import React, { Component } from 'react';
-import netlifyIdentity from 'netlify-identity-widget';
 import '../css/style.css';
 import Axios from 'axios';
 import { FUNCIONES } from '../utils/utils';
-import { Header, Table, Loader, Button, Icon, Menu,Dropdown } from 'semantic-ui-react';
-import SortableLst from '../components/sortable-list';
+import { Header, Table, Loader} from 'semantic-ui-react';
 import sortBy from 'lodash/sortBy';
 import { MostrarMensaje } from './Mensajes';
-import VendedorSel  from '../components/VendedorSel';
 import { MsjConfirma } from './MsjConfirma';
-import { isLoggedIn, logout , getUser} from "../utils/identity"
-import { async } from 'q';
+import { getUser} from "../utils/identity"
+
 import { navigate } from '@reach/router';
-import Inputdate from './Inputdate';
 
 
 export default class Ordenes extends Component {

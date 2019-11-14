@@ -280,7 +280,7 @@ export default class Iniciar extends Component {
 						if(itemserie!==undefined){
 						if(x>0) stringdet+=","
 						if(y>0) stringorden+=","
-								stringdet+='"'+x+'":{"item_id":"'+itemserie+'", "booked_quantity":"1"}'
+								stringdet+='"'+x+'":{"item_id":"'+itemserie.id+'", "booked_quantity":"1"}'
 								stringorden+='"'+y+'":{"id":"'+series[linea].lineid+'", "serie":"'+series[linea].serie+'"}'
 								x++
 								y++

@@ -505,7 +505,7 @@ export default class Formula extends Component {
 		return(
 			<div >
 				<form onSubmit={this.handleSubmit}>
-				<Grid>
+				<Grid columns={2}>
 		<Grid.Row>
 			<Grid.Column> 
 				<label>Fecha
@@ -543,7 +543,7 @@ export default class Formula extends Component {
 					className="ui segment"
 				/></label></Grid.Column></Grid.Row>):("")
 							}
-	
+
 		
 			<Grid.Row><Grid.Column><label>
 			  Origen

@@ -11,7 +11,7 @@
 	# Locations de las netlify functions (Backend) 
 	# Son los mismos nombres de los archivos que hay en la carpeta /src/service
   
-GATSBY_URL_EMPLEADOS='/.netlify/functions/empleados'
+	GATSBY_URL_EMPLEADOS='/.netlify/functions/empleados'
 	GATSBY_URL_FUNCIONES='/.netlify/functions/Funciones'
 	GATSBY_URL_FIRMA='/.netlify/functions/GuardarImagen'
 	GATSBY_URL_PHOTO='/.netlify/functions/GuardarPhoto'
@@ -41,6 +41,7 @@ GATSBY_URL_EMPLEADOS='/.netlify/functions/empleados'
 	GATSBY_URL_PURCHASE='/.netlify/functions/PurchaseOrder'
 	GATSBY_URL_RECEIVEPURCHASE='/.netlify/functions/ReceivePurchase'
 	GATSBY_URL_NEWITEM='/.netlify/functions/CrearItem'
+	GATSBY_URL_GUARDARITEM='/.netlify/functions/GuardarItem'
 	GATSBY_URL_EDITPURCHASE='/.netlify/functions/PurchaseOrderEdit'
 	GATSBY_URL_ITEMSERIE='/.netlify/functions/GetItemserie'
 	GATSBY_URL_DELIVER='/.netlify/functions/Deliver'

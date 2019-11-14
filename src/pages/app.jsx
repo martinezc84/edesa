@@ -214,9 +214,11 @@ export default class App extends Component {
 
 			vendibles = res.data.bundles
 			itemst = res.data.items
+			//console.log(itemst)
 			itemst = this.trataItems(itemst)
 			vendibles = this.trataItems(vendibles)
-			//console.log(itemst)
+			console.log(itemst)
+			console.log(vendibles)
 			this.guardar('vendibles', vendibles);
 			this.guardarmem("vendibles", vendibles);
 			this.guardarmem("itemst", itemst);
@@ -250,9 +252,9 @@ export default class App extends Component {
 					//console.log(data)
 					let res = await Axios.get(FUNCIONES.comprables)
 					let categorias = res.data.items_grouped
-					//console.log(categorias)
+					//console.log(categorias)					
 					comprables = this.trataCats(categorias)
-					//console.log(comprables)
+					console.log(comprables)
 					this.guardarmem('comprables', comprables);
 					this.guardar('comprables', comprables);
 					this.setState({

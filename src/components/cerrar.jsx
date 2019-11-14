@@ -301,6 +301,7 @@ export default class Iniciar extends Component {
 					let rendimientos = this.state.rendimientos
 					let x = 0
 					let y=0
+					let generardetalle = false
 					if(desperdicios.length>0){
 						generadescarte=true
 						for(let desper in desperdicios){
@@ -320,6 +321,7 @@ export default class Iniciar extends Component {
 					stringrend+="}"
 					//console.log(referencias)
 					for(let refer in referencias){
+						generardetalle = true
 						iteminfo = await this.get_itemz(referencias[refer].item_id)
 						//console.log(iteminfo)
 						let newitem = {name:iteminfo.name+"-"+referencias[refer].referencia, code:referencias[refer].codigo,  item_category_id:iteminfo.item_category_id,measurement_unit:iteminfo.measurement_unit, product_type:iteminfo.product_type, payee_id:iteminfo.payee_id }
@@ -332,7 +334,7 @@ export default class Iniciar extends Component {
 					}
 					let formula_id
 					let formula={}
-					let generardetalle = false
+					
 					for(let linea in detalle){
 						let formulas = this.state.formulas
 						if(detalle[linea].generar){

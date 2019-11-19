@@ -28,6 +28,7 @@ export default class OrdenP extends Component {
 		detalle:[],
 		equipos:[],
 		empleados:[],
+		generados:[],
 		id:0,
 		show:false,
 		getmem:null,
@@ -231,6 +232,7 @@ export default class OrdenP extends Component {
 				
 					let orden =data
 					let detalle = data.detalle
+					let generados = data.generados
 					//let formulas = data.formulas
 					let recursos=[]
 					let series=[]
@@ -254,7 +256,8 @@ export default class OrdenP extends Component {
 						from_agency:from_agency,
 						from_orden:from_orden,
 						fechahora_entrega:new Date(orden.fechahora_entrega),
-						itemsgenerados:itemsgenerados
+						itemsgenerados:itemsgenerados,
+						generados
 					});
 				}
 				catch(error)  {
@@ -616,7 +619,7 @@ export default class OrdenP extends Component {
 		
 		items = [items,...itemst]
 		let { orden, fechahora_entrega,
-		loading, pdf, itemsgenerados ,equipos, action, Selectequipo, Selectempleado, equipo_id, empleados, empleado, detalle,  Formulas, from_orden
+		loading, pdf, generados, itemsgenerados ,equipos, action, Selectequipo, Selectempleado, equipo_id, empleados, empleado, detalle,  Formulas, from_orden
 		
 		} = this.state;
 		orden.employee_id = parseInt(orden.employee_id.toString())
@@ -695,12 +698,43 @@ export default class OrdenP extends Component {
 						}
 				</Table.Body>
 				</Table>
+				<p >PRODUCIDO</p>
+				<Table sortable celled>
+				<Table.Header>
+				<Table.Row>
+					
+					<Table.HeaderCell>
+						PRODUCTO
+					</Table.HeaderCell>
+					<Table.HeaderCell>
+						CANTIDAD
+					</Table.HeaderCell>
+					</Table.Row>
+				</Table.Header>
+				<Table.Body>
+					{
+					
+						generados
+						.map((t) => (
+							<Table.Row>
+								
+								<Table.Cell>
+								{t.nombre}
+							
+								</Table.Cell>
+								<Table.Cell>
+								{t.cantidad}
+							
+								</Table.Cell>
+						</Table.Row>
+						))
+						}
+				</Table.Body>
+				</Table>
 				</form>
 			
 				
 				
-				<MostrarMensaje titulo={'Sus Datos fueron guardados con exito'} mensajes={'Guardar'}  visible={this.state.visible} onConfirm={this.onConfirm} />
-				<Msjerror titulo={this.state.errormsj} mensajes={'Error'}  visible={this.state.visiblee} onConfirm={this.onConfirme} />
 				</div>
 				)
 			else if (action=='edit')

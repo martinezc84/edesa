@@ -76,6 +76,7 @@ export default class Iniciar extends Component {
 					let formulas = data.formulas
 					let recursos=[]
 					let series=[]
+					let utilizados=[]
 					let recurso
 					let serie
 					let ids=1
@@ -241,12 +242,14 @@ export default class Iniciar extends Component {
 				}
 				
 
-				let x=0
+					let x=0
+					let z=10000000
 					let stringdet="{"
 					let stringorden=""
 					let itemserie
 					let formula_id
 					let formula={}
+					let utilizados=[]
 					let error = {error:false,msj:""}
 
 					for (let linea in detalle){
@@ -262,6 +265,9 @@ export default class Iniciar extends Component {
 							for(let insumo in formula.insumos){
 								if(x>0) stringdet+=","
 								stringdet+='"'+x+'":{"item_id":"'+formula.insumos[insumo].item_id+'", "booked_quantity":"'+(detalle[linea].cantidad*formula.insumos[insumo].cantidad)+'"}'
+								let item = {item_id:formula.insumos[insumo].item_id,cantidad:(detalle[linea].cantidad*formula.insumos[insumo].cantidad),orden_id:this.state.orden.id, nombre:formula.insumos[insumo].name}
+								utilizados.push(item)
+								z++
 								x++
 							}
 
@@ -272,11 +278,17 @@ export default class Iniciar extends Component {
 					for (let linea in recursos){
 						if(x>0) stringdet+=","
 								stringdet+='"'+x+'":{"item_id":"'+recursos[linea].item_id+'", "booked_quantity":"'+recursos[linea].cantidad+'"}'
+								let item = {id:z,item_id:recursos[linea].item_id,cantidad:(recursos[linea].cantidad),orden_id:this.state.orden.id, nombre:recursos[linea].producto}
+								utilizados.push(item)
 								x++
+								z++
 					}
 					let y=0;
 					for (let linea in series){
 						itemserie= await this.get_item(series[linea].serie)
+						let item = {id:z,item_id:itemserie.id,cantidad:1,orden_id:this.state.orden.id, nombre:itemserie.name}
+						utilizados.push(item)
+						z++
 						if(itemserie!==undefined){
 						if(x>0) stringdet+=","
 						if(y>0) stringorden+=","
@@ -310,7 +322,10 @@ export default class Iniciar extends Component {
 
 							if (res.data.id!==undefined){
 								let resp = await Axios.post(FUNCIONES.deliver+"?id="+res.data.id)
-								 resp = await Axios.post(`${FUNCIONES.editarorden}`,'{"id":'+this.state.orden.id+', "estado":"iniciada","detalle":{'+stringorden+'}}')
+								//console.log(JSON.stringify(utilizados))
+								let editorden = '{"id":'+this.state.orden.id+', "estado":"iniciada","detalle":{'+stringorden+'},"consumidos":'+JSON.stringify(utilizados)+'}'
+								//console.log(editorden)
+								 resp = await Axios.post(`${FUNCIONES.editarorden}`,editorden)
 								this.setState({
 									loading: false,
 									visible:true,

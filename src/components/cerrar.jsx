@@ -19,6 +19,7 @@ export default class Iniciar extends Component {
 		referencias:[],
 		desperdicios:[],
 		rendimientos:[],
+		consumidos:[],
 		formulas:[],
 		detalle:[],
 		orden:null,
@@ -29,6 +30,7 @@ export default class Iniciar extends Component {
 		itemst:[],
 		loading:false,
 		date:new Date().toLocaleDateString('en-GB'),
+		consumototal:0
 				
 	};
 	
@@ -50,7 +52,7 @@ export default class Iniciar extends Component {
 		this.setState({
 			fecha:dte})
 
-		 console.log(dte)
+		 //console.log(dte)
 
 	};
 
@@ -75,6 +77,7 @@ export default class Iniciar extends Component {
 					let orden =data
 					let detalle = data.detalle
 					let formulas = data.formulas
+					let consumidos = data.consumidos
 					let desperdicios=[]
 					let referencias=[]
 					let rendimientos=[]
@@ -82,8 +85,14 @@ export default class Iniciar extends Component {
 					let desperdiciol
 					let refer
 					let ids=1
+					let consumototal=0;
+
+					for(let linea in consumidos){
+						
+						consumototal = consumototal +  parseInt(consumidos[linea].cantidad)
+					}
 					
-					
+				
 					for(let linea in detalle){
 						formula_id = detalle[linea].formula_id
 						detalle[linea].generar=true
@@ -151,6 +160,7 @@ export default class Iniciar extends Component {
 						desperdicios,
 						rendimientos,
 						to_agency,
+						consumototal
 						
 						
 					});
@@ -292,6 +302,10 @@ export default class Iniciar extends Component {
 	   let generadescarte =false
 	   let generarendimiento =false
 	   let errorgen = false
+	   let generados=[]
+	   let z=10000000
+	   let consumototal = this.state.consumototal
+	   let generadototal = 0
 	
 		// Ciclo de llamadas
 		
@@ -307,6 +321,7 @@ export default class Iniciar extends Component {
 						for(let desper in desperdicios){
 							if(y>0) stringdesper+=","
 							stringdesper+='"'+y+'":{"item_id":"'+desperdicios[desper].item_id+'", "booked_quantity":"'+desperdicios[desper].cantidad+'"}'
+							generadototal=generadototal+parseInt(desperdicios[desper].cantidad)
 						}
 					}
 					stringdesper+="}"
@@ -316,6 +331,10 @@ export default class Iniciar extends Component {
 							if(y>0) stringrend+=","
 							stringrend+='"'+y+'":{"item_id":"'+rendimientos[rend].item_id+'", "booked_quantity":"'+rendimientos[rend].cantidad+'"}'
 							y++
+							let itemgen = {id:z,orden_id:this.state.orden.id, item_id:rendimientos[rend].item_id,cantidad:rendimientos[rend].cantidad,nombre:rendimientos[rend].producto}
+							generados.push(itemgen)
+							z++
+							generadototal=generadototal+parseInt(rendimientos[rend].cantidad)
 						}
 					}
 					stringrend+="}"
@@ -326,11 +345,16 @@ export default class Iniciar extends Component {
 						//console.log(iteminfo)
 						let newitem = {name:iteminfo.name+"-"+referencias[refer].referencia, code:referencias[refer].codigo,  item_category_id:iteminfo.item_category_id,measurement_unit:iteminfo.measurement_unit, product_type:iteminfo.product_type, payee_id:iteminfo.payee_id }
 						//console.log(JSON.stringify(newitem)) 
+						
 						let itemdata  = await this.crear_item(newitem)
 						//let itemdata={id:1587455}
 						if(x>0) stringdet+=","
 						stringdet+='"'+x+'":{"item_id":"'+itemdata.id+'", "booked_quantity":"1"}'
 						x++
+						generadototal=generadototal+parseInt("1")
+						let itemgen = {id:z,orden_id:this.state.orden.id,item_id:itemdata.id,cantidad:1,nombre:iteminfo.name+"-"+referencias[refer].referencia,codigo:referencias[refer].codigo}
+							generados.push(itemgen)
+							z++
 					}
 					let formula_id
 					let formula={}
@@ -351,84 +375,104 @@ export default class Iniciar extends Component {
 								if(x>0) stringdet+=","
 								stringdet+='"'+x+'":{"item_id":"'+formula.pt[ptl].item_id+'", "booked_quantity":"'+(detalle[linea].cantidad*formula.pt[ptl].cantidad)+'"}'
 								x++
+								let itemgen = {id:z,orden_id:this.state.orden.id,item_id:formula.pt[ptl].item_id,cantidad:(detalle[linea].cantidad*formula.pt[ptl].cantidad),nombre:formula.pt[ptl].name}
+							generados.push(itemgen)
+							z++
+							generadototal+=detalle[linea].cantidad*formula.pt[ptl].cantidad
 							}
 						}
 					}
 						stringdet+="}"
-						let shipment = {shipment:booking}
-						let poststr = JSON.stringify(shipment)
-						poststr= poststr.replace('"|insumos|"',stringdet)
+						//console.log(generadototal)
+						//console.log(consumototal)
+						if (generadototal<=consumototal){
 						
+							let shipment = {shipment:booking}
+							let poststr = JSON.stringify(shipment)
+							poststr= poststr.replace('"|insumos|"',stringdet)
+							
 
-						if(generadescarte){
-							let bookingd = booking
-							bookingd.movements_attributes="|descarte|"
-							bookingd.agency_to_id = descarte
-							let shipmentd = {shipment:booking}
-							let poststrd = JSON.stringify(shipmentd)
-							poststrd= poststrd.replace('"|descarte|"',stringdesper)
-							let resd = await Axios.post(`${FUNCIONES.reservaciones}`,poststrd)
-							if (resd.data.id!==undefined){
-								resd = await Axios.post(FUNCIONES.deliver+"?id="+resd.data.id)
-							}else{
-								errorgen=true
+							if(generadescarte){
+								let bookingd = booking
+								bookingd.movements_attributes="|descarte|"
+								bookingd.agency_to_id = descarte
+								let shipmentd = {shipment:booking}
+								let poststrd = JSON.stringify(shipmentd)
+								poststrd= poststrd.replace('"|descarte|"',stringdesper)
+								let resd = await Axios.post(`${FUNCIONES.reservaciones}`,poststrd)
+								if (resd.data.id!==undefined){
+									resd = await Axios.post(FUNCIONES.deliver+"?id="+resd.data.id)
+								}else{
+									errorgen=true
+								}
+
+								//console.log(poststrd)
 							}
 
-							console.log(poststrd)
-						}
-
-						if(generarendimiento){
-							let bookingd = booking
-							bookingd.movements_attributes="|rendimiento|"
-							
-							let shipmentd = {shipment:booking}
-							let poststrd = JSON.stringify(shipmentd)
-							poststrd= poststrd.replace('"|rendimiento|"',stringrend)
-							console.log(poststrd)
-							let resd = await Axios.post(`${FUNCIONES.reservaciones}`,poststrd)
-							if (resd.data.id!==undefined){
-								resd = await Axios.post(FUNCIONES.deliver+"?id="+resd.data.id)
-							}else{
-								errorgen=true
+							if(generarendimiento){
+								let bookingd = booking
+								bookingd.movements_attributes="|rendimiento|"
+								
+								let shipmentd = {shipment:booking}
+								let poststrd = JSON.stringify(shipmentd)
+								poststrd= poststrd.replace('"|rendimiento|"',stringrend)
+								//console.log(poststrd)
+								let resd = await Axios.post(`${FUNCIONES.reservaciones}`,poststrd)
+								if (resd.data.id!==undefined){
+									resd = await Axios.post(FUNCIONES.deliver+"?id="+resd.data.id)
+								}else{
+									errorgen=true
+								}
+								
 							}
+							if (generardetalle){
+								//console.log(poststr)
+								let res = await Axios.post(`${FUNCIONES.reservaciones}`,poststr)
 							
-						}
-						if (generardetalle){
-							console.log(poststr)
-							let res = await Axios.post(`${FUNCIONES.reservaciones}`,poststr)
-						
-						if (res.data.id!==undefined){
-								let resp = await Axios.post(FUNCIONES.deliver+"?id="+res.data.id)
-								 resp = await Axios.post(`${FUNCIONES.editarorden}`,'{"id":'+this.state.orden.id+', "estado":"finalizada","detalle":{}}')
-								this.setState({
-									loading: false,
-									visible:true,
+							if (res.data.id!==undefined){
+									let resp = await Axios.post(FUNCIONES.deliver+"?id="+res.data.id)
+									let ordenstring = '{"id":'+this.state.orden.id+', "estado":"finalizada","detalle":{},"generados":'+JSON.stringify(generados)+'}'
+									//console.log(ordenstring)
+									resp = await Axios.post(`${FUNCIONES.editarorden}`,ordenstring)
+									this.setState({
+										loading: false,
+										visible:true,
+										
+									});
+								}else{
+									this.setState({
+										loading: false,
+										visiblee:true,
+										errormsj:"Sus datos no se guardaron, contacte al Administrador"
+									});	
+								}
+							}else{
+								if(errorgen){
 									
-								});
-							}else{
-								this.setState({
-									loading: false,
-									visiblee:true,
-									errormsj:"Sus datos no se guardaron, contacte al Administrador"
-								});	
+									this.setState({
+										loading: false,
+										visiblee:true,
+										errormsj:"Sus datos no se guardaron, contacte al Administrador"
+									});	
+
+								}else{
+									let ordenstring = '{"id":'+this.state.orden.id+', "estado":"finalizada","detalle":{},"generados":'+JSON.stringify(generados)+'}'
+									//console.log(ordenstring)
+									let resp = await Axios.post(`${FUNCIONES.editarorden}`,ordenstring)
+									this.setState({
+										loading: false,
+										visible:true,
+										
+									});
+								}
+
 							}
 						}else{
-							if(errorgen){
-								
-								this.setState({
-									loading: false,
-									visiblee:true,
-									errormsj:"Sus datos no se guardaron, contacte al Administrador"
-								});	
-
-							}else{
-								this.setState({
-									loading: false,
-									visible:true,
-									
-								});
-							}
-
+							this.setState({
+								loading: false,
+								visiblee:true,
+								errormsj:"La cantidad de producto terminado es mayor al valor de la materia primar"
+							});	
 						}
 				
 			

@@ -107,7 +107,10 @@ export default class NuevaOrden extends Component {
 	};
 
 	async formulas(){
-		let res = await Axios.get(FUNCIONES.formulas+'?id=3');
+		let userdata={group_id:0}
+
+		userdata = getUser()
+		let res = await Axios.get(FUNCIONES.formulas+'?id='+userdata.store);
 		
 						
 						let Formulas = res.data;						

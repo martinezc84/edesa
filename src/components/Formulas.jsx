@@ -65,7 +65,7 @@ export default class Secuencias extends Component {
 					loading: true
 				});
                 
-				Axios.get(FUNCIONES.formulas+'?id=3')
+				Axios.get(FUNCIONES.formulas+'?id='+user.store)
 					.then(({ data }) => {
 						//console.log(data)
 						

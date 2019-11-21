@@ -406,15 +406,15 @@ export default class SaleOrders extends Component {
           <input type="text" value={this.state.buscar} onChange={this.handleChange} />
         </label>
 					{Invoices.length === 0 ? (
-						<Header as="h2">No hay turnos vendidos para ese tipo</Header>
+						<Header as="h2">No hay O/V</Header>
 					) : (
 						<React.Fragment>
 							
 							<div className="pt-8">
-								<Header>Facturas Vencidas</Header>
+								<Header>O/V</Header>
 								<div className="inline-block pr-4">
 									<Menu compact>
-										<Menu.Item active>Cantidad de facturas: {Invoices.length}</Menu.Item>
+										<Menu.Item active>Cantidad de O/V: {Invoices.length}</Menu.Item>
 									</Menu>
 								</div>
 

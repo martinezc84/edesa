@@ -937,7 +937,7 @@ export default class Formula extends Component {
 			  />):('')}
 			</label></Grid.Column></Grid.Row>
 
-			{buttonactive ? ( <React.Fragment> <Grid.Row><Grid.Column><Button type="button"   onClick={() => {
+			{true ? ( <React.Fragment> <Grid.Row columns={2}><Grid.Column><Button type="button"   onClick={() => {
 										this.agregar_insumo();
 									}}	>Agregar Insumo</Button></Grid.Column><Grid.Column><Button type="button"    onClick={() => {
 										this.agregar_pt();

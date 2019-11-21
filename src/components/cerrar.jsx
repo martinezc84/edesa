@@ -358,7 +358,7 @@ export default class Iniciar extends Component {
 					}
 					let formula_id
 					let formula={}
-					
+					consumototal = consumototal+z
 					for(let linea in detalle){
 						let formulas = this.state.formulas
 						if(detalle[linea].generar){

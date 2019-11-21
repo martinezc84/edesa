@@ -856,16 +856,16 @@ export default class Formula extends Component {
 				<Grid>
 			
 							{nombre!==null ? (
-			<Grid.Row><Grid.Column>
+			<Grid.Row columns={1}><Grid.Column>
 			<label>
 			  Nombre
 			  <input type="text" placeholder="Nombre"  name="nombre"
-                     className="mr-sm-2" value={this.state.nombre}
+                     className="mr-sm-4" value={this.state.nombre}
 				onChange={this.handleInputChange} />
 			</label></Grid.Column></Grid.Row>):("")
 							}
 			{tipo_insumo!==null ? (
-			<Grid.Row><Grid.Column><label>
+			<Grid.Row columns={1}><Grid.Column><label>
 			  Insumo
 			  <Dropdown
 					value={tipo_insumo}
@@ -877,7 +877,7 @@ export default class Formula extends Component {
 					className="mr-sm-2"
 				/>
 			</label></Grid.Column></Grid.Row>):('')}
-			<Grid.Row>
+			<Grid.Row columns={3}>
 			{genera_unico!==null ? (
 			<Grid.Column><label>
 			  Genera Items únicos?
@@ -908,7 +908,7 @@ export default class Formula extends Component {
 					/>
 			</label></Grid.Column>):('')}
 			</Grid.Row>
-			<Grid.Row><Grid.Column><label>
+			<Grid.Row columns={2}><Grid.Column><label>
 			  Origen
 			  { from_agency!==0 && agencias !=[] ? (
 			  <Dropdown

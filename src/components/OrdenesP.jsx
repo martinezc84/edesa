@@ -181,7 +181,7 @@ export default class OrdenesP extends Component {
 				let res = await this.empleados();
 
                 //console.log(FUNCIONES.ordenes)
-				Axios.get(FUNCIONES.ordenes+"?id=3&eid=&lines=10&inicio=0&estado=espera")
+				Axios.get(FUNCIONES.ordenes+"?id="+user.store+"&eid=&lines=10&inicio=0&estado=espera")
 					.then(({ data }) => {
 						
 						//console.log(data)
@@ -317,7 +317,7 @@ export default class OrdenesP extends Component {
 		cargarordenes = async (estado)=>{
 
 			let res = await this.empleados();
-			Axios.get(FUNCIONES.ordenes+"?id=3&eid=&lines=10&inicio=0&estado="+estado)
+			Axios.get(FUNCIONES.ordenes+"?id="+this.state.userdata.store+"&eid=&lines=10&inicio=0&estado="+estado)
 			.then(({ data }) => {
 				
 				//console.log(data)

@@ -322,6 +322,7 @@ export default class Iniciar extends Component {
 							if(y>0) stringdesper+=","
 							stringdesper+='"'+y+'":{"item_id":"'+desperdicios[desper].item_id+'", "booked_quantity":"'+desperdicios[desper].cantidad+'"}'
 							generadototal=generadototal+parseInt(desperdicios[desper].cantidad)
+							y++
 						}
 					}
 					stringdesper+="}"

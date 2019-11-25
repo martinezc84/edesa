@@ -324,7 +324,8 @@ export default class Formula extends Component {
 					agency_to_id:this.state.to_agency,
 					reference:this.state.nombre,
 					memo:"",
-					payee_id:393185
+					payee_id:393185,
+					
 				}
 				let shipment = {shipment:booking}
 				if((booking.reference!=="")  ){

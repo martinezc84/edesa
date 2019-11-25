@@ -379,7 +379,7 @@ export default class PurchaseDetail extends Component {
 					x++
 					}
 
-					let request='{"id":"'+this.state.orden.id+'", "agency_id":"'+this.state.orden.agency_id+'","exchange_rate":"'+this.state.orden.exchange_rate+'","delivery_date":"'+fechastr+'","purchase_order_details_attributes":{'+stringdet+'}}';
+					let request='{"id":"'+this.state.orden.id+'", "agency_id":"'+this.state.orden.agency_id+'","exchange_rate":"1","delivery_date":"","purchase_order_details_attributes":{'+stringdet+'}}';
 					//console.log(request)
 					res = await Axios.post(FUNCIONES.recibir, request)
 					this.setState({

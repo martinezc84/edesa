@@ -123,7 +123,7 @@ export default class UnpaidInvoices extends Component {
 		
 		
 			let { guardar, valores } = this.props;
-			if (valores.length === 0) {
+			
 				this.setState({
 					loading: true
 				});
@@ -203,14 +203,7 @@ export default class UnpaidInvoices extends Component {
 					});
 
 				
-			} else {
-				this.setState({
-				
-					Invoices: valores,
-					
-					cantidadPaginas: Math.floor(valores.length / this.state.first) + 1
-				});
-			}
+		
 		
 	}
 

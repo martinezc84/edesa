@@ -499,6 +499,22 @@ export default class Formula extends Component {
 						linea.flexible = linea.flexible ? 1 : 0
 			
 					));
+
+				if (this.props.action=="edit"){
+					formula.pt.map((linea, i)=> (
+		
+						linea.nuevo ? linea.id= linea.id + 10000000 : false 
+			
+					));
+
+				}
+
+				formula.pt.map((linea, i)=> (
+		
+					delete(linea.nuevo)
+		
+				));
+
 					let poststr = JSON.stringify(formula)
 				console.log(poststr)
 				let data;
@@ -609,7 +625,10 @@ export default class Formula extends Component {
 
 		agregar_pt = () =>{
 			let id =this.state.ptcont;
-			let pt={id:id,cantidad:1,item_id:0}
+			let pt={id:id,cantidad:1,item_id:0,nuevo:true}
+			if (this.props.action=="edit"){
+				pt.formula_id = this.props.id
+			}
 			id++;
 			let pts = [...this.state.pts, pt]
 
@@ -626,7 +645,11 @@ export default class Formula extends Component {
 
 		agregar_desperdicio = () =>{
 			let id =this.state.despercont;
+			
 			let desperdicio={id:id,cantidad:1,item_id:0,flexible:false}
+			if (this.props.action=="edit"){
+				desperdicio.formula_id = this.props.id
+			}
 			id++;
 			let desperdicios = [...this.state.desperdicios, desperdicio]
 

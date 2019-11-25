@@ -104,7 +104,7 @@ export default class Iniciar extends Component {
 						if (formula.gd==1){	
 							//console.log("genera desperdicio")						
 							for(let desperdicio in formula.desperdicios){
-								desperdiciol = {id:ids, producto:formula.desperdicios[desperdicio].name, cantidad:(formula.desperdicios[desperdicio].cantidad), item_id:formula[desperdicio].item_id}
+								desperdiciol = {id:ids, producto:formula.desperdicios[desperdicio].name, cantidad:(formula.desperdicios[desperdicio].cantidad), item_id:formula.desperdicios[desperdicio].item_id}
 								desperdicios.push(desperdiciol)
 								ids++
 							}

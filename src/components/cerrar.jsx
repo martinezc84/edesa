@@ -326,6 +326,7 @@ export default class Iniciar extends Component {
 						}
 					}
 					stringdesper+="}"
+					y=0
 					if(rendimientos.length>0){
 						generarendimiento=true
 						for(let rend in rendimientos){

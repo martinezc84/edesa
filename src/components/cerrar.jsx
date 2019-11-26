@@ -414,7 +414,7 @@ export default class Iniciar extends Component {
 							if(generarendimiento){
 								let bookingd = booking
 								bookingd.movements_attributes="|rendimiento|"
-								
+								bookingd.agency_to_id=this.state.to_agency
 								let shipmentd = {shipment:booking}
 								let poststrd = JSON.stringify(shipmentd)
 								poststrd= poststrd.replace('"|rendimiento|"',stringrend)

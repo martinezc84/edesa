@@ -126,7 +126,7 @@ export default class Iniciar extends Component {
 									code = detalle[linea].serie+"-"+x
 									x++
 								}
-								refer = {id:ids, codigo:code, producto:formula.pt[lineapt].name, referencia:(formula.pt[lineapt].referencia),item_id:formula.pt[lineapt].item_id}
+								refer = {id:ids, codigo:code, producto:formula.pt[lineapt].name, referencia:(formula.pt[lineapt].referencia),item_id:formula.pt[lineapt].item_id, peso:0}
 								referencias.push(refer)
 								ids++
 								//x++
@@ -241,7 +241,7 @@ export default class Iniciar extends Component {
 
 	crear_item=async (data)=>{
 		
-		let string = '{"item":{"name":"'+data.name.replace('"', '\\"')+'", "code":"'+data.code+'","ean13":"'+data.code+'","item_category_id":"'+data.item_category_id+'", "stockable":"true","measurement_unit":"'+data.measurement_unit+'","purchasable":"true", "product_type":"'+data.product_type+'","weight":"0","payee_id":"'+data.payee_id+'"}}';
+		let string = '{"item":{"name":"'+data.name.replace('"', '\\"')+'", "code":"'+data.code+'","ean13":"'+data.code+'","item_category_id":"'+data.item_category_id+'", "stockable":"true","measurement_unit":"'+data.measurement_unit+'","purchasable":"true", "product_type":"'+data.product_type+'","weight":"'+data.peso+'","payee_id":"'+data.payee_id+'"}}';
 		//console.log(string)
 		let res = await Axios.post(FUNCIONES.crearitem, string)
 		//console.log(res.data) 
@@ -345,7 +345,7 @@ export default class Iniciar extends Component {
 						generardetalle = true
 						iteminfo = await this.get_itemz(referencias[refer].item_id)
 						//console.log(iteminfo)
-						let newitem = {name:iteminfo.name+"-"+referencias[refer].referencia, code:referencias[refer].codigo,  item_category_id:iteminfo.item_category_id,measurement_unit:iteminfo.measurement_unit, product_type:iteminfo.product_type, payee_id:iteminfo.payee_id }
+						let newitem = {name:iteminfo.name+"-"+referencias[refer].referencia, code:referencias[refer].codigo,  item_category_id:iteminfo.item_category_id,measurement_unit:iteminfo.measurement_unit, product_type:iteminfo.product_type, payee_id:iteminfo.payee_id, peso:referencias[refer].peso }
 						//console.log(JSON.stringify(newitem)) 
 						
 						let itemdata  = await this.crear_item(newitem)
@@ -561,6 +561,31 @@ export default class Iniciar extends Component {
 			}
         
             
+		  }
+		  
+		  handleInputChangepeso = event => {
+            const target = event.target
+            const value = target.value
+			const name = target.name
+			let id = target.id
+			
+				let referencias = this.state.referencias
+				id = id.split("_")
+				
+				referencias.map((ref, i)=> (
+		
+					ref.id == id[1]  ? ref.peso = value :  false	
+		
+				));	
+				//console.log(referencias)
+				this.setState({
+					referencias
+				  })
+
+			
+		
+        
+            
           }
         
           handleSubmit = event => {
@@ -608,6 +633,11 @@ export default class Iniciar extends Component {
 				>
 					REFERENCIA
 				</Table.HeaderCell>
+				<Table.HeaderCell
+					
+				>
+					PESO
+				</Table.HeaderCell>
 				
 				</Table.Row>
 			</Table.Header>
@@ -630,6 +660,17 @@ export default class Iniciar extends Component {
 					id={"refer_"+t.id}
                     value={t.cantidad}
 					onChange={this.handleInputChange}				
+                    className="inputform"
+				  />}
+				 
+				  </Table.Cell>
+				  <Table.Cell>{<input
+					autoFocus
+                    type="number"
+					name="peso"
+					id={"peso_"+t.id}
+                    value={t.peso}
+					onChange={this.handleInputChangepeso}				
                     className="inputform"
 				  />}
 				 

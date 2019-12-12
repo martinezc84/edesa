@@ -65,11 +65,20 @@ export default class NuevaOrden extends Component {
 
 	guardarcantidad = (id, cantidad) => {
 		let detalle = this.state.detalle
+
+		if (cantidad!=""){
 		detalle.map((linea, i)=> (
 		
 			linea.id == id ? linea.cantidad = parseInt(cantidad) : false		
 
 		));		
+		}else{
+			detalle.map((linea, i)=> (
+		
+				linea.id == id ? linea.cantidad = "" : false		
+	
+			));	
+		}
 		//console.log(insumos)
 		this.setState(
 			{

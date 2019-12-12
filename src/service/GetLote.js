@@ -1,7 +1,7 @@
 //@ts-check
 import axios from 'axios';
 import { headers, APIP_URL } from '../utils/utils';
-const URL = APIP_URL.formula;
+const URL = APIP_URL.lote;
 const headersr = {
 	'Access-Control-Allow-Origin': '*',
 	'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
@@ -16,7 +16,7 @@ exports.handler = async (event, context) => {
 		//@ts-ignore
 		let id = event.queryStringParameters.id;
 		let { data } = await axios.get(URL+"?id="+id, { headers });
-		//console.log(data)
+		console.log(data)
 		return {
 			statusCode: 200,
 			body: JSON.stringify(data),

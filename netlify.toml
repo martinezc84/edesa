@@ -47,6 +47,7 @@
 	GATSBY_URL_DELIVER='/.netlify/functions/Deliver'
 	GATSBY_URL_ITEMZAURU='/.netlify/functions/GetItemzauru'
 	GATSBY_URL_ITEMORDEN='/.netlify/functions/GetItemorden'
+	GATSBY_URL_EXISTENCIAS='/.netlify/functions/GetExistencias'
 
 	# Dominio del sitio de las APIs (Backend)
 	GATSBY_ZAURU_URL='https://zauru.herokuapp.com'
@@ -72,6 +73,12 @@
 	GATSBY_APIP_GUARDARITEM = '/guardar_item'
 	GATSBY_APIP_GETITEMSERIE = '/getitemserie'
 	GATSBY_APIP_GETITEMORDEN = '/getitemorden'
+	GATSBY_APIP_GUARDARLOTE = '/guardarlote'
+	GATSBY_APIP_EDITARLOTE = '/editar_lote'
+	GATSBY_APIP_GETLOTE = '/lote'
+	GATSBY_APIP_GETLOTES = '/lotes'
+	GATSBY_APIP_EXISTENCIAS= '/excel_existencias'
+
 	#API DE ZAURU
 
 	GATSBY_API_EMPLEADOS='/settings/employees/'	
@@ -87,11 +94,12 @@
 	GATSBY_API_ITEM='/settings/items.json'
   	GATSBY_API_DELIVER='/inventories/bookings/'
 	GATSBY_API_ITEMZAURU='/settings/items/'
+	GATSBY_API_CREARLOTE = '/inventories/lots.json'
 
 	# Email y token de autenticación para utilizar las APIs 
-        #GATSBY_EMAIL='api@edesa.com'
-        #GATSBY_TOKEN='y749fGvk3B6nC8pMUy4j'
-		#GATSBY_API_KEY='y749fGvk3B6nC8pMUy4j'
+        GATSBY_EMAIL='api@semperlibery.com'
+    	GATSBY_TOKEN='AtG-z7a8z44W767Tt83S'
+		GATSBY_API_KEY='AtG-z7a8z44W767Tt83S'
 		#GATSBY_EMAIL='api@discogua.com.gt'
         #GATSBY_TOKEN='uuvDJ6vscs1ewsxbRVHU'
 		#GATSBY_API_KEY='uuvDJ6vscs1ewsxbRVHU'

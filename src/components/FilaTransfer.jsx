@@ -32,10 +32,20 @@ export default class FilaTransfer extends Component {
 		  [name]: value,
 		})
 	  }
+
+	  handleInputChangelote = event => {
+		const target = event.target
+		const value = target.value
+		const name = target.name
+		this.props.guardarlote(this.state.id,value)
+		this.setState({
+		  [name]: value,
+		})
+	  }
 	
 
 	render() {
-		let {  items, item_id, selectitem, id,  cantidad, view, buscaritem } = this.props;
+		let {  items, item_id, selectitem, id,  cantidad, view, buscaritem, lote } = this.props;
 		let insumo=null
 		
 			item_id = parseInt(item_id)
@@ -77,7 +87,17 @@ export default class FilaTransfer extends Component {
 				options={items}
 				/>):('')}
 			</Table.Cell>
+			<Table.Cell>
 			
+			<input
+			type="text"
+			name="lote"
+			value={lote}
+			onChange={this.handleInputChangelote}
+			className="inputform"
+			
+		  />
+			</Table.Cell>
 			<Table.Cell>
 			{cantidad!==null?(
 			<input

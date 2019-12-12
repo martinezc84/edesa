@@ -15,8 +15,19 @@ export default class FilaDetalleCompra extends Component {
 			linea.id == id ? linea.serie = serie : false		
 
 		));	
-		this.props.guardarserie(this.props.id,serie)
+		this.props.guardarserie(this.props.id,series)
 			
+		
+	};
+
+	guardarpeso = (id, peso) => {
+		let series = this.props.line.series
+		series.map((linea, i)=> (
+		
+			linea.id == id ? linea.peso = peso : false		
+
+		));	
+		this.props.guardarserie(this.props.id,series)			
 		
 	};
 
@@ -27,6 +38,19 @@ export default class FilaDetalleCompra extends Component {
 		const value = target.value
 		const name = target.name
 		this.props.guardarcantidad(this.props.id,value)
+		this.setState({
+		  [name]: value,
+		})
+	  }
+
+	  
+
+	handleInputChangelote = event => {
+		
+		const target = event.target
+		const value = target.value
+		const name = target.name
+		this.props.guardarlote(this.props.id,value)
 		this.setState({
 		  [name]: value,
 		})
@@ -58,7 +82,22 @@ export default class FilaDetalleCompra extends Component {
                     className="inputform"
                   />
 					</Table.Cell>
+					{line.product_type==3 ? (
 					<Table.Cell>
+						<input
+					placeholder="Lote"
+					autoFocus
+                    type="text"
+					name="lote"
+					id={'lote_'+id}
+                    value={line.lote}
+					onChange={this.handleInputChangelote}
+					readOnly={true}
+                    className="inputform"
+                  />
+					</Table.Cell>
+
+					) :(<Table.Cell>
 					<label>
 						Es único?
 						<Checkbox
@@ -69,7 +108,8 @@ export default class FilaDetalleCompra extends Component {
 									
 								/>
 						</label>
-					</Table.Cell>
+					</Table.Cell>)}
+					
 					
 				</Table.Row>
 				{ (line.series.length>0)?
@@ -81,6 +121,9 @@ export default class FilaDetalleCompra extends Component {
 								guardarserie={this.guardarcantidad}
 								name={line.name}
 								id_parent={id}
+								peso={t.peso}
+								guardarpeso={this.guardarpeso}
+								
 							/>
 						)):('')
 					}

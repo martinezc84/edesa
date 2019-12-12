@@ -225,6 +225,21 @@ export default class Formula extends Component {
 		
 	};
 
+	guardarlote = (id, lote) => {
+		let insumos = this.state.insumos
+		insumos.map((insumo, i)=> (
+		
+			insumo.id == id ? insumo.lote = lote : false		
+
+		));		
+		//console.log(insumos)
+		this.setState(
+			{
+				insumos:insumos
+			})
+		
+	};
+
 
 
 	buscariitem = (id, items) => {
@@ -420,7 +435,7 @@ export default class Formula extends Component {
 		
 		agregar_item = () =>{
 			let id =this.state.insumoscont;
-			let insum={id:id,item_id:0,booked_quantity:1}
+			let insum={id:id,item_id:0,booked_quantity:1,lote:""}
 			id++;
 			let insumos = this.state.insumos;
 			insumos.push(insum)
@@ -591,6 +606,11 @@ export default class Formula extends Component {
 				>
 					ITEM
 				</Table.HeaderCell>
+				<Table.HeaderCell
+					
+				>
+					LOTE
+				</Table.HeaderCell>
 				
 				<Table.HeaderCell
 					
@@ -611,6 +631,7 @@ export default class Formula extends Component {
 							item_id={t.item_id}
 							cantidad={t.booked_quantity}							
 							guardarcantidad={guardarcantidad}
+							guardarlote={this.guardarlote}
 						/>
 					))}
 			</Table.Body>

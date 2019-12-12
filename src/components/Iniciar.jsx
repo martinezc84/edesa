@@ -91,9 +91,9 @@ export default class Iniciar extends Component {
 						 from_agency=formula.from_agency
 						if (formula.rv==1){	
 						detalle[linea].generar=false						
-							console.log("recurso variable")						
+							//console.log("recurso variable")						
 							for(let insumo in formula.insumos){
-								recurso = {id:ids, item_id:formula.insumos[insumo].item_id,  producto:formula.insumos[insumo].name, cantidad:(detalle[linea].cantidad*formula.insumos[insumo].cantidad)}
+								recurso = {id:ids, lote:"", item_id:formula.insumos[insumo].item_id,  producto:formula.insumos[insumo].name, cantidad:(detalle[linea].cantidad*formula.insumos[insumo].cantidad)}
 								recursos.push(recurso)
 								ids++
 							}
@@ -102,7 +102,7 @@ export default class Iniciar extends Component {
 						for(let insumo in formula.insumos){
 							if (formula.insumos[insumo].unico==1){
 								detalle[linea].generar=false
-								console.log("es unico")	
+								//console.log("es unico")	
 								for (let y=0; y<formula.insumos[insumo].cantidad;y++){
 									serie = {id:ids, lineid:detalle[linea].id, producto:formula.insumos[insumo].name, serie:""}
 									series.push(serie)
@@ -412,6 +412,28 @@ export default class Iniciar extends Component {
             this.setState({
               [name]: value,
             })
+		  }
+		  
+		  handleInputChangelote = event => {
+
+			const target = event.target
+            const value = target.value
+			const name = target.name
+			const id = target.id
+			//console.log(id)
+		
+				let recursos = this.state.recursos
+				recursos.map((recurso, i)=> (
+				
+					recurso.id == id ? recurso.lote = value : false		
+		
+				));	
+
+			
+        
+            this.setState({
+              [name]: value,
+            })
           }
         
           handleSubmit = event => {
@@ -459,6 +481,11 @@ export default class Iniciar extends Component {
 				>
 					CANTIDAD
 				</Table.HeaderCell>
+				<Table.HeaderCell
+					
+				>
+					
+				</Table.HeaderCell>
 				
 				</Table.Row>
 			</Table.Header>
@@ -476,6 +503,16 @@ export default class Iniciar extends Component {
 					id={t.id}
                     value={t.cantidad}
 					onChange={this.handleInputChange}				
+                    className="inputform"
+                  />}</Table.Cell>
+				  <Table.Cell>{<input
+				  placeholder={"Lote"}
+					autoFocus
+                    type="text"
+					name="lote"
+					id={t.id}
+                    value={t.lote}
+					onChange={this.handleInputChangelote}				
                     className="inputform"
                   />}</Table.Cell>
 											

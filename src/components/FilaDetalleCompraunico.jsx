@@ -20,11 +20,22 @@ export default class FilaDetalleCompraunico extends Component {
 		})
 	  }
 
+	  handleInputChangepeso = event => {
+		
+		const target = event.target
+		const value = target.value
+		const name = target.name
+		this.props.guardarpeso(this.props.id,value)
+		this.setState({
+		  [name]: value,
+		})
+	  }
+
 
 	render() {
 
 		
-		let { id, serie, name, id_parent } = this.props;
+		let { id, serie, name, id_parent, peso } = this.props;
 		//console.log(key);
 	
 			return (
@@ -45,7 +56,16 @@ export default class FilaDetalleCompraunico extends Component {
 					1
 					</Table.Cell>
 					<Table.Cell>
-					
+					<input
+					placeholder={"peso"}
+					autoFocus
+                    type="text"
+					name="peso"				
+                    value={peso}
+					onChange={this.handleInputChangepeso}				
+					className="inputform"
+					id={"eso_"+id_parent+"_"+id}
+                  />
 					</Table.Cell>
 					
 				</Table.Row>

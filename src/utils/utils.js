@@ -70,6 +70,11 @@ const FUNCIONES = {
 	deliver:URL_PREFIX+process.env.GATSBY_URL_DELIVER,
 	itemzauru:URL_PREFIX+process.env.GATSBY_URL_ITEMZAURU,
 	itemsorden:URL_PREFIX+process.env.GATSBY_URL_ITEMORDEN,
+	crearlote:URL_PREFIX+process.env.GATSBY_URL_CREARLOTE,
+	guardarlote:URL_PREFIX+process.env.GATSBY_URL_GUARDARLOTE,
+	editarlote:URL_PREFIX+process.env.GATSBY_URL_EDITARLOTE,
+	lote:URL_PREFIX+process.env.GATSBY_URL_LOTE,
+	existencias:URL_PREFIX+process.env.GATSBY_URL_EXISTENCIAS,
 	
 };
 
@@ -88,6 +93,7 @@ const ZAURU = {
 	crearitem:ZAURU_URL+process.env.GATSBY_API_ITEM,
 	deliver:ZAURU_URL+process.env.GATSBY_API_DELIVER,
 	itemzauru:ZAURU_URL+process.env.GATSBY_API_ITEMZAURU,
+	crearlote:ZAURU_URL+process.env.GATSBY_API_CREARLOTE,
 };
 
 const API_URL = {
@@ -113,7 +119,12 @@ const APIP_URL = {
 	equipos: URL_APIP+process.env.GATSBY_APIP_EQUIPOS,
 	guardaritem:URL_APIP+process.env.GATSBY_APIP_GUARDARITEM,
 	itemserie:URL_APIP+process.env.GATSBY_APIP_GETITEMSERIE,
-	itemorden:URL_APIP+process.env.GATSBY_APIP_GETITEMORDEN
+	itemorden:URL_APIP+process.env.GATSBY_APIP_GETITEMORDEN,
+	guardarlote:URL_APIP+process.env.GATSBY_APIP_GUARDARLOTE,
+	editarlote:URL_APIP+process.env.GATSBY_APIP_EDITARLOTE,
+	lote:URL_APIP+process.env.GATSBY_APIP_GETLOTE,
+	lotes:URL_APIP+process.env.GATSBY_APIP_GETLOTES,
+	existencias:URL_APIP+process.env.GATSBY_APIP_EXISTENCIAS,
 
 }
 

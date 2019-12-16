@@ -496,7 +496,7 @@ export default class Iniciar extends Component {
 								
 							}
 							if (generardetalle){
-								console.log(poststr)
+								//console.log(poststr)
 								let res = await Axios.post(`${FUNCIONES.reservaciones}`,poststr)
 							
 							if (res.data.id!==undefined){

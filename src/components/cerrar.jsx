@@ -19,6 +19,7 @@ export default class Iniciar extends Component {
 		referencias:[],
 		desperdicios:[],
 		rendimientos:[],
+		lotes:[],
 		consumidos:[],
 		formulas:[],
 		detalle:[],
@@ -81,6 +82,7 @@ export default class Iniciar extends Component {
 					let desperdicios=[]
 					let referencias=[]
 					let rendimientos=[]
+					let lotes=[]
 					let rendimiento
 					let desperdiciol
 					let refer
@@ -112,7 +114,9 @@ export default class Iniciar extends Component {
 						let x=1
 						let exist =true
 						let code
-						if (formula.genera_unico==1){
+						let lote
+						console.log(formula)
+						if (formula.genera_unico=="1"){
 							detalle[linea].generar=false
 							//console.log("genera unico")						
 							for(let lineapt in formula.pt){
@@ -133,11 +137,37 @@ export default class Iniciar extends Component {
 								}
 							}
 						}
+
+						if (formula.gl==1){
+							let cont =1
+							let date = new Date();
+							let fechastr = date.toLocaleString();
+							//console.log(fechastr)
+							let hotastr = fechastr.substring(11,17)
+							//console.log(hotastr)
+							fechastr = fechastr.substring(0,10)
+							fechastr = fechastr.trim();
+							let fecha = fechastr.split('/');
+							let hora = hotastr.split(":")
+							fechastr = fecha[2]+fecha[1]+fecha[0]+hora[0]+hora[1]
+							detalle[linea].generar=false
+							//console.log("genera unico")						
+							for(let lineapt in formula.pt){
+
+								lote = {id:ids, lote:fechastr+cont, producto:formula.pt[lineapt].name, item_id:formula.pt[lineapt].item_id, cantidad:( formula.pt[lineapt].cantidad * detalle[linea].cantidad)}
+								lotes.push(lote)
+								ids++
+								cont++
+								//x++
+								
+							}
+						}
+						//console.log(lotes)
 						
 						exist =true
 						
 
-						if (formula.rv==1){
+						if (formula.rv==1 && formula.gl==0){
 							detalle[linea].generar=false
 							//console.log("genera unico")						
 							for(let lineapt in formula.pt){
@@ -160,7 +190,8 @@ export default class Iniciar extends Component {
 						desperdicios,
 						rendimientos,
 						to_agency,
-						consumototal
+						consumototal,
+						lotes
 						
 						
 					});
@@ -271,6 +302,23 @@ export default class Iniciar extends Component {
 			return null
 		}
 	}
+
+	crear_lote=async (data)=>{
+		let date = new Date();
+						date.setDate(date.getDate() + 15);
+						let fechastr = date.toLocaleDateString('en-US');
+						let fecha = fechastr.split('/');
+						fechastr = fecha[2]+'-'+fecha[0]+'-'+fecha[1]
+		
+		let string = '{"lot":{"item_id":"'+data.item_id+'", "name":"'+data.lote+'","expires":"'+fechastr+'"}}'
+		//console.log(string)
+		let res = await Axios.post(FUNCIONES.crearlote, string) 
+
+		 string = '{"cantidad":"'+data.cantidad+'", "saldo":"'+data.cantidad+'"  ,"lote":"'+data.lote.replace('"', '\\"')+'","id":"'+res.data.id+'","store_id":"'+this.state.userdata.store+'", "vence":"'+fechastr+'"}'
+		//console.log(string)
+		let res2 =  Axios.post(FUNCIONES.guardarlote, string) 
+		return res.data.id
+	}	
 	
 	
 	  guardar_formula = async () => {
@@ -313,6 +361,7 @@ export default class Iniciar extends Component {
 					let referencias = this.state.referencias
 					let desperdicios = this.state.desperdicios
 					let rendimientos = this.state.rendimientos
+					let lotes = this.state.lotes
 					let x = 0
 					let y=0
 					let generardetalle = false
@@ -358,6 +407,25 @@ export default class Iniciar extends Component {
 							generados.push(itemgen)
 							z++
 					}
+
+					for(let lote in lotes){
+						generardetalle = true
+						
+						//console.log(iteminfo)
+						let newlote = {item_id:lotes[lote].item_id, lote:lotes[lote].lote, cantidad:lotes[lote].cantidad}
+						//console.log(JSON.stringify(newitem)) 
+						
+						let lotedata  = await this.crear_lote(newlote)
+						//let itemdata={id:1587455}
+						//console.log(lotedata)
+						if(x>0) stringdet+=","
+						stringdet+='"'+x+'":{"item_id":"'+lotes[lote].item_id+'", "booked_quantity":"'+lotes[lote].cantidad+'","lot_id":"'+lotedata+'"}'
+						x++
+						generadototal=generadototal+parseInt(lotes[lote].cantidad)
+
+					}
+
+
 					let formula_id
 					let formula={}
 					consumototal = consumototal+z
@@ -428,7 +496,7 @@ export default class Iniciar extends Component {
 								
 							}
 							if (generardetalle){
-								//console.log(poststr)
+								console.log(poststr)
 								let res = await Axios.post(`${FUNCIONES.reservaciones}`,poststr)
 							
 							if (res.data.id!==undefined){
@@ -582,9 +650,28 @@ export default class Iniciar extends Component {
 					referencias
 				  })
 
+            
+		  }
+		  
+		  handleInputChangeCant = event => {
+            const target = event.target
+            const value = target.value
+			const name = target.name
+			let id = target.id
 			
+				let lotes = this.state.lotes
+				id = id.split("_")
+				
+				lotes.map((ref, i)=> (
 		
-        
+					ref.id == id[1]  ? ref.cantidad = value :  false	
+		
+				));	
+				//console.log(referencias)
+				this.setState({
+					lotes
+				  })
+
             
           }
         
@@ -604,10 +691,11 @@ export default class Iniciar extends Component {
 
 		let {
 				
-			referencias, desperdicios, loading, rendimientos
+			referencias, desperdicios, loading, rendimientos, lotes
            
 			
 		} = this.state;
+		console.log(lotes)
 
 			if (loading) {
 			return <Loader active inline="centered" />;
@@ -617,7 +705,7 @@ export default class Iniciar extends Component {
 				<div >
                 <form onSubmit={this.handleSubmit}>
 
-				{  (referencias.length>0)?(<React.Fragment><p >REFERENCIAS</p>
+				{  (referencias.length>0 || lotes.length>0)?(<React.Fragment><p >REFERENCIAS</p>
 			<Table sortable celled>
 			<Table.Header>
 			<Table.Row>
@@ -632,6 +720,11 @@ export default class Iniciar extends Component {
 					
 				>
 					REFERENCIA
+				</Table.HeaderCell>
+				<Table.HeaderCell
+					
+				>
+					
 				</Table.HeaderCell>
 				<Table.HeaderCell
 					
@@ -671,6 +764,33 @@ export default class Iniciar extends Component {
 					id={"peso_"+t.id}
                     value={t.peso}
 					onChange={this.handleInputChangepeso}				
+                    className="inputform"
+				  />}
+				 
+				  </Table.Cell>
+											
+					
+						
+				</Table.Row>
+					))}
+					{
+					lotes
+					.map((t) => (
+						<Table.Row>
+										
+					<Table.Cell>{t.producto}</Table.Cell>
+					<Table.Cell>{t.lote}</Table.Cell>
+					 
+					<Table.Cell>
+				 
+				  </Table.Cell>
+				  <Table.Cell>{<input
+					autoFocus
+                    type="number"
+					name="cantidad"
+					id={"cantidad_"+t.id}
+                    value={t.cantidad}
+					onChange={this.handleInputChangeCant}				
                     className="inputform"
 				  />}
 				 

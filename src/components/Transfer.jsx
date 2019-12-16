@@ -345,11 +345,18 @@ export default class Formula extends Component {
 				let shipment = {shipment:booking}
 				if((booking.reference!=="")  ){
 					let x=0
+					let lot_id
 					let stringdet="{"
 					let insumos = this.state.insumos
 					for (let linea in insumos){
 						if(x>0) stringdet+=","
-						stringdet+='"'+x+'":{"item_id":"'+insumos[linea].item_id+'", "booked_quantity":"'+insumos[linea].booked_quantity+'"}'
+						if(insumos[linea].lote!=""){
+							lot_id = await Axios.get(FUNCIONES.lote+'?id='+insumos[linea].lote)
+							lot_id = lot_id.data.id
+					   }else{
+						   lot_id = ""
+					   }
+						stringdet+='"'+x+'":{"item_id":"'+insumos[linea].item_id+'", "booked_quantity":"'+insumos[linea].booked_quantity+'", "lot_id":"'+lot_id+'"}'
 						x++
 					}
 					stringdet+="}"

@@ -48,6 +48,8 @@
 	GATSBY_URL_ITEMZAURU='/.netlify/functions/GetItemzauru'
 	GATSBY_URL_ITEMORDEN='/.netlify/functions/GetItemorden'
 	GATSBY_URL_EXISTENCIAS='/.netlify/functions/GetExistencias'
+	GATSBY_URL_LOTEZAURU='/.netlify/functions/GetLoteZauru'
+	GATSBY_URL_ENTREGA='/.netlify/functions/GetEntrega'
 
 	# Dominio del sitio de las APIs (Backend)
 	GATSBY_ZAURU_URL='https://zauru.herokuapp.com'
@@ -95,6 +97,8 @@
   	GATSBY_API_DELIVER='/inventories/bookings/'
 	GATSBY_API_ITEMZAURU='/settings/items/'
 	GATSBY_API_CREARLOTE = '/inventories/lots.json'
+	GATSBY_API_LOTEZAURU = '/inventories/lots/'
+	GATSBY_API_ENTREGA = '/inventories/deliveries/'
 
 	# Email y token de autenticación para utilizar las APIs 
         #GATSBY_EMAIL='api@semperlibery.com'

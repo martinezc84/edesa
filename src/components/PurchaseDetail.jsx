@@ -9,6 +9,7 @@ import { Msjerror } from './Mensajeserror';
 import FilaDetalle from './FilaDetalleCompra';
 import { isLoggedIn, logout , getUser} from "../utils/identity"
 import { navigate } from 'gatsby';
+import { domainToASCII } from 'url';
 
 
 
@@ -142,9 +143,10 @@ export default class PurchaseDetail extends Component {
 					let date = new Date();
 					let fechastr = date.toLocaleString();
 					console.log(fechastr)
-					let hotastr = fechastr.substring(10,17)
+					let hotastr = fechastr.substring(11,17)
 					console.log(hotastr)
-					fechastr = fechastr.substring(0,9)
+					fechastr = fechastr.substring(0,10)
+					fechastr = fechastr.trim();
 					let fecha = fechastr.split('/');
 					let hora = hotastr.split(":")
 					fechastr = fecha[2]+fecha[1]+fecha[0]+hora[0]+hora[1]
@@ -326,6 +328,15 @@ export default class PurchaseDetail extends Component {
 		//let string= '{"purchase_order":{"purchase_order_details_attributes":{"0":{"id":"'+this.state.orden.id+'", "_destroy":"false", "booked_quantity":"'+quantity+'","reference":"'+reference+'"}}}}'
 	}
 
+	get_lote=async (id)=>{
+		
+		
+		let res = await Axios.get(FUNCIONES.lotezauru+'?id='+id)
+		
+		return res.data
+	}
+	
+	
 	crear_item=async (data)=>{
 		
 		let string = '{"item":{"name":"'+data.name.replace('"', '\\"')+'", "code":"'+data.code+'","ean13":"'+data.code+'","item_category_id":"'+data.item_category_id+'", "stockable":"true","measurement_unit":"'+data.measurement_unit+'","purchasable":"true", "product_type":"'+data.product_type+'","weight":"'+data.peso+'","payee_id":"'+data.payee_id+'"}}';
@@ -338,15 +349,11 @@ export default class PurchaseDetail extends Component {
 		return res.data
 	}	
 
-	crear_lote=async (data)=>{
-		
-		let string = '{"lot":{"name":"'+data.name.replace('"', '\\"')+'", "item_id":"'+data.item_id+'"}}';
+	guardar_lote=async (data)=>{
+	
+		let string = '{"cantidad":"'+data.cantidad+'", "saldo":"'+data.cantidad+'"  ,"lote":"'+data.name.replace('"', '\\"')+'","id":"'+data.id+'","store_id":"'+this.state.userdata.store+'", "vence":"'+data.vence+'"}'
 		//console.log(string)
-		let res = await Axios.post(FUNCIONES.crearlote, string)
-		//console.log(res.data) 
-		string = '{"cantidad":"'+data.cantidad+'", "saldo":"'+data.cantidad+'"  ,"lote":"'+data.name.replace('"', '\\"')+'",id":"'+res.data.id+'","store_id":"'+this.state.userdata.store+'", "vence":"'+data+'"}'
-		//console.log(string)
-		let res2 = await Axios.post(FUNCIONES.guardaritem, string) 
+		let res = await Axios.post(FUNCIONES.guardarlote, string) 
 		return res.data
 	}	
 	
@@ -373,6 +380,7 @@ export default class PurchaseDetail extends Component {
 				let edit = false
 				let lineas = 0;
 				let res;
+				let capturarlotes = false;
 				for(let linea in detalle){
 					let series = detalle[linea].series
 					if(detalle[linea].unico){
@@ -394,13 +402,14 @@ export default class PurchaseDetail extends Component {
 					if(x>0) stringdet+=","
 
 					if(detalle[linea].product_type==3){
+						capturarlotes = true;
 						let date = new Date();
 						date.setDate(date.getDate() + 15);
 						let fechastr = date.toLocaleDateString('en-US');
 						let fecha = fechastr.split('/');
 						fechastr = fecha[2]+'-'+fecha[0]+'-'+fecha[1]
 
-						stringdet+='"'+x+'":{"id":"'+detalle[linea].id+'", "item_id":"'+detalle[linea].item_id+'", "booked_quantity":"'+detalle[linea].item_cantidad+'", "lot_delivered_quantity":["'+detalle[linea].cantidad+'"], "lot_name":["'+detalle[linea].lote+'"],"lot_expire":["'+fechastr+'"]}'
+						stringdet+='"'+x+'":{"id":"'+detalle[linea].id+'", "item_id":"'+detalle[linea].item_id+'", "booked_quantity":"'+detalle[linea].item_cantidad+'", "lot_delivered_quantity":["'+detalle[linea].cantidad+'"], "lot_name":["'+detalle[linea].lote+'"],"lot_expire":["'+fechastr+'"],"reference":"'+detalle[linea].lote+'" }'
 					}else{
 						stringdet+='"'+x+'":{"id":"'+detalle[linea].id+'", "item_id":"'+detalle[linea].item_id+'", "booked_quantity":"'+detalle[linea].item_cantidad+'", "delivered_quantity":"'+detalle[linea].cantidad+'"}'
 					}
@@ -438,7 +447,28 @@ export default class PurchaseDetail extends Component {
 					let request='{"id":"'+this.state.orden.id+'", "agency_id":"'+this.state.orden.agency_id+'","exchange_rate":"1","delivery_date":"'+fechastr+'","purchase_order_details_attributes":{'+stringdet+'}}';
 					console.log(request)
 					res = await Axios.post(FUNCIONES.recibir, request) 
-						//console.log(res)
+					
+					if (capturarlotes)
+					{
+						let lotesdata =res.data
+						console.log(lotesdata)
+						let entregas  = lotesdata.shipment_purchase_orders
+						 for(let entrega in entregas){
+							let ide=entregas[entrega].shipment_id
+							console.log(ide)
+						let movements = await Axios.get(FUNCIONES.entrega+'?id='+ide)
+							movements = movements.data.movements
+						for(let linea in movements){
+							if(movements[linea].lot_id!=null){
+
+								let loteinfo = await this.get_lote(movements[linea].lot_id)
+								let lote = {name:loteinfo.name, id:movements[linea].lot_id,cantidad:movements[linea].delivered_quantity, vence:loteinfo.expires}
+								this.guardar_lote(lote)
+							}
+						}
+					}
+						
+					}
 						this.setState({
 							loading: false,
 							visible:true

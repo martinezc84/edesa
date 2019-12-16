@@ -75,7 +75,8 @@ const FUNCIONES = {
 	editarlote:URL_PREFIX+process.env.GATSBY_URL_EDITARLOTE,
 	lote:URL_PREFIX+process.env.GATSBY_URL_LOTE,
 	existencias:URL_PREFIX+process.env.GATSBY_URL_EXISTENCIAS,
-	
+	lotezauru:URL_PREFIX+process.env.GATSBY_URL_LOTEZAURU,
+	entrega:URL_PREFIX+process.env.GATSBY_URL_ENTREGA,
 };
 
 const ZAURU = {
@@ -94,6 +95,8 @@ const ZAURU = {
 	deliver:ZAURU_URL+process.env.GATSBY_API_DELIVER,
 	itemzauru:ZAURU_URL+process.env.GATSBY_API_ITEMZAURU,
 	crearlote:ZAURU_URL+process.env.GATSBY_API_CREARLOTE,
+	lotezauru:ZAURU_URL+process.env.GATSBY_API_LOTEZAURU,
+	entrega:ZAURU_URL+process.env.GATSBY_API_ENTREGA
 };
 
 const API_URL = {

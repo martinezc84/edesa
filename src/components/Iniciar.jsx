@@ -277,7 +277,15 @@ export default class Iniciar extends Component {
 
 					for (let linea in recursos){
 						if(x>0) stringdet+=","
-								stringdet+='"'+x+'":{"item_id":"'+recursos[linea].item_id+'", "booked_quantity":"'+recursos[linea].cantidad+'"}'
+						let lot_id
+
+						if(recursos[linea].lote!=""){
+							 lot_id = await Axios.get(FUNCIONES.lote+'?id='+recursos[linea].lote)
+							 lot_id = lot_id.data.id
+						}else{
+							lot_id = ""
+						}
+								stringdet+='"'+x+'":{"item_id":"'+recursos[linea].item_id+'", "booked_quantity":"'+recursos[linea].cantidad+'", "lot_id":"'+lot_id+'"}'
 								let item = {id:z,item_id:recursos[linea].item_id,cantidad:(recursos[linea].cantidad),orden_id:this.state.orden.id, nombre:recursos[linea].producto}
 								utilizados.push(item)
 								x++

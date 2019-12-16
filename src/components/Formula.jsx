@@ -100,6 +100,7 @@ export default class Formula extends Component {
 					let unico
 					let rv
 					let gd
+					let gl
 					let formula = data
 					let insumos = data.insumos
 					insumos.map((insumo, i)=> (
@@ -115,6 +116,7 @@ export default class Formula extends Component {
 					formula.genera_unico ==1 ? unico =true: unico=false;
 					formula.rv ==1 ? rv =true: rv=false;
 					formula.gd ==1 ? gd =true: gd=false;
+					formula.gl ==1 ? gl =true: gl=false;
 					from_agency = parseInt(formula.from_agency);
 					to_agency = parseInt(formula.to_agency);
 					comprables = [...comprables, itemst]
@@ -128,6 +130,7 @@ export default class Formula extends Component {
 						tiempo_de_produccion:formula.tiempo_de_produccion,
 						rv:rv,
 						gd:gd,
+						gl:gl,
 						activa:formula.activa,
 						unico:unico,
 						formula:formula,
@@ -152,6 +155,7 @@ export default class Formula extends Component {
 					tiempo_de_produccion:"00:00:00",
 					rv:0,
 					gd:0,
+					gl:0,
 					activa:1,
 					unico:0,
 					formula:null,
@@ -167,6 +171,7 @@ export default class Formula extends Component {
 				esunico:this.esunico,
 				rvf:this.rv,
 				gdf:this.gd,
+				glf:this.gl,
 				action:action,
 				guardarcantidad:this.guardarcantidad,
 				guardarcantidadpt:this.guardarcantidadpt,
@@ -405,6 +410,19 @@ export default class Formula extends Component {
 		
 	};
 
+	gl = (e, item) => {
+		let gl = null;
+
+		item.checked ==true ? gl =true: gl=false; 
+
+		this.setState(
+			{
+                gl:gl,
+               
+			})
+		
+	};
+
 	tipoinsumo = (e, item) => {
 		//console.log(item)
 		let tipo_insumo
@@ -460,6 +478,7 @@ export default class Formula extends Component {
 				formula.genera_unico = this.state.unico==true ? "1" : "0"
 				formula.rv = this.state.rv==true ? "1" : "0"
 				formula.gd = this.state.gd==true ? "1" : "0"
+				formula.gl = this.state.gl==true ? "1" : "0"
 				formula.insumos = this.state.insumos
 				formula.pt= this.state.pts
 				formula.desperdicios= this.state.desperdicios
@@ -701,7 +720,7 @@ export default class Formula extends Component {
 			to_agency,
 			selectAg,
 			show,
-            nombre,tipo_insumo,genera_unico,rv,gd, options,  unico, items, tipoinsumo, esunico,gdf, rvf, action, desperdicios
+            nombre,tipo_insumo,genera_unico,rv,gd, options,  unico, items, tipoinsumo, esunico,gdf, rvf, action, desperdicios, glf, gl,
 			
 		} = this.state;
 
@@ -741,6 +760,11 @@ export default class Formula extends Component {
                 <label>
                   <strong>Genera Desperdicio?</strong>
 				  {gd==true?'si':'no'}
+				</label>):('')}
+				{gd!==null ? (
+                <label>
+                  <strong>Genera Lotes?</strong>
+				  {gl==true?'si':'no'}
 				</label>):('')}
                
               </form>
@@ -900,7 +924,7 @@ export default class Formula extends Component {
 					className="mr-sm-2"
 				/>
 			</label></Grid.Column></Grid.Row>):('')}
-			<Grid.Row columns={3}>
+			<Grid.Row columns={4}>
 			{genera_unico!==null ? (
 			<Grid.Column><label>
 			  Genera Items únicos?
@@ -928,6 +952,15 @@ export default class Formula extends Component {
 						onChange={gdf}
 						toggle
 						checked={gd}
+					/>
+			</label></Grid.Column>):('')}
+			{gl!==null ? (
+			<Grid.Column><label>
+			  Genera Lotes?
+			  <Checkbox
+						onChange={glf}
+						toggle
+						checked={gl}
 					/>
 			</label></Grid.Column>):('')}
 			</Grid.Row>
@@ -1134,7 +1167,7 @@ export default class Formula extends Component {
 					className="mr-sm-2"
 				/>
 			</label></Grid.Column></Grid.Row>):('')}
-			<Grid.Row columns={3}>
+			<Grid.Row columns={4}>
 			{genera_unico!==null ? (
 			<Grid.Column><label>
 			  Genera Items únicos?
@@ -1162,6 +1195,15 @@ export default class Formula extends Component {
 						onChange={gdf}
 						toggle
 						checked={gd}
+					/>
+			</label></Grid.Column>):('')}
+			{gl!==null ? (
+			<Grid.Column><label>
+			  Genera Lotes?
+			  <Checkbox
+						onChange={glf}
+						toggle
+						checked={gl}
 					/>
 			</label></Grid.Column>):('')}
 			</Grid.Row>

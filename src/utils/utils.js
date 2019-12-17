@@ -77,6 +77,9 @@ const FUNCIONES = {
 	existencias:URL_PREFIX+process.env.GATSBY_URL_EXISTENCIAS,
 	lotezauru:URL_PREFIX+process.env.GATSBY_URL_LOTEZAURU,
 	entrega:URL_PREFIX+process.env.GATSBY_URL_ENTREGA,
+	loteagencia:URL_PREFIX+process.env.GATSBY_URL_LOTEAGENCIA,
+	lotesagencia:URL_PREFIX+process.env.GATSBY_URL_LOTESAGENCIA,
+	guardarloteag:URL_PREFIX+process.env.GATSBY_URL_GUARDARLOTEAGENCIA,
 };
 
 const ZAURU = {
@@ -128,6 +131,9 @@ const APIP_URL = {
 	lote:URL_APIP+process.env.GATSBY_APIP_GETLOTE,
 	lotes:URL_APIP+process.env.GATSBY_APIP_GETLOTES,
 	existencias:URL_APIP+process.env.GATSBY_APIP_EXISTENCIAS,
+	loteagencia:URL_APIP+process.env.GATSBY_APIP_LOTEAGENCIA,
+	lotesagencia:URL_APIP+process.env.GATSBY_APIP_LOTESAGENCIA,
+	guardarloteag:URL_APIP+process.env.GATSBY_APIP_GUARDARLOTEAGENCIA,
 
 }
 

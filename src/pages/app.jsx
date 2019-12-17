@@ -17,6 +17,7 @@ import Existencias from '../components/Existencias';
 import OrdenesCompra from '../components/PurchaseOrders';
 import OrdenCompra from '../components/PurchaseDetail';
 import Transfer from '../components/Transfer';
+import LotesAgencia from '../components/LotesAgencia';
 import Login from '../components/Login';
 import NuevaOrden from '../components/NuevaOrden';
 import { Router } from "@reach/router"
@@ -453,6 +454,7 @@ export default class App extends Component {
 			<RutaPrivada  path="/app/orden/terminar/:id" component={Terminar} guardar={this.guardar} {...propsIni}  ></RutaPrivada>
 			<RutaPrivada  path="/app/ordenp/:action/:id" component={OrdenP} guardar={this.guardar} {...propson}  ></RutaPrivada>
 			<RutaPrivada  path="/app/existencias" component={Existencias} guardar={this.guardar} {...propson}  ></RutaPrivada>
+			<RutaPrivada  path="/app/lotesagencia" component={LotesAgencia} guardar={this.guardar} {...propson}  ></RutaPrivada>
 				<Login path='/app/login/:error' />
 				
 				

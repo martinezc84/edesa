@@ -353,6 +353,7 @@ export default class Formula extends Component {
 						if(insumos[linea].lote!=""){
 							lot_id = await Axios.get(FUNCIONES.lote+'?id='+insumos[linea].lote)
 							lot_id = lot_id.data.id
+							Axios.post(FUNCIONES.guardarloteag,'{"lote_id":"'+lot_id+'","cantidad":"'+insumos[linea].booked_quantity+'","agencia_id":"'+this.state.to_agency+'"}')
 					   }else{
 						   lot_id = ""
 					   }

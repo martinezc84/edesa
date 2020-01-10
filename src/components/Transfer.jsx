@@ -345,6 +345,7 @@ export default class Formula extends Component {
 				let shipment = {shipment:booking}
 				if((booking.reference!=="")  ){
 					let x=0
+					
 					let lot_id
 					let stringdet="{"
 					let insumos = this.state.insumos

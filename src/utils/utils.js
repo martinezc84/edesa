@@ -80,6 +80,7 @@ const FUNCIONES = {
 	loteagencia:URL_PREFIX+process.env.GATSBY_URL_LOTEAGENCIA,
 	lotesagencia:URL_PREFIX+process.env.GATSBY_URL_LOTESAGENCIA,
 	guardarloteag:URL_PREFIX+process.env.GATSBY_URL_GUARDARLOTEAGENCIA,
+	beneficiarios:URL_PREFIX+process.env.GATSBY_API_BENEFICIARIOS,
 };
 
 const ZAURU = {
@@ -99,7 +100,8 @@ const ZAURU = {
 	itemzauru:ZAURU_URL+process.env.GATSBY_API_ITEMZAURU,
 	crearlote:ZAURU_URL+process.env.GATSBY_API_CREARLOTE,
 	lotezauru:ZAURU_URL+process.env.GATSBY_API_LOTEZAURU,
-	entrega:ZAURU_URL+process.env.GATSBY_API_ENTREGA
+	entrega:ZAURU_URL+process.env.GATSBY_API_ENTREGA,
+	beneficiarios:ZAURU_URL+process.env.GATSBY_API_BENEFICIARIOS
 };
 
 const API_URL = {

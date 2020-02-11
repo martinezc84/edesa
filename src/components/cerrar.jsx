@@ -468,7 +468,7 @@ Selectempleado = (e, item) => {
 		//console.log(string)
 		let res = await Axios.post(FUNCIONES.crearlote, string) 
 
-		 string = '{"cantidad":"'+data.cantidad+'", "saldo":"'+data.cantidad+'"  ,"lote":"'+data.lote.replace('"', '\\"')+'","id":"'+res.data.id+'","store_id":"'+this.state.userdata.store+'", "vence":"'+fechastr+'"}'
+		 string = '{"cantidad":"'+data.cantidad+'", "saldo":"'+data.cantidad+'"  ,"lote":"'+data.lote.replace('"', '\\"')+'","id":"'+res.data.id+'","store_id":"'+this.state.userdata.store+'", "vence":"'+fechastr+'", "item_id":"'+data.item_id+'"}'
 		//console.log(string)
 		let res2 =  Axios.post(FUNCIONES.guardarlote, string) 
 		return res.data.id

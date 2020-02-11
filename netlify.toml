@@ -54,10 +54,13 @@
 	GATSBY_URL_LOTESAGENCIA='/.netlify/functions/GetLotesAgencia'
 	GATSBY_URL_GUARDARLOTEAGENCIA='/.netlify/functions/GuardarLoteAgencia'
 	GATSBY_URL_BENEFICIARIOS='/.netlify/functions/Beneficiarios'
+<<<<<<< HEAD
 	GATSBY_URL_GUARDARPEDIDO='/.netlify/functions/GuardarPedido'
 	GATSBY_URL_EDITARPEDIDO='/.netlify/functions/EditarPedido'
 	GATSBY_URL_PEDIDO='/.netlify/functions/GetPedido'
 	GATSBY_URL_PEDIDOS='/.netlify/functions/GetPedidos'
+=======
+>>>>>>> c4373fe68b367e662ae113042da346949b1d1a06
 
 	# Dominio del sitio de las APIs (Backend)
 	GATSBY_ZAURU_URL='https://zauru.herokuapp.com'
@@ -117,9 +120,15 @@
 	GATSBY_API_BENEFICIARIOS='/settings/payees/datatables.json?scope=clients'
 
 	# Email y token de autenticación para utilizar las APIs 
+<<<<<<< HEAD
         GATSBY_EMAIL='api@edesa.com'
     	GATSBY_TOKEN='y749fGvk3B6nC8pMUy4j'
 		GATSBY_API_KEY='y749fGvk3B6nC8pMUy4j'
+=======
+        GATSBY_EMAIL='api@semperlibery.com'
+    	GATSBY_TOKEN='AtG-z7a8z44W767Tt83S'
+		GATSBY_API_KEY='AtG-z7a8z44W767Tt83S'
+>>>>>>> c4373fe68b367e662ae113042da346949b1d1a06
 		#GATSBY_EMAIL='api@discogua.com.gt'
         #GATSBY_TOKEN='uuvDJ6vscs1ewsxbRVHU'
 		#GATSBY_API_KEY='uuvDJ6vscs1ewsxbRVHU'

@@ -14,8 +14,8 @@ const headersr = {
 exports.handler = async (event, context) => {
 	try {
 		//@ts-ignore
-		let id = event.queryStringParameters.ag;
-		let { data } = await axios.get(URL+"?ag="+id, { headers });
+		let ag = event.queryStringParameters.agg;
+		let { data } = await axios.get(URL+"?ag="+ag, { headers });
 		console.log(data)
 		return {
 			statusCode: 200,

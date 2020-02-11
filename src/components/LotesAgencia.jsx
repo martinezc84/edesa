@@ -31,7 +31,8 @@ export default class OrdenesP extends Component {
 		userdata:null,
 		Items:[],
 		Pesos:[],
-		estado:'espera'
+		estado:'espera',
+		agg:3391
 	
 	};
 
@@ -105,7 +106,7 @@ export default class OrdenesP extends Component {
 				
 
                 //console.log(FUNCIONES.ordenes)
-				Axios.get(FUNCIONES.lotesagencia+"?ag=3391")
+				Axios.get(FUNCIONES.lotesagencia+"?agg="+this.state.agg)
 					.then(({ data }) => {
 						let Items=[]
 						
@@ -115,7 +116,7 @@ export default class OrdenesP extends Component {
 						//console.log(Ordenes)
 
 						for (let Item in Resp) {
-							let itemex={cantidad:Resp[Item].cantidad,fecha:Resp[Item].fecha,lote:Resp[Item].lote,vence:Resp[Item].vence,dias:Resp[Item].dias}
+							let itemex={cantidad:Resp[Item].cantidad,fecha:Resp[Item].fecha,lote:Resp[Item].lote,vence:Resp[Item].vence,dias:Resp[Item].dias, tipo:Resp[Item].name}
 							Items.push(itemex);
 						}
 
@@ -184,24 +185,31 @@ export default class OrdenesP extends Component {
 
 	
 
-		cargarxistencias = async (agg)=>{
-
+		cargarxistencias = async (agg,store)=>{
+			this.setState({
+				
+				loading: true,							
+				
+			});
 			
-			Axios.get(FUNCIONES.existencias+"?store_id=4&agg="+agg)
+			Axios.get(FUNCIONES.lotesagencia+"?store_id="+store+"&agg="+agg)
 			.then(({ data }) => {
 				
-				//console.log(data)
-				let Items = data.items;			
-				
-				
-
+				let Items=[]					
+				let Resp =  data			
 				//console.log(Ordenes)
+				for (let Item in Resp) {
+					let itemex={cantidad:Resp[Item].cantidad,fecha:Resp[Item].fecha,lote:Resp[Item].lote,vence:Resp[Item].vence,dias:Resp[Item].dias, tipo:Resp[Item].name}
+					Items.push(itemex);
+				}
+
 				
+			
 				this.setState({
-					Items: Items,
-					agg:agg,
+					Items:Items,
 					loading: false,							
-					cantidadPaginas: Math.floor(Items.length / this.state.first) + 1
+					cantidadPaginas: Math.floor(Items.length / this.state.first) + 1,
+					agg:agg
 				});
 			})
 			.catch((error) => {
@@ -222,7 +230,7 @@ export default class OrdenesP extends Component {
 			offset,
 			column,
 			direction,
-			Pesos
+			agg
 		} = this.state;
 
 		if (loading) {
@@ -234,6 +242,26 @@ export default class OrdenesP extends Component {
           Buscar :
           <input type="text" value={this.state.buscar} onChange={this.handleChange} />
         </label>
+		<Menu inverted  widths={2}>
+							<Menu.Item
+							active={agg==3391}
+							color={"blue"}
+							onClick={() => {
+								this.cargarxistencias(3391,3)
+							}}
+							name="Maduración"
+						></Menu.Item>
+						<Menu.Item
+						color={"orange"}
+						active={agg==3443}
+							onClick={() => {
+								this.cargarxistencias(3443,3)
+							}}
+							name="Para Producción"
+						></Menu.Item>
+						
+						
+						</Menu>
 					{Items.length === 0 ? (
 						<React.Fragment>
 					
@@ -273,7 +301,12 @@ export default class OrdenesP extends Component {
 								<Table sortable celled>
 									<Table.Header>
 									<Table.Row>
-																				
+									<Table.HeaderCell
+											sorted={column === 'name' ? direction : null}
+											onClick={this.handleSort('name')}
+										>
+											Tipo
+										</Table.HeaderCell>									
 										<Table.HeaderCell
 											sorted={column === 'lote' ? direction : null}
 											onClick={this.handleSort('lote')}
@@ -310,6 +343,9 @@ export default class OrdenesP extends Component {
 												
 											<React.Fragment>
 											<Table.Row>
+											<Table.Cell>
+												{t.tipo}
+											</Table.Cell>
 											<Table.Cell>
 												{t.lote}
 											</Table.Cell>

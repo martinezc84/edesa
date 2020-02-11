@@ -32,7 +32,7 @@ export default class FilaDetalle extends Component {
 	
 
 	render() {
-		let {  items, line, view, item_id, selectitem, id, formulas, cantidad, from_orden } = this.props;
+		let {  items, line, view, item_id, selectitem, id, formulas, cantidad, from_orden, marcas, marca, Selectmarca } = this.props;
 		
 		
 	//console.log(item_id)
@@ -64,6 +64,20 @@ export default class FilaDetalle extends Component {
 						selection
 						id={id}
 						options={formulas}
+						/>):('')}
+					</Table.Cell>
+					<Table.Cell>
+					
+					{marcas!==null?(
+					<Dropdown
+						value={marca}
+						placeholder='Marca'
+						onChange={Selectmarca}
+						search
+						fluid
+						selection
+						id={"marca_"+id}
+						options={marcas}
 						/>):('')}
 					</Table.Cell>
 					<Table.Cell>

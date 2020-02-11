@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import '../css/style.css';
 import Axios from 'axios';
 import { FUNCIONES, production } from '../utils/utils';
-import { Header, Table, Loader, Grid, Button} from 'semantic-ui-react';
+import { Header, Table, Loader, Grid, Dropdown} from 'semantic-ui-react';
 import sortBy from 'lodash/sortBy';
 import { MostrarMensaje } from './Mensajes';
 import { Msjerror } from './Mensajeserror';
@@ -22,6 +22,8 @@ export default class Iniciar extends Component {
 		recursos:[],
 		formulas:[],
 		detalle:[],
+		empleados:[],
+		empleado:0,
 		orden:null,
 		insumoscont:1,
 		despercont:1,
@@ -56,7 +58,7 @@ export default class Iniciar extends Component {
 
 	
 
-	componentDidMount() {
+	async componentDidMount() {
 	
 		this.setState({
 			userdata: getUser(),
@@ -68,9 +70,11 @@ export default class Iniciar extends Component {
 				let id = this.props.id
 				let formula
 				let formula_id
+				let res = await this.empleados();
 				Axios.get(FUNCIONES.orden+"?id="+id)
 				.then(({ data }) => {
 					//console.log(data)
+					
 					let orden =data
 					let detalle = data.detalle
 					let formulas = data.formulas
@@ -142,6 +146,49 @@ export default class Iniciar extends Component {
     
 }
 
+trataEmpleados= (empleados) => {
+	return empleados.map((t) => ({
+		key: t.id,
+		value: t.id,
+		text: t.name,
+		
+	}));
+};
+
+async empleados(){
+	if(this.props.getmem('empleados')===undefined){
+		
+			try {
+				
+				let res = await Axios.get(FUNCIONES.empleados);
+				let empleados = res.data
+				empleados = this.trataEmpleados(empleados)
+				//console.log(res.data)
+				this.props.guardarmem('empleados', empleados);
+				this.props.guardar('empleados', empleados);
+				this.setState({
+					empleados: empleados,
+					
+				});
+
+				//cargar formula
+				return true
+				
+			
+			}catch(error) {
+				console.error(error);
+				return false
+			};
+		}else{
+			//console.log(this.props.getmem('empleados'))
+			this.setState({
+				empleados:this.props.getmem('empleados')
+				
+			});
+			return true
+		}
+}
+
 	guardarcantidad = (id, cantidad) => {
 		let insumos = this.state.insumos
 		insumos.map((insumo, i)=> (
@@ -196,7 +243,27 @@ export default class Iniciar extends Component {
 		return name
 	};
 
+	buscarimpresor = (id, items) => {
+		//console.log(items)
+		let name = null
+		items.map((item, i)=> (
+		
+			item.key == id  ? name = item.text :  false	
 
+		));		
+		
+		return name
+	};
+
+
+	Selectempleado = (e, item) => {
+		
+		this.setState(
+			{
+                empleado:parseInt(item.value)
+			})
+		
+	};
 
 	guardarcantidadpt = (id, cantidad) => {
 
@@ -230,7 +297,7 @@ export default class Iniciar extends Component {
 							
 				let booking ={
 					
-					booker_id:orden.employee_id,
+					
 					planned_delivery:this.state.date,
 					movements_attributes:"|insumos|",
 					needs_transport:0,
@@ -294,7 +361,7 @@ export default class Iniciar extends Component {
 					let y=0;
 					for (let linea in series){
 						itemserie= await this.get_item(series[linea].serie)
-						let item = {id:z,item_id:itemserie.id,cantidad:1,orden_id:this.state.orden.id, nombre:itemserie.name}
+						let item = {id:z, referencia:series[linea].serie , item_id:itemserie.id,cantidad:1,orden_id:this.state.orden.id, nombre:itemserie.name,orden_line_id:series[linea].lineid}
 						utilizados.push(item)
 						z++
 						if(itemserie!==undefined){
@@ -305,7 +372,7 @@ export default class Iniciar extends Component {
 								x++
 								y++
 						}else{
-						itemserie= await this.get_item(series[linea].serie)
+						
 							error = {error:true,msj:"No se encontro el numero de serie "+series[linea].serie}
 							
 						}
@@ -321,6 +388,7 @@ export default class Iniciar extends Component {
 							})
 					}else{
 						booking.agency_from_id=this.state.from_agency
+						booking.booker_id = this.state.empleado
 						let shipment = {shipment:booking}
 						let poststr = JSON.stringify(shipment)
 						poststr= poststr.replace('"|insumos|"',stringdet)
@@ -460,7 +528,7 @@ export default class Iniciar extends Component {
 
 		let {
 				
-			series, recursos, loading
+			series, recursos, loading, empleado, empleados
            
 			
 		} = this.state;
@@ -473,7 +541,19 @@ export default class Iniciar extends Component {
 				<div >
                 <form onSubmit={this.handleSubmit}>
 
-				{  (recursos.length>0)?(<React.Fragment><p >RECURSOS</p>
+				{  (recursos.length>0)?(<React.Fragment>
+					<Grid columns={2}><Grid.Row><Grid.Column>
+						<label>Impresor: <Dropdown
+					value={empleado}
+					placeholder='Impresor'
+					onChange={this.Selectempleado}				
+					selection
+					search
+					options={empleados}
+					className="ui segment"
+				/></label></Grid.Column><Grid.Column></Grid.Column></Grid.Row></Grid>
+					
+					<p >RECURSOS</p>
 			<Table sortable celled>
 			<Table.Header>
 			<Table.Row>

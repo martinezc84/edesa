@@ -141,6 +141,13 @@ export default class SaleOrders extends Component {
 						invoice.id =	this.get_id(invoice.DT_RowId)
 						));
 
+						Invoices.map((invoice, i)=> (
+							//console.log(invoice.ref)
+							invoice.ref != '' ? invoice.ref = this.quitarlink(invoice.ref) :''
+						));
+
+						Invoices = Invoices.filter((s) =>  s.ref == 'IMPRIMIR');
+
 
 						Invoices.map((invoice, i)=> (
 							
@@ -152,11 +159,7 @@ export default class SaleOrders extends Component {
 							invoice.onum != '' ? invoice.onum = this.quitarlink(invoice.onum) :''
 						));
 
-						Invoices.map((invoice, i)=> (
-							//console.log(invoice)
-							invoice.ref != '' ? invoice.ref = this.quitarlink(invoice.ref) :''
-						));
-
+						
 						Invoices.map((invoice, i)=> (
 							//console.log(invoice)
 							invoice.cli != '' ? invoice.cli = this.quitarlink(invoice.cli) :''

@@ -14,12 +14,16 @@ import OrdenP from '../components/OrdenP';
 import Iniciar from '../components/Iniciar';
 import Terminar from '../components/cerrar';
 import Existencias from '../components/Existencias';
+import Reparacion from '../components/Reparacion';
+import ReporteBobinas from '../components/ReporteBobinas';
 import OrdenesCompra from '../components/PurchaseOrders';
 import OrdenCompra from '../components/PurchaseDetail';
 import Transfer from '../components/Transfer';
 import LotesAgencia from '../components/LotesAgencia';
 import Login from '../components/Login';
 import NuevaOrden from '../components/NuevaOrden';
+import Pedidos from '../components/Pedidos';
+import NuevoPedido from '../components/NuevoPedido';
 import { Router } from "@reach/router"
 import { Container } from 'semantic-ui-react';
 import Axios from 'axios';
@@ -40,7 +44,11 @@ export default class App extends Component {
 		userdata:{group_id:0},
 		orden_compra:0,
 		show:false,
-		Ordenes:[]
+		Ordenes:[],
+		referencias:[],
+		marcas:[],
+		empleados:[],
+		comprables:[]
 		};
 
 
@@ -131,6 +139,8 @@ export default class App extends Component {
 		window.localStorage.removeItem("menuitems")
 		window.localStorage.removeItem("equipos")
 		window.localStorage.removeItem("empleados")
+		window.localStorage.removeItem("marcas")
+		window.localStorage.removeItem("referencias")
 
 		let userdata = getUser()
 			//console.log('cargando zauru')
@@ -178,7 +188,13 @@ export default class App extends Component {
 			for (var _i = 0; _i < cat.length; _i++) {
 				let det = cat[_i];
 				//console.log(det[1])
-				let i={key:det[1],value:det[1],text: det[0]}
+				let codes = det[0].split("-")
+				let i
+				if(codes[codes.length - 1]!=" "){
+					 i={key:det[1],value:det[1],text: det[0],code: codes[codes.length - 1].trim()}
+				}else{
+					 i={key:det[1],value:det[1],text: det[0],code: "0"}
+				}
 				items.push(i);
 			}
 		}
@@ -192,6 +208,7 @@ export default class App extends Component {
 			key: t.id,
 			value: t.id,
 			text: t.name,
+			code: t.code
 			
 		}));
 	};
@@ -216,7 +233,7 @@ export default class App extends Component {
 
 			vendibles = res.data.bundles
 			itemst = res.data.items
-			//console.log(itemst)
+			console.log(itemst)
 			itemst = this.trataItems(itemst)
 			vendibles = this.trataItems(vendibles)
 			console.log(itemst)
@@ -227,6 +244,79 @@ export default class App extends Component {
 			this.setState({
 				vendibles: vendibles,
 				itemst:itemst
+			})
+			//cargar comprables
+			return true
+			
+			
+		
+		
+	}else{
+		this.setState({
+			vendibles:this.getmem("vendibles"),
+			itemst:this.getmem("itemst")
+			
+		});
+		return false
+	}
+	}
+
+	quitarlink(text){
+		const resp = text.split('>')
+		const textresp = resp[1].split('<');
+		return textresp[0];
+	}
+
+	existe=(item, array) => {
+		let resp
+		array.map((linea, i)=> (
+			
+			item == linea ? resp=true : resp=false		
+
+		));
+
+		return resp;
+	}
+
+	async beneficiarios(){
+		
+		let beneficiarios
+		
+		//console.log(this.getmem("vendibles"))
+		if(this.getmem("marcas")===undefined){
+		let res = await Axios.post(`${FUNCIONES.beneficiarios}`,'{"draw":"1", "start":"0","length":"300","desde":"0","hasta":"0","scope":"clients"}')
+		
+		//console.log(res.data)
+			beneficiarios = res.data.data
+			let marcas=[]
+			let referencias=[]
+			console.log(beneficiarios.length)
+			for (var _i = 0; _i < beneficiarios.length; _i++) {
+				//console.log(beneficiarios[_i].DT_RowId)
+				let id = beneficiarios[_i].DT_RowId
+				id = id.split("-")
+				let bene = {id:id[2], nombre:this.quitarlink(beneficiarios[_i].name), tin:beneficiarios[_i].tin}
+				marcas.push(bene)
+				let ref =this.quitarlink(beneficiarios[_i].reference)
+				if(referencias.length>0){
+					if(!this.existe(ref,referencias)){
+						referencias.push(ref)
+					}
+				}else{
+						referencias.push(ref)
+				}
+				
+			}
+			 
+			//console.log(marcas)
+			//console.log(referencias)
+			this.guardar('referencias', referencias);
+			this.guardarmem("referencias", referencias);
+			this.guardar('marcas', marcas);
+			this.guardarmem("marcas", marcas);
+			this.setState({
+				referencias: referencias,
+				marcas:marcas
 			})
 			//cargar comprables
 			return true
@@ -260,8 +350,7 @@ export default class App extends Component {
 					this.guardarmem('comprables', comprables);
 					this.guardar('comprables', comprables);
 					this.setState({
-						comprables: comprables,
-						items:this.state.vendibles												
+						comprables: comprables										
 					});
 					return true
 					//cargar agencias
@@ -280,6 +369,8 @@ export default class App extends Component {
 				return false
 			}
 	}
+
+	
 
 	async agencias(){
 		if(this.getmem('agencias')===undefined){
@@ -322,6 +413,8 @@ export default class App extends Component {
 			resp = await this.comprables();
 			//console.log('agencias')
 			resp = await this.agencias();
+
+			resp = await this.beneficiarios();
 			//console.log('listo')
 			//console.log(this.state.vendibles)
 			//console.log(this.state.comprables)
@@ -384,7 +477,7 @@ export default class App extends Component {
 		};
 
 		let propsov = {
-			valores:this.state.ordenesdeventa
+			valores:[]
 			
 		};
 
@@ -413,6 +506,23 @@ export default class App extends Component {
 			agencias:this.state.agencias,
 			empleados:this.state.empleados
 		};
+		let propspedidos = {
+			guardarmem:this.guardarmem,
+			getmem:this.getmem,
+			agencias:this.state.agencias,
+			empleados:this.state.empleados,
+			marcas:this.state.marcas,
+			valores:[]
+		};
+
+		let propsnuevop = {
+			guardarmem:this.guardarmem,
+			getmem:this.getmem,
+			empleados:this.state.empleados,
+			marcas:this.state.marcas,
+			valores:[],
+			items:this.state.comprables,
+		};
 
 		let propsOP = {
 			guardarmem:this.guardarmem,
@@ -431,7 +541,7 @@ export default class App extends Component {
 		};
 
 		let propsIni = {
-		
+			getmem:this.getmem,
 			
 		};
 		return (
@@ -454,7 +564,11 @@ export default class App extends Component {
 			<RutaPrivada  path="/app/orden/terminar/:id" component={Terminar} guardar={this.guardar} {...propsIni}  ></RutaPrivada>
 			<RutaPrivada  path="/app/ordenp/:action/:id" component={OrdenP} guardar={this.guardar} {...propson}  ></RutaPrivada>
 			<RutaPrivada  path="/app/existencias" component={Existencias} guardar={this.guardar} {...propson}  ></RutaPrivada>
+			<RutaPrivada  path="/app/reparacion" component={Reparacion} guardar={this.guardar} {...propson}  ></RutaPrivada>
 			<RutaPrivada  path="/app/lotesagencia" component={LotesAgencia} guardar={this.guardar} {...propson}  ></RutaPrivada>
+			<RutaPrivada  path="/app/pedidos" component={Pedidos} guardar={this.guardar} {...propspedidos}  ></RutaPrivada>
+			<RutaPrivada  path="/app/nuevopedido" component={NuevoPedido} guardar={this.guardar} {...propsnuevop}  ></RutaPrivada>
+			<RutaPrivada  path="/app/reporte" component={ReporteBobinas} guardar={this.guardar} {...propsnuevop}  ></RutaPrivada>
 				<Login path='/app/login/:error' />
 				
 				

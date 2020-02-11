@@ -56,16 +56,7 @@ export default class FilaDetalleCompraunico extends Component {
 					1
 					</Table.Cell>
 					<Table.Cell>
-					<input
-					placeholder={"peso"}
-					autoFocus
-                    type="text"
-					name="peso"				
-                    value={peso}
-					onChange={this.handleInputChangepeso}				
-					className="inputform"
-					id={"eso_"+id_parent+"_"+id}
-                  />
+					
 					</Table.Cell>
 					
 				</Table.Row>

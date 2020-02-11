@@ -48,7 +48,10 @@ export default class NuevaOrden extends Component {
 		guardar:true,
 		visilee:false,
 		defaultdate: new Date(),
-		descripcion:""
+		descripcion:"",
+		marcas:[],
+		marca:0,
+		fechahora_entrega: new Date()
 
 				
 	};
@@ -201,7 +204,69 @@ export default class NuevaOrden extends Component {
 			}
 	}
 
+	trataMarcas= (marcas) => {
+		return marcas.map((t) => ({
+			key: t.id,
+			value: t.id,
+			text: t.nombre,
+			
+		}));
+	};
+
+	quitarlink(text){
+		const resp = text.split('>')
+		const textresp = resp[1].split('<');
+		return textresp[0];
+	}
+
+	async marcas(){
+		
+			
+		try {
+			
+			let beneficiarios
+
+			//console.log(this.getmem("vendibles"))
+			if(this.props.getmem("marcas")===undefined){
+			let res = await Axios.post(`${FUNCIONES.beneficiarios}`,'{"draw":"1", "start":"0","length":"300","desde":"0","hasta":"0","scope":"clients"}')
+			
+			//console.log(res.data)
+				beneficiarios = res.data.data
+				let marcas=[]
+				
+				console.log(beneficiarios.length)
+				for (var _i = 0; _i < beneficiarios.length; _i++) {
+					//console.log(beneficiarios[_i].DT_RowId)
+					let id = beneficiarios[_i].DT_RowId
+					id = id.split("-")
+					let bene = {id:id[2], nombre:this.quitarlink(beneficiarios[_i].name), tin:beneficiarios[_i].tin}
+					marcas.push(bene)
+				}
+
+				marcas= this.trataMarcas(marcas)
+				this.setState({
+					marcas:marcas
+					
+				});
+			}else{
+				//console.log(this.props.getmem('empleados'))
+				let marcas= this.trataMarcas(this.props.getmem('marcas'))
+				this.setState({
+					
+					marcas:marcas
+					
+				});
+				return true
+			}
+			
+		
+		}catch(error) {
+			console.error(error);
+			return false
+		};
+
 	
+}
 
 	async componentDidMount() {
 		let user = isLoggedIn();
@@ -225,10 +290,11 @@ export default class NuevaOrden extends Component {
 				let res = await this.empleados();
 				res = await this.equipos();
 				res = await this.formulas();
+				res = await this.marcas();
 				let id = parseInt(this.props.id)
 				let detalle = []
 				let linedet
-				console.log(id)
+				//console.log(id)
 				if(id>0){
 				Axios.get(FUNCIONES.ordenventa+"?id="+id)
 				.then(({ data }) => {
@@ -237,7 +303,7 @@ export default class NuevaOrden extends Component {
 					let orden_id = data.id
 					detalle = []
 					for(let linea in detalleinf){
-						linedet = {id:detalleinf[linea].id,  formula_id:0,item_bundle_name:detalleinf[linea].item_bundle_name,item_cantidad:detalleinf[linea].quantity,cantidad:0}
+						linedet = {id:detalleinf[linea].id,  formula_id:0,item_bundle_name:detalleinf[linea].reference,item_cantidad:detalleinf[linea].quantity,cantidad:0, marca:0}
 						detalle.push(linedet)
 					}
 					//console.log(detalle)
@@ -268,7 +334,27 @@ export default class NuevaOrden extends Component {
     
 }
 
+	Selectmarca = (e, item) => {
+		console.log(item)
+		let id = item.id;
+		id = id.toString().split("_");	
+		id = parseInt(id[1])
+		let detalle =this.state.detalle
+		console.log(id)
+		detalle.map((linea, i)=> (
+			
+			linea.id == id ? linea.marca = parseInt(item.value) : false		
 
+		));
+		console.log(detalle)
+		this.setState(
+			{
+                detalle:detalle
+			})
+
+		
+		
+	};
 
 	SeleccionarTipo = (e, item) => {
 		
@@ -427,60 +513,68 @@ export default class NuevaOrden extends Component {
 				let guardar=true;			
 				let orden ={}
 				orden.fecha = this.state.date
-				orden.fechahora_entrega = this.state.fechahora_entrega
-				orden.orden_id = this.state.orden_id
+				
 				orden.equipo_id = this.state.equipo_id
 				orden.employee_id = this.state.empleado
 				orden.store_id =this.state.userdata.store
-				orden.descripcion = this.state.descripcion
+				orden.detalles = this.state.descripcion
+				
+				orden.estado="pendiente"
+				
 				let lineasaproducir=[]
-				this.state.detalle.map((linea, i)=> (
-						
-					linea.formula_id>0 ? lineasaproducir.push(linea) : false
-		
-				));	
-				orden.detalle = lineasaproducir
-				console.log(orden)
-				
-				
-				if((orden.fecha!=="") && (orden.descripcion!="") && (orden.fechahora_entrega!==undefined) && (orden.orden_id>0) && (orden.equipo_id!="")&& (orden.detalle.length>0)  ){
-					
-					orden.detalle.map((linea, i)=> (
-		
-						guardar = linea.cantidad>0 ? true : false
 			
-					));	
-
-					
-					let fecha = orden.fecha.split('-');
-					orden.fecha = fecha[2]+'/'+fecha[1]+'/'+fecha[0]
-					let fechastr = orden.fechahora_entrega.toLocaleDateString('en-US');
-					let horastr = orden.fechahora_entrega.getHours();
-					let minutes = orden.fechahora_entrega.getMinutes();
+				let fecha = orden.fecha.split('-');
+				//orden.fecha = fecha[2]+'/'+fecha[1]+'/'+fecha[0]
+				let fechastr = this.state.fechahora_entrega.toLocaleDateString('en-US');
+				let horastr = this.state.fechahora_entrega.getHours();
+				let minutes = this.state.fechahora_entrega.getMinutes();
 					//console.log(fechastr)
 					//console.log(minutes)
 					fecha = fechastr.split('/');
-					orden.fechahora_entrega = fecha[2]+'/'+fecha[0]+'/'+fecha[1]+" "+horastr+":"+minutes
-					let poststr = JSON.stringify(orden)
-					console.log(poststr)
-					console.log(orden.fechahora_entrega)
-					let data;
-						guardar ?  data = await Axios.post(FUNCIONES.guardardaroden, poststr) : null
-						let res =data.data
-						console.log(res.data)
-						if (res.data.id!==undefined){
-							this.setState({
-								loading:false,
-								visible:true,
-								
-							});
-						}else{
-							this.setState({
-								loading:false,
-								visiblee:true,
-								errormsj:"Sus datos no se guardaron, contacte al Administrador"
-							});
-						}	
+					orden.fecha = fecha[2]+'/'+fecha[0]+'/'+fecha[1]+" "+horastr+":"+minutes
+				
+				
+				if((orden.fecha!=="") && (orden.descripcion!="")   && (orden.equipo_id!="")&& (this.state.detalle.length>0)  ){
+					
+					
+
+					let error = false;
+
+					for (let linea in this.state.detalle ){
+						if(this.state.detalle[linea].formula_id>0){
+							orden.item_id = this.state.detalle[linea].formula_id,
+							orden.payee_id= this.state.detalle[linea].marca
+
+							let poststr = JSON.stringify(orden)
+							console.log(poststr)
+							guardar = this.state.detalle[linea].cantidad>0 ? true : false
+							let data;
+								guardar ?  data = await Axios.post(FUNCIONES.guardarpedido, poststr) : null
+								let res =data.data
+								console.log(res.response)
+								if (res.response.id==0){
+									
+									error = true
+								}	
+							
+						}
+		
+					}
+
+					if(error){
+						this.setState({
+							loading:false,
+							visiblee:true,
+							errormsj:"Sus datos no se guardaron, contacte al Administrador"
+						});
+					}else{
+						this.setState({
+							loading:false,
+							visible:true,
+							
+						});
+					}
+					
 
 
 				}else{
@@ -526,7 +620,7 @@ export default class NuevaOrden extends Component {
 			this.setState({				
 				visible:false
 			});
-			navigate('/app/ordenesp/')
+			navigate('/app/pedidos/')
 		}
 
 		onConfirme = ()=>{
@@ -577,7 +671,7 @@ export default class NuevaOrden extends Component {
 		
 		items = [items,...itemst]
 		let {
-		loading, guardarcantidad,equipos, action, Selectequipo, Selectempleado, equipo_id, empleados, empleado, detalle, item_id, Formulas, from_orden
+		loading, guardarcantidad,equipos, action, Selectequipo, Selectempleado, equipo_id, empleados, empleado, detalle, item_id, Formulas, from_orden, marcas
 			
 		} = this.state;
 		if (loading) {
@@ -605,14 +699,7 @@ export default class NuevaOrden extends Component {
 					<form onSubmit={this.handleSubmit}>
 						<Grid columns={3}>
 					<Grid.Row>
-						<Grid.Column> <label>Fecha<DateInput
-							name="date"
-							placeholder="Date"
-							value={this.state.date}
-							iconPosition="left"
-							onChange={this.handleDateChange}
-							/>
-						</label></Grid.Column>
+						
 						
 			<Grid.Column> <label>Fecha y hora de entrega<Inputdate
 			date={""}
@@ -628,12 +715,8 @@ export default class NuevaOrden extends Component {
 						selection
 						options={equipos}
 						className="ui segment"
-					/></label></Grid.Column></Grid.Row>
-					
-						</Grid>
-					<Grid columns={1}>
-					<Grid.Row>
-					<Grid.Column><label>Empleado: <Dropdown
+					/></label></Grid.Column>
+					<Grid.Column><label>Impresor: <Dropdown
 					value={empleado}
 					placeholder='Equipo'
 					onChange={Selectempleado}				
@@ -641,7 +724,13 @@ export default class NuevaOrden extends Component {
 					search
 					options={empleados}
 					className="ui segment"
-				/></label></Grid.Column>
+				/></label></Grid.Column></Grid.Row>
+					
+						</Grid>
+
+					<Grid columns={1}>
+					<Grid.Row>
+					
 					</Grid.Row>
 				    <Grid.Row>
 					<Grid.Column>	
@@ -675,6 +764,9 @@ export default class NuevaOrden extends Component {
 						A PRODUCIR
 					</Table.HeaderCell>
 					<Table.HeaderCell>
+						MARCA
+					</Table.HeaderCell>
+					<Table.HeaderCell>
 						CANTIDAD
 					</Table.HeaderCell>
 					</Table.Row>
@@ -694,7 +786,9 @@ export default class NuevaOrden extends Component {
 								cantidad={t.cantidad}
 								guardarcantidad={guardarcantidad}
 								from_orden={from_orden}
-								
+								Selectmarca={this.Selectmarca}
+								marca={t.marca}
+								marcas={marcas}
 								
 							/>
 						))}

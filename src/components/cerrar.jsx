@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import '../css/style.css';
 import Axios from 'axios';
 import { FUNCIONES, descarte, production } from '../utils/utils';
-import { Header, Table, Dropdown, Checkbox, Loader } from 'semantic-ui-react';
+import { Header, Table, Dropdown, Checkbox, Loader, Grid } from 'semantic-ui-react';
 import { MostrarMensaje } from './Mensajes';
 import { Msjerror } from './Mensajeserror';
 import { isLoggedIn, logout , getUser} from "../utils/identity"
@@ -31,7 +31,9 @@ export default class Iniciar extends Component {
 		itemst:[],
 		loading:false,
 		date:new Date().toLocaleDateString('en-GB'),
-		consumototal:0
+		consumototal:0, 
+		empleado:0,
+		empleados:[]
 				
 	};
 	
@@ -57,6 +59,71 @@ export default class Iniciar extends Component {
 
 	};
 
+	trataMarcas= (marcas) => {
+		return marcas.map((t) => ({
+			key: t.id,
+			value: t.id,
+			text: t.nombre,
+			
+		}));
+	};
+
+	quitarlink(text){
+		const resp = text.split('>')
+		const textresp = resp[1].split('<');
+		return textresp[0];
+	}
+
+	async marcas(){
+		
+			
+		try {
+			
+			let beneficiarios
+
+			//console.log(this.getmem("vendibles"))
+			if(this.props.getmem("marcas")===undefined){
+			let res = await Axios.post(`${FUNCIONES.beneficiarios}`,'{"draw":"1", "start":"0","length":"300","desde":"0","hasta":"0","scope":"clients"}')
+			
+			console.log(res.data)
+				beneficiarios = res.data.data
+				let marcas=[]
+				
+				console.log(beneficiarios.length)
+				for (var _i = 0; _i < beneficiarios.length; _i++) {
+					//console.log(beneficiarios[_i].DT_RowId)
+					let id = beneficiarios[_i].DT_RowId
+					id = id.split("-")
+					let bene = {id:id[2], nombre:this.quitarlink(beneficiarios[_i].name), tin:beneficiarios[_i].tin}
+					marcas.push(bene)
+				}
+
+				marcas= this.trataMarcas(marcas)
+				this.setState({
+					marcas:marcas
+					
+				});
+			}else{
+				//console.log(this.props.getmem('empleados'))
+				let marcas= this.trataMarcas(this.props.getmem('marcas'))
+				console.log(marcas)
+				this.setState({
+					
+					marcas:marcas
+					
+				});
+				return true
+			}
+			
+		
+		}catch(error) {
+			console.error(error);
+			return false
+		};
+
+	
+}
+
 	
 
 	async componentDidMount() {
@@ -72,6 +139,8 @@ export default class Iniciar extends Component {
 				let formula={}
 				let formula_id
 				let resp = await Axios.get(FUNCIONES.orden+"?id="+id)
+				let mar = await this.marcas()
+				mar = await this.empleados();
 				if (resp.data.id!=undefined){
 					let data = resp.data
 					//console.log(data)
@@ -115,7 +184,7 @@ export default class Iniciar extends Component {
 						let exist =true
 						let code
 						let lote
-						console.log(formula)
+						//console.log(formula)
 						if (formula.genera_unico=="1"){
 							detalle[linea].generar=false
 							//console.log("genera unico")						
@@ -130,7 +199,7 @@ export default class Iniciar extends Component {
 									code = detalle[linea].serie+"-"+x
 									x++
 								}
-								refer = {id:ids, codigo:code, producto:formula.pt[lineapt].name, referencia:(formula.pt[lineapt].referencia),item_id:formula.pt[lineapt].item_id, peso:0}
+								refer = {id:ids, lineid:detalle[linea].id, description: detalle[linea].serie, codigo:"", producto:formula.pt[lineapt].name, referencia:detalle[linea].serie,item_id:formula.pt[lineapt].item_id, peso:0, marca:0, reparacion:false}
 								referencias.push(refer)
 								ids++
 								//x++
@@ -212,6 +281,72 @@ export default class Iniciar extends Component {
     
 }
 
+trataEmpleados= (empleados) => {
+	return empleados.map((t) => ({
+		key: t.id,
+		value: t.id,
+		text: t.name,
+		
+	}));
+};
+
+async empleados(){
+	if(this.props.getmem('empleados')===undefined){
+		
+			try {
+				
+				let res = await Axios.get(FUNCIONES.empleados);
+				let empleados = res.data
+				empleados = this.trataEmpleados(empleados)
+				//console.log(res.data)
+				this.props.guardarmem('empleados', empleados);
+				this.props.guardar('empleados', empleados);
+				this.setState({
+					empleados: empleados,
+					
+				});
+
+				//cargar formula
+				return true
+				
+			
+			}catch(error) {
+				console.error(error);
+				return false
+			};
+		}else{
+			//console.log(this.props.getmem('empleados'))
+			this.setState({
+				empleados:this.props.getmem('empleados')
+				
+			});
+			return true
+		}
+}
+
+
+buscarimpresor = (id, items) => {
+	//console.log(items)
+	let name = null
+	items.map((item, i)=> (
+	
+		item.key == id  ? name = item.text :  false	
+
+	));		
+	
+	return name
+};
+
+
+Selectempleado = (e, item) => {
+	
+	this.setState(
+		{
+			empleado:parseInt(item.value)
+		})
+	
+};	
+
 	guardarcantidad = (id, cantidad) => {
 		let insumos = this.state.insumos
 		insumos.map((insumo, i)=> (
@@ -270,13 +405,32 @@ export default class Iniciar extends Component {
 			})
 	};
 
-	crear_item=async (data)=>{
+	get_marca(id){
+		for (var i=0; i<this.state.marcas.length; i++) {
+			
+            if (this.state.marcas[i].key==id){
+				//console.log(this.state.empleados[i])
+				return this.state.marcas[i].text;
+			}
+            //a b c
+		}
 		
-		let string = '{"item":{"name":"'+data.name.replace('"', '\\"')+'", "code":"'+data.code+'","ean13":"'+data.code+'","item_category_id":"'+data.item_category_id+'", "stockable":"true","measurement_unit":"'+data.measurement_unit+'","purchasable":"true", "product_type":"'+data.product_type+'","weight":"'+data.peso+'","payee_id":"'+data.payee_id+'"}}';
+		return '';
+	} 
+
+	crear_item=async (data)=>{
+		let status = data.reparacion ? 'malo' : 'bueno';
+		let marca =  this.get_marca(data.marca)
+		let descripcion = {madre:data.madre, marca:marca, empleado:data.empleado}
+		let descripcionjson = JSON.stringify(descripcion)
+
+		let string = '{"item":{"name":"'+data.name.replace('"', '\\"')+'-'+marca+'", "code":"'+data.code+'","ean13":"'+data.code+'","item_category_id":"'+data.item_category_id+'", "stockable":"true","measurement_unit":"'+data.measurement_unit+'","purchasable":"true", "product_type":"'+data.product_type+'","weight":"'+data.peso+'","payee_id":"'+data.payee_id+'","description":"'+data.description+'"}}';
 		//console.log(string)
 		let res = await Axios.post(FUNCIONES.crearitem, string)
 		//console.log(res.data) 
-		string = '{"code":"'+data.code+'","name":"'+data.name.replace('"', '\\"')+'","category_id":"'+data.item_category_id+'","id":"'+res.data.id+'","store_id":"'+this.state.userdata.store+'", "details":"'+this.state.orden.id+'"}'
+		
+
+		string = '{"code":"'+data.code+'","name":"'+data.name.replace('"', '\\"')+'-'+marca+'","category_id":"'+data.item_category_id+'","id":"'+res.data.id+'","store_id":"'+this.state.userdata.store+'", "details":"'+this.state.orden.id+'","status":"'+status+'", "quantity":"'+data.peso+'"}'
 		//console.log(string)
 		let res2 = await Axios.post(FUNCIONES.guardaritem, string) 
 		return res.data
@@ -322,6 +476,11 @@ export default class Iniciar extends Component {
 	
 	
 	  guardar_formula = async () => {
+
+		if(this.state.empleado==0){
+			alert('Seleccione Impresor');
+			return;
+		}
 	
 		this.setState({
 			loading: true
@@ -331,7 +490,7 @@ export default class Iniciar extends Component {
 		let detalle = this.state.detalle
 		let booking ={
 					
-			booker_id:orden.employee_id,
+			booker_id:this.state.empleado,
 			planned_delivery:this.state.date,
 			movements_attributes:"|insumos|",
 			needs_transport:0,
@@ -394,7 +553,9 @@ export default class Iniciar extends Component {
 						generardetalle = true
 						iteminfo = await this.get_itemz(referencias[refer].item_id)
 						//console.log(iteminfo)
-						let newitem = {name:iteminfo.name+"-"+referencias[refer].referencia, code:referencias[refer].codigo,  item_category_id:iteminfo.item_category_id,measurement_unit:iteminfo.measurement_unit, product_type:iteminfo.product_type, payee_id:iteminfo.payee_id, peso:referencias[refer].peso }
+						let empleado = this.buscarimpresor(this.state.empleado,this.state.empleados)
+												
+						let newitem = {empleado:empleado,  name:iteminfo.name, code:referencias[refer].codigo, madre: referencias[refer].description,  item_category_id:iteminfo.item_category_id,measurement_unit:iteminfo.measurement_unit, product_type:iteminfo.product_type, payee_id:iteminfo.payee_id, peso:referencias[refer].peso, reparacion:referencias[refer].reparacion, marca:referencias[refer].marca }
 						//console.log(JSON.stringify(newitem)) 
 						
 						let itemdata  = await this.crear_item(newitem)
@@ -403,7 +564,9 @@ export default class Iniciar extends Component {
 						stringdet+='"'+x+'":{"item_id":"'+itemdata.id+'", "booked_quantity":"1"}'
 						x++
 						generadototal=generadototal+parseInt("1")
-						let itemgen = {id:z,orden_id:this.state.orden.id,item_id:itemdata.id,cantidad:1,nombre:iteminfo.name+"-"+referencias[refer].referencia,codigo:referencias[refer].codigo}
+						let status = referencias[refer].reparacion ? 'malo' : 'bueno';
+						let marca =  this.get_marca(referencias[refer].marca)
+						let itemgen = {id:z, payee_id:referencias[refer].marca, peso:referencias[refer].peso, orden_line_id:referencias[refer].lineid , orden_id:this.state.orden.id,item_id:itemdata.id,cantidad:1,nombre:iteminfo.name+"-"+referencias[refer].referencia,codigo:referencias[refer].codigo, reparacion:referencias[refer].reaparacion, estado:status,  madre:referencias[refer].description, marca:marca,empleado:empleado}
 							generados.push(itemgen)
 							z++
 					}
@@ -630,6 +793,36 @@ export default class Iniciar extends Component {
         
             
 		  }
+
+		  reparacion = (e, item) => {
+			
+			let referencias = this.state.referencias
+			//console.log(item)
+			let id = item.id;
+			id = id.toString().split("_");	
+			//console.log(id)	
+			if (item.checked){
+				referencias.map((ref, i)=> (
+		
+					ref.id == id[1]  ? ref.reparacion = true :  false	
+		
+				));	
+			}else{
+				referencias.map((ref, i)=> (
+		
+					ref.id == id[1]  ? ref.reparacion = false :  false	
+		
+				));	
+			}
+				
+				
+				console.log(referencias)
+				this.setState({
+					referencias
+				  })
+
+            
+		  }
 		  
 		  handleInputChangepeso = event => {
             const target = event.target
@@ -643,6 +836,28 @@ export default class Iniciar extends Component {
 				referencias.map((ref, i)=> (
 		
 					ref.id == id[1]  ? ref.peso = value :  false	
+		
+				));	
+				//console.log(referencias)
+				this.setState({
+					referencias
+				  })
+
+            
+		  }
+
+		  handleInputChangeserie = event => {
+            const target = event.target
+            const value = target.value
+			const name = target.name
+			let id = target.id
+			
+				let referencias = this.state.referencias
+				id = id.split("_")
+				
+				referencias.map((ref, i)=> (
+		
+					ref.id == id[1]  ? ref.codigo = value :  false	
 		
 				));	
 				//console.log(referencias)
@@ -681,6 +896,28 @@ export default class Iniciar extends Component {
             this.guardar_formula()
             //alert(`Welcome ${this.state.firstName} ${this.state.lastName}!`)
 					}
+
+					Selectmarca = (e, item) => {
+						//console.log(item)
+						let id = item.id;
+						id = id.toString().split("_");	
+						id = parseInt(id[1])
+						let detalle =this.state.referencias
+						//console.log(id)
+						detalle.map((linea, i)=> (
+							
+							linea.id == id ? linea.marca = item.value : false		
+				
+						));
+						console.log(detalle)
+						this.setState(
+							{
+								referencias:detalle
+							})
+				
+						
+						
+					};
 					
 
 				
@@ -691,11 +928,11 @@ export default class Iniciar extends Component {
 
 		let {
 				
-			referencias, desperdicios, loading, rendimientos, lotes
+			referencias, desperdicios, loading, rendimientos, lotes, marcas, empleado, empleados
            
 			
 		} = this.state;
-		console.log(lotes)
+		//console.log(lotes)
 
 			if (loading) {
 			return <Loader active inline="centered" />;
@@ -703,9 +940,22 @@ export default class Iniciar extends Component {
 		
 			return(
 				<div >
+					<Grid columns={2}><Grid.Row><Grid.Column>
+						<label>Impresor: <Dropdown
+					value={empleado}
+					placeholder='Impresor'
+					onChange={this.Selectempleado}				
+					selection
+					search
+					options={empleados}
+					className="ui segment"
+				/></label></Grid.Column><Grid.Column></Grid.Column></Grid.Row></Grid>
                 <form onSubmit={this.handleSubmit}>
 
-				{  (referencias.length>0 || lotes.length>0)?(<React.Fragment><p >REFERENCIAS</p>
+				{  (referencias.length>0 || lotes.length>0)?(<React.Fragment>
+					
+					
+					<p >REFERENCIAS</p>
 			<Table sortable celled>
 			<Table.Header>
 			<Table.Row>
@@ -719,17 +969,22 @@ export default class Iniciar extends Component {
 				<Table.HeaderCell
 					
 				>
-					REFERENCIA
+					CODIGO
 				</Table.HeaderCell>
 				<Table.HeaderCell
 					
 				>
-					
+					MARCA
 				</Table.HeaderCell>
 				<Table.HeaderCell
 					
 				>
 					PESO
+				</Table.HeaderCell>
+				<Table.HeaderCell
+					
+				>
+					
 				</Table.HeaderCell>
 				
 				</Table.Row>
@@ -741,20 +996,26 @@ export default class Iniciar extends Component {
 						<Table.Row>
 										
 					<Table.Cell>{t.producto}</Table.Cell>
-					<Table.Cell><Barcode
-				  value={t.codigo}
-				  format="EAN13"
-				  /></Table.Cell>
-					 
 					<Table.Cell>{<input
 					autoFocus
                     type="text"
-					name="refer"
-					id={"refer_"+t.id}
-                    value={t.cantidad}
-					onChange={this.handleInputChange}				
+					name="serie"
+					id={"serie_"+t.id}
+                    value={t.codigo}
+					onChange={this.handleInputChangeserie}				
                     className="inputform"
-				  />}
+				  />}</Table.Cell>
+					 
+					<Table.Cell>{<label>Marca: <Dropdown
+					value={t.marca}
+					placeholder='Marca'
+					onChange={this.Selectmarca}				
+					selection
+					search
+					id={"marca_"+t.id}
+					options={marcas}
+					className="ui segment"
+				/></label>}
 				 
 				  </Table.Cell>
 				  <Table.Cell>{<input
@@ -768,7 +1029,18 @@ export default class Iniciar extends Component {
 				  />}
 				 
 				  </Table.Cell>
-											
+				  <Table.Cell>
+				  {<label>
+						Reparacion
+						<Checkbox
+									onChange={this.reparacion}
+									toggle
+									checked={t.reparacion}
+									id={"reparacion_"+t.id}
+									
+								/>
+						</label>}
+						</Table.Cell>						
 					
 						
 				</Table.Row>
@@ -782,7 +1054,7 @@ export default class Iniciar extends Component {
 					<Table.Cell>{t.lote}</Table.Cell>
 					 
 					<Table.Cell>
-				 
+					
 				  </Table.Cell>
 				  <Table.Cell>{<input
 					autoFocus
@@ -795,7 +1067,9 @@ export default class Iniciar extends Component {
 				  />}
 				 
 				  </Table.Cell>
-											
+				  <Table.Cell>
+				 
+				  </Table.Cell>							
 					
 						
 				</Table.Row>

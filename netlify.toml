@@ -5,7 +5,7 @@
 
 [build.environment]
   # Dominio del sitio de producción (Frontend)
-	#GATSBY_URL= 'http://localhost:9000'
+	GATSBY_URL= 'http://localhost:9000'
 	GATSBY_PRODUCTION='3083'
 	GATSBY_DESCARTE='3087'
 	# Locations de las netlify functions (Backend) 
@@ -53,9 +53,14 @@
 	GATSBY_URL_LOTEAGENCIA='/.netlify/functions/GetLoteAgencia'
 	GATSBY_URL_LOTESAGENCIA='/.netlify/functions/GetLotesAgencia'
 	GATSBY_URL_GUARDARLOTEAGENCIA='/.netlify/functions/GuardarLoteAgencia'
+	GATSBY_URL_BENEFICIARIOS='/.netlify/functions/Beneficiarios'
+	GATSBY_URL_GUARDARPEDIDO='/.netlify/functions/GuardarPedido'
+	GATSBY_URL_EDITARPEDIDO='/.netlify/functions/EditarPedido'
+	GATSBY_URL_PEDIDO='/.netlify/functions/GetPedido'
+	GATSBY_URL_PEDIDOS='/.netlify/functions/GetPedidos'
 
 	# Dominio del sitio de las APIs (Backend)
-	#GATSBY_ZAURU_URL='https://zauru.herokuapp.com'
+	GATSBY_ZAURU_URL='https://zauru.herokuapp.com'
 	GATSBY_URL_API = 'https://dcgse.com/calendario_api/apical'
 	GATSBY_URL_APIP = 'https://dcgse.com/calendario_api/apiprod'
 	GATSBY_URL_IMAGES = 'https://dcgse.com/calendario_api/uploads'
@@ -86,6 +91,10 @@
 	GATSBY_APIP_LOTEAGENCIA= '/loteagencia'
 	GATSBY_APIP_LOTESAGENCIA= '/lotesagencia'
 	GATSBY_APIP_GUARDARLOTEAGENCIA= '/guardarloteag'
+	GATSBY_APIP_GUARDARPEDIDO= '/guardarpedido'
+	GATSBY_APIP_EDITARPEDIDO= '/editarpedido'
+	GATSBY_APIP_PEDIDO= '/pedido'
+	GATSBY_APIP_PEDIDOS= '/pedidos'
 
 	#API DE ZAURU
 
@@ -105,11 +114,12 @@
 	GATSBY_API_CREARLOTE = '/inventories/lots.json'
 	GATSBY_API_LOTEZAURU = '/inventories/lots/'
 	GATSBY_API_ENTREGA = '/inventories/deliveries/'
+	GATSBY_API_BENEFICIARIOS='/settings/payees/datatables.json?scope=clients'
 
 	# Email y token de autenticación para utilizar las APIs 
-        #GATSBY_EMAIL='api@semperlibery.com'
-    	#GATSBY_TOKEN='AtG-z7a8z44W767Tt83S'
-		#GATSBY_API_KEY='AtG-z7a8z44W767Tt83S'
+        GATSBY_EMAIL='api@edesa.com'
+    	GATSBY_TOKEN='y749fGvk3B6nC8pMUy4j'
+		GATSBY_API_KEY='y749fGvk3B6nC8pMUy4j'
 		#GATSBY_EMAIL='api@discogua.com.gt'
         #GATSBY_TOKEN='uuvDJ6vscs1ewsxbRVHU'
 		#GATSBY_API_KEY='uuvDJ6vscs1ewsxbRVHU'

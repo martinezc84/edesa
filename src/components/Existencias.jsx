@@ -115,7 +115,7 @@ export default class OrdenesP extends Component {
 						//console.log(Ordenes)
 
 						for (let Item in Resp) {
-							let itemex={codigo:Resp[Item].code,nombre:Resp[Item].name,peso:Resp[Item].peso,cantidad:Resp[Item].quantity}
+							let itemex={codigo:Resp[Item].code,nombre:Resp[Item].name,peso:Resp[Item].peso,cantidad:Resp[Item].quantity,referencia:Resp[Item].referencia,marca:Resp[Item].marca,empleado:Resp[Item].empleado}
 							Items.push(itemex);
 						}
 
@@ -286,10 +286,22 @@ export default class OrdenesP extends Component {
 											Codigo
 										</Table.HeaderCell>
 										<Table.HeaderCell
+											sorted={column === 'referencia' ? direction : null}
+											onClick={this.handleSort('referencia')}
+										>
+											Origen
+										</Table.HeaderCell>
+										<Table.HeaderCell
 											sorted={column === 'name' ? direction : null}
 											onClick={this.handleSort('name')}
 										>
 											Nombre
+										</Table.HeaderCell>
+										<Table.HeaderCell
+											sorted={column === 'marca' ? direction : null}
+											onClick={this.handleSort('marca')}
+										>
+											Marca
 										</Table.HeaderCell>
 										<Table.HeaderCell
 											sorted={column === 'quantity' ? direction : null}
@@ -304,7 +316,12 @@ export default class OrdenesP extends Component {
 										>
 											Peso
 										</Table.HeaderCell>
-										
+										<Table.HeaderCell
+											sorted={column === 'impresor' ? direction : null}
+											onClick={this.handleSort('impresor')}
+										>
+											Impresor
+										</Table.HeaderCell>
 										
 										
 									
@@ -322,13 +339,33 @@ export default class OrdenesP extends Component {
 												{t.codigo}
 											</Table.Cell>
 											<Table.Cell>
+												{t.referencia}
+											</Table.Cell>
+											<Table.Cell>
 												{t.nombre}
+											</Table.Cell>
+											<Table.Cell>
+												{t.marca}
 											</Table.Cell>
 											<Table.Cell>
 												{t.cantidad}
 											</Table.Cell>
 											<Table.Cell>
 												{t.peso}
+											</Table.Cell>
+											<Table.Cell>
+												{t.empleado}
+											</Table.Cell>
+											<Table.Cell>
+											<Button 
+												positive					
+												icon
+												labelPosition="right"
+												
+											>
+											<Icon name="save" />
+												Edit
+										</Button>
 											</Table.Cell>
 											</Table.Row>
 

@@ -133,7 +133,7 @@ export default class PurchaseDetail extends Component {
 				let id = parseInt(this.props.id)
 				let detalle = []
 				let linedet
-				console.log(id)
+				console.log(comprables)
 				this.setState({
 					loading: true
 				});
@@ -275,6 +275,18 @@ export default class PurchaseDetail extends Component {
 		return name
 	};
 
+	buscaritemcode = (code, items) => {
+		console.log(items)
+		let itemr = null
+		items.map((item, i)=> (
+		
+			item.key == code  ? itemr = item :  false	
+
+		));		
+		
+		return itemr
+	};
+
 	
 	buscarag = (id) => {
 		let name = null
@@ -387,7 +399,15 @@ export default class PurchaseDetail extends Component {
 						edit = true;
 						for(let x = 0 ; x<series.length; x++ ){
 							detalle[linea].code =series[x].serie
-							detalle[linea].peso = series[x].peso
+							detalle[linea].peso = series[x].serie.substring(19,24)
+							let prouctcode = series[x].serie.substring(0,7)
+							console.log(prouctcode)
+							console.log(detalle[linea])
+							let itemres = this.buscaritemcode(prouctcode, this.state.comprables)
+							if(itemres!=null){
+								detalle[linea].item_id = itemres.key
+								detalle[linea].name = itemres.text
+							}
 							let res = await this.crear_item(detalle[linea]);
 							if(lineas>0) stringedit+=","
 							stringedit+='"'+lineas+'":{"item_id":"'+res.id+'", "booked_quantity":"1","reference":"","unit_cost":"'+detalle[linea].unit_cost+'"}'

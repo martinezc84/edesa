@@ -80,6 +80,13 @@ const FUNCIONES = {
 	loteagencia:URL_PREFIX+process.env.GATSBY_URL_LOTEAGENCIA,
 	lotesagencia:URL_PREFIX+process.env.GATSBY_URL_LOTESAGENCIA,
 	guardarloteag:URL_PREFIX+process.env.GATSBY_URL_GUARDARLOTEAGENCIA,
+	beneficiarios:URL_PREFIX+process.env.GATSBY_URL_BENEFICIARIOS,
+	pedidos:URL_PREFIX+process.env.GATSBY_URL_PEDIDOS,
+	pedido:URL_PREFIX+process.env.GATSBY_URL_PEDIDO,
+	guardarpedido:URL_PREFIX+process.env.GATSBY_URL_GUARDARPEDIDO,
+	editarpedido:URL_PREFIX+process.env.GATSBY_URL_EDITARPEDIDO,
+	editaritem:URL_PREFIX+"/EditarItem",
+	reportebobinas:URL_PREFIX+"/ReporteBobinas",
 };
 
 const ZAURU = {
@@ -99,7 +106,9 @@ const ZAURU = {
 	itemzauru:ZAURU_URL+process.env.GATSBY_API_ITEMZAURU,
 	crearlote:ZAURU_URL+process.env.GATSBY_API_CREARLOTE,
 	lotezauru:ZAURU_URL+process.env.GATSBY_API_LOTEZAURU,
-	entrega:ZAURU_URL+process.env.GATSBY_API_ENTREGA
+	entrega:ZAURU_URL+process.env.GATSBY_API_ENTREGA,
+	beneficiarios:ZAURU_URL+process.env.GATSBY_API_BENEFICIARIOS,
+	editaritem:ZAURU_URL+"/settings/items/",
 };
 
 const API_URL = {
@@ -134,6 +143,11 @@ const APIP_URL = {
 	loteagencia:URL_APIP+process.env.GATSBY_APIP_LOTEAGENCIA,
 	lotesagencia:URL_APIP+process.env.GATSBY_APIP_LOTESAGENCIA,
 	guardarloteag:URL_APIP+process.env.GATSBY_APIP_GUARDARLOTEAGENCIA,
+	pedidos:URL_APIP+process.env.GATSBY_APIP_PEDIDOS,
+	pedido:URL_APIP+process.env.GATSBY_APIP_PEDIDO,
+	guardarpedido:URL_APIP+process.env.GATSBY_APIP_GUARDARPEDIDO,
+	editarpedido:URL_APIP+process.env.GATSBY_APIP_EDITARPEDIDO,
+	reportebobinas:URL_APIP+'/reporte_bobinas',
 
 }
 

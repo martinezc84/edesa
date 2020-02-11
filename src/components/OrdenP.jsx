@@ -646,6 +646,16 @@ export default class OrdenP extends Component {
 					Descripción: {orden.descripcion}
 					</Grid.Column>
 					</Grid.Row>
+					<Grid columns={2}>
+						<Grid.Row>
+							<Grid.Column>
+								{orden.fechahora_ini}
+							</Grid.Column>
+							<Grid.Column>
+								{orden.fechahora_fin}
+							</Grid.Column>
+						</Grid.Row>
+					</Grid>
 					
 					<p >INSUMOS</p>
 				<Table sortable celled>

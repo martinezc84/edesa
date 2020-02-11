@@ -664,7 +664,15 @@ Selectempleado = (e, item) => {
 							
 							if (res.data.id!==undefined){
 									let resp = await Axios.post(FUNCIONES.deliver+"?id="+res.data.id)
-									let ordenstring = '{"id":'+this.state.orden.id+', "estado":"finalizada","detalle":{},"generados":'+JSON.stringify(generados)+'}'
+									let inicio = new Date();
+									let fechastr = inicio.toLocaleDateString('en-US');
+									let horastr = inicio.getHours();
+									let minutes = inicio.getMinutes();
+									//console.log(fechastr)
+									//console.log(minutes)
+									let fecha = fechastr.split('/');
+									fechastr = fecha[2]+'/'+fecha[0]+'/'+fecha[1]+" "+horastr+":"+minutes
+									let ordenstring = '{"id":'+this.state.orden.id+', "fechahora_fin":"'+fechastr+'",  "estado":"finalizada","detalle":{},"generados":'+JSON.stringify(generados)+'}'
 									//console.log(ordenstring)
 									resp = await Axios.post(`${FUNCIONES.editarorden}`,ordenstring)
 									this.setState({

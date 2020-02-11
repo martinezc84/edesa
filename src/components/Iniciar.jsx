@@ -399,7 +399,15 @@ async empleados(){
 							if (res.data.id!==undefined){
 								let resp = await Axios.post(FUNCIONES.deliver+"?id="+res.data.id)
 								//console.log(JSON.stringify(utilizados))
-								let editorden = '{"id":'+this.state.orden.id+', "estado":"iniciada","detalle":{'+stringorden+'},"consumidos":'+JSON.stringify(utilizados)+'}'
+								let inicio = new Date();
+								let fechastr = inicio.toLocaleDateString('en-US');
+								let horastr = inicio.getHours();
+								let minutes = inicio.getMinutes();
+								//console.log(fechastr)
+								//console.log(minutes)
+								let fecha = fechastr.split('/');
+								fechastr = fecha[2]+'/'+fecha[0]+'/'+fecha[1]+" "+horastr+":"+minutes
+								let editorden = '{"id":'+this.state.orden.id+', "fechahora_ini":"'+fechastr+'", "estado":"iniciada","detalle":{'+stringorden+'},"consumidos":'+JSON.stringify(utilizados)+'}'
 								//console.log(editorden)
 								 resp = await Axios.post(`${FUNCIONES.editarorden}`,editorden)
 								this.setState({

@@ -286,7 +286,43 @@ export default class ReporteBobinas extends Component {
 				return true
 			}
 	}
+	limpiar = async ()=>{
+		this.setState({
+			empleado:"",
+			marca:"",
+			codigo:"",
+			madre:"",
+			fechahora_ini:"",
+			fechahora_fin:""
+			
+		});
 
+		Axios.get(FUNCIONES.reportebobinas+"?empleado=&marca=&turno=&fini=&ffin=&codigo=&madre=")
+		.then(({ data }) => {
+			let Items=[]
+		
+			let Resp =  data.items
+			//console.log(Ordenes)
+
+			for (let Item in Resp) {
+				let itemex={codigo:Resp[Item].codigo,nombre:Resp[Item].nombre,peso:Resp[Item].peso,madre:Resp[Item].madre,marca:Resp[Item].marca,empleado:Resp[Item].empleado,fecha:Resp[Item].fecha,hora:Resp[Item].hora,}
+				Items.push(itemex);
+			}
+
+			
+		
+			this.setState({
+				Items:Items,
+				
+				loading: false,							
+				cantidadPaginas: Math.floor(Items.length / this.state.first) + 1
+			});
+		})
+		.catch((error) => {
+			console.error(error);
+		});
+		
+	}
 	
 
 		cargarxistencias = async ()=>{
@@ -368,6 +404,11 @@ export default class ReporteBobinas extends Component {
 			direction,
 			codigo, madre, empleado, marca, empleados, marcas
 		} = this.state;
+		let pesototal=parseFloat("0");
+	
+		Items.map((t) => (
+			pesototal=pesototal + parseFloat(t.peso )
+		))
 
 		if (loading) {
 			return <Loader active inline="centered" />;
@@ -378,7 +419,7 @@ export default class ReporteBobinas extends Component {
           Buscar :
           <input type="text" value={this.state.buscar} onChange={this.handleChange} />
         </label><React.Fragment>
-			<Grid columns={5}>
+			<Grid columns={6}>
 				<Grid.Row>
 					<Grid.Column>{
 			<input
@@ -431,7 +472,19 @@ export default class ReporteBobinas extends Component {
 	  >
 <Icon name="search" />
 		  Buscar
-  </Button></Grid.Column>
+  </Button> </Grid.Column><Grid.Column><Button
+								
+								class="ui orange button"
+								onClick={() => {
+								  this.limpiar( );
+								  
+								}}								
+								icon
+								labelPosition="right"
+							>
+					  <Icon name="repeat" />
+								Limpiar
+						</Button></Grid.Column>
 				</Grid.Row><Grid.Row>
 
 					<Grid.Column>Desde:  <Inputdate
@@ -522,6 +575,12 @@ export default class ReporteBobinas extends Component {
 											Marca
 										</Table.HeaderCell>
 										<Table.HeaderCell
+											sorted={column === 'peso' ? direction : null}
+											onClick={this.handleSort('peso')}
+										>
+											Peso
+										</Table.HeaderCell>
+										<Table.HeaderCell
 											sorted={column === 'empleado' ? direction : null}
 											onClick={this.handleSort('empleado')}
 										>
@@ -566,6 +625,9 @@ export default class ReporteBobinas extends Component {
 												{t.marca}
 											</Table.Cell>
 											<Table.Cell>
+												{t.peso}
+											</Table.Cell>
+											<Table.Cell>
 												{t.empleado}
 											</Table.Cell>
 											<Table.Cell>
@@ -581,6 +643,36 @@ export default class ReporteBobinas extends Component {
 
 											</React.Fragment>
 											))}
+											<Table.Row>
+											<Table.Cell>
+												
+											</Table.Cell>
+											<Table.Cell>
+												
+											</Table.Cell>
+											<Table.Cell>
+												
+											</Table.Cell>
+											<Table.Cell>
+												
+											</Table.Cell>
+											<Table.Cell>
+												{pesototal}
+											</Table.Cell>
+											<Table.Cell>
+												
+											</Table.Cell>
+											<Table.Cell>
+												
+											</Table.Cell>
+											<Table.Cell>
+												
+											</Table.Cell>
+											<Table.Cell>
+											
+											</Table.Cell>
+											</Table.Row>
+
 									</Table.Body>
 								</Table>
 

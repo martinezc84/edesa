@@ -9,8 +9,21 @@ import sortBy from 'lodash/sortBy';
 import {  getUser} from "../utils/identity"
 import { navigate } from '@reach/router';
 import Inputdate from './Inputdate';
+import { isThisSecond } from 'date-fns';
 
-
+const options = [
+	
+	{
+		key: 'dia',
+		text: 'Día',
+		value: 'dia',
+	  },
+	  {
+		key: 'noche',
+		text: 'Noche',
+		value: 'noche',
+	  },
+]
 
 export default class ReporteBobinas extends Component {
 	state = {
@@ -39,7 +52,12 @@ export default class ReporteBobinas extends Component {
 		empleado:"",
 		marca:"",
 		fechahora_ini: "",
-		fechahora_fin: ""
+		fechahora_fin: "",
+		turno:"",
+		options:options,
+		equipo_id:0,
+		equipos:[]
+		
 	
 	};
 
@@ -112,9 +130,10 @@ export default class ReporteBobinas extends Component {
 				});
 				let mar = await this.marcas()
 				mar = await this.empleados();
+				mar = await this.equipos();
 
                 //console.log(FUNCIONES.ordenes)
-				Axios.get(FUNCIONES.reportebobinas+"?empleado=&marca=&turno=&fini=&ffin=&codigo=&madre=")
+				Axios.get(FUNCIONES.reportebobinas+"?empleado=&marca=&turno=&fini=&ffin=&codigo=&madre=&equipo=")
 					.then(({ data }) => {
 						let Items=[]
 					
@@ -122,7 +141,7 @@ export default class ReporteBobinas extends Component {
 						//console.log(Ordenes)
 
 						for (let Item in Resp) {
-							let itemex={codigo:Resp[Item].codigo,nombre:Resp[Item].nombre,peso:Resp[Item].peso,madre:Resp[Item].madre,marca:Resp[Item].marca,empleado:Resp[Item].empleado,fecha:Resp[Item].fecha,hora:Resp[Item].hora,}
+							let itemex={codigo:Resp[Item].codigo,nombre:Resp[Item].nombre,peso:Resp[Item].peso,madre:Resp[Item].madre,marca:Resp[Item].marca,empleado:Resp[Item].empleado,fecha:Resp[Item].fecha,hora:Resp[Item].hora,equipo:Resp[Item].equipo}
 							Items.push(itemex);
 						}
 
@@ -293,11 +312,13 @@ export default class ReporteBobinas extends Component {
 			codigo:"",
 			madre:"",
 			fechahora_ini:"",
-			fechahora_fin:""
+			fechahora_fin:"",
+			equipo_id:0,
+			turno:""
 			
 		});
 
-		Axios.get(FUNCIONES.reportebobinas+"?empleado=&marca=&turno=&fini=&ffin=&codigo=&madre=")
+		Axios.get(FUNCIONES.reportebobinas+"?empleado=&marca=&turno=&fini=&ffin=&codigo=&madre=&equipo=")
 		.then(({ data }) => {
 			let Items=[]
 		
@@ -323,12 +344,65 @@ export default class ReporteBobinas extends Component {
 		});
 		
 	}
+
+	Selectequipo = (e, item) => {
+		//console.log(item)
+		this.setState(
+			{
+                equipo_id:item.value
+			})
+		
+	};
+
+	trataEquipo= (empleados) => {
+		return empleados.map((t) => ({
+			key: t.id,
+			value: t.id,
+			text: t.name,
+			
+		}));
+	};
+
+
+	async equipos(){
+		if(this.props.getmem('equipos')===undefined){
+			let userdata = getUser()
+				try {
+					
+					let res = await Axios.get(FUNCIONES.equipos+"?id=3");
+					let equipos = res.data
+					equipos = this.trataEquipo(equipos)
+					console.log(equipos)
+					this.props.guardarmem('equipos', equipos);
+					
+					this.setState({
+						equipos: equipos,
+						
+					});
+
+					//cargar formula
+					return true
+					
+				
+				}catch(error) {
+					console.error(error);
+					return false
+				};
+			}else{
+				//console.log(this.props.getmem('equipos'))
+				this.setState({
+					equipos:this.props.getmem('equipos')
+					
+				});
+				return true
+			}
+	}
 	
 
 		cargarxistencias = async ()=>{
 
 			
-			Axios.get(FUNCIONES.reportebobinas+"?empleado="+this.state.empleado+"&marca="+this.state.marca	+"&turno=&fini="+this.state.fechahora_ini+"&ffin="+this.state.fechahora_fin+"&codigo="+this.state.codigo+"&madre="+this.state.madre)
+			Axios.get(FUNCIONES.reportebobinas+"?empleado="+this.state.empleado+"&marca="+this.state.marca	+"&turno="+this.state.turno+"&fini="+this.state.fechahora_ini+"&ffin="+this.state.fechahora_fin+"&codigo="+this.state.codigo+"&madre="+this.state.madre+"&equipo="+this.state.equipo_id)
 			.then(({ data }) => {
 				
 				//console.log(data)
@@ -369,6 +443,15 @@ export default class ReporteBobinas extends Component {
 			
 		};
 
+		Selectturno = (e, item) => {
+	
+			this.setState(
+				{
+					turno:item.value
+				})
+			
+		};
+
 		Selectmarca = (e, item) => {
 			//console.log(item)
 			let marca = item.value
@@ -402,7 +485,7 @@ export default class ReporteBobinas extends Component {
 			offset,
 			column,
 			direction,
-			codigo, madre, empleado, marca, empleados, marcas
+			codigo, madre, empleado, marca, empleados, marcas, options, turno, equipos, equipo_id
 		} = this.state;
 		let pesototal=parseFloat("0");
 	
@@ -442,7 +525,7 @@ export default class ReporteBobinas extends Component {
 		  />}</Grid.Column>
 		  <Grid.Column><Dropdown
 		  value={empleado}
-		  placeholder='Equipo'
+		  placeholder='Impresor'
 		  onChange={this.Selectempleado}				
 		  selection
 		  search
@@ -460,7 +543,38 @@ export default class ReporteBobinas extends Component {
 						
 						options={marcas}
 						/></Grid.Column>
-	  <Grid.Column>
+						<Grid.Column>Desde:  <Inputdate
+			date={""}
+			//guardar={this.props.guardar}
+			name={"fechahora_ini"}
+			guardar={this.saveDate}
+			
+	/></Grid.Column><Grid.Column>Hasta: <Inputdate
+	date={""}
+	//guardar={this.props.guardar}
+	name={"fechahora_fin"}
+	guardar={this.saveDate}
+	
+/></Grid.Column>
+	  
+				</Grid.Row ><Grid.Row columns={6}>
+				<Grid.Column><Dropdown
+		  value={turno}
+		  placeholder='Turno'
+		  onChange={this.Selectturno}				
+		  selection
+		  search
+		  options={options}
+		  className="ui segment"
+	  /></Grid.Column><Grid.Column><Dropdown
+	  value={equipo_id}
+	  placeholder='Equipo'
+	  onChange={this.Selectequipo}					
+	  selection
+	  options={equipos}
+	  className="ui segment"
+  /></Grid.Column><Grid.Column></Grid.Column>
+					<Grid.Column>
 		  <Button
 								
 		  class="ui orange button"
@@ -485,21 +599,6 @@ export default class ReporteBobinas extends Component {
 					  <Icon name="repeat" />
 								Limpiar
 						</Button></Grid.Column>
-				</Grid.Row><Grid.Row>
-
-					<Grid.Column>Desde:  <Inputdate
-			date={""}
-			//guardar={this.props.guardar}
-			name={"fechahora_ini"}
-			guardar={this.saveDate}
-			
-	/></Grid.Column><Grid.Column>Hasta: <Inputdate
-	date={""}
-	//guardar={this.props.guardar}
-	name={"fechahora_fin"}
-	guardar={this.saveDate}
-	
-/></Grid.Column>
 					<Grid.Column><ReactHTMLTableToExcel
                     id="test-table-xls-button"
                     className=""
@@ -586,7 +685,12 @@ export default class ReporteBobinas extends Component {
 										>
 											Impresor
 										</Table.HeaderCell>
-										
+										<Table.HeaderCell
+											sorted={column === 'equipo' ? direction : null}
+											onClick={this.handleSort('equipo')}
+										>
+											Equipo
+										</Table.HeaderCell>
 										<Table.HeaderCell
 											sorted={column === 'fecha' ? direction : null}
 											onClick={this.handleSort('fecha')}
@@ -629,6 +733,9 @@ export default class ReporteBobinas extends Component {
 											</Table.Cell>
 											<Table.Cell>
 												{t.empleado}
+											</Table.Cell>
+											<Table.Cell>
+												{t.equipo}
 											</Table.Cell>
 											<Table.Cell>
 												{t.fecha}

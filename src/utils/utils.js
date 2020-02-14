@@ -109,6 +109,10 @@ const ZAURU = {
 	entrega:ZAURU_URL+process.env.GATSBY_API_ENTREGA,
 	beneficiarios:ZAURU_URL+process.env.GATSBY_API_BENEFICIARIOS,
 	editaritem:ZAURU_URL+"/settings/items/",
+	guardarregistro:URL_PREFIX+'/GuardarRegistro',
+	editaregistro:URL_PREFIX+'/EditarRegistro',
+	registro:URL_PREFIX+'/GetRegistro',
+	registros:URL_PREFIX+'/GetRegistros',
 };
 
 const API_URL = {
@@ -148,6 +152,10 @@ const APIP_URL = {
 	guardarpedido:URL_APIP+process.env.GATSBY_APIP_GUARDARPEDIDO,
 	editarpedido:URL_APIP+process.env.GATSBY_APIP_EDITARPEDIDO,
 	reportebobinas:URL_APIP+'/reporte_bobinas',
+	guardarregistro:URL_APIP+'/guardarregistro',
+	editarregistro:URL_APIP+'/editar_registro',
+	registro:URL_APIP+'/registro',
+	registros:URL_APIP+'/registros',
 
 }
 

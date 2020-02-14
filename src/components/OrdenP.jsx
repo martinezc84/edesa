@@ -108,7 +108,7 @@ export default class OrdenP extends Component {
 			text: t.nombre,
 			
 		}));
-	};
+	}; 
 
 	async formulas(){
 		let res = await Axios.get(FUNCIONES.formulas+'?id=3');

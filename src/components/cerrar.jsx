@@ -424,11 +424,9 @@ Selectempleado = (e, item) => {
 		let descripcion = {madre:data.madre, marca:marca, empleado:data.empleado}
 		let descripcionjson = JSON.stringify(descripcion)
 
-		let string = '{"item":{"name":"'+data.name.replace('"', '\\"')+'-'+marca+'", "code":"'+data.code+'","ean13":"'+data.code+'","item_category_id":"'+data.item_category_id+'", "stockable":"true","measurement_unit":"'+data.measurement_unit+'","purchasable":"true", "product_type":"'+data.product_type+'","weight":"'+data.peso+'","payee_id":"'+data.payee_id+'","description":"'+data.description+'"}}';
-		//console.log(string)
+		let string = '{"item":{"name":"'+data.name.replace('"', '\\"')+'-'+marca+'", "code":"'+data.code+'","ean13":"'+data.code+'","item_category_id":"'+data.item_category_id+'", "stockable":"true","measurement_unit":"'+data.measurement_unit+'","purchasable":"true", "product_type":"'+data.product_type+'","weight":"'+data.peso+'","payee_id":"'+data.payee_id+'","description":"'+descripcionjson+'"}}';
+
 		let res = await Axios.post(FUNCIONES.crearitem, string)
-		//console.log(res.data) 
-		
 
 		string = '{"code":"'+data.code+'","name":"'+data.name.replace('"', '\\"')+'-'+marca+'","category_id":"'+data.item_category_id+'","id":"'+res.data.id+'","store_id":"'+this.state.userdata.store+'", "details":"'+this.state.orden.id+'","status":"'+status+'", "quantity":"'+data.peso+'"}'
 		//console.log(string)
@@ -561,7 +559,7 @@ Selectempleado = (e, item) => {
 						let itemdata  = await this.crear_item(newitem)
 						//let itemdata={id:1587455}
 						if(x>0) stringdet+=","
-						stringdet+='"'+x+'":{"item_id":"'+itemdata.id+'", "booked_quantity":"1"}'
+						stringdet+='"'+x+'":{"item_id":"'+itemdata.id+'", "booked_quantity":"1","reference":"'+referencias[refer].marca+'"}'
 						x++
 						generadototal=generadototal+parseInt("1")
 						let status = referencias[refer].reparacion ? 'malo' : 'bueno';

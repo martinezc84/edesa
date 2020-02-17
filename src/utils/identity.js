@@ -61,6 +61,8 @@ export const logout = callback => {
 		window.localStorage.removeItem("menuitems")
 		window.localStorage.removeItem("equipos")
 		window.localStorage.removeItem("empleados")
+		window.localStorage.removeItem("marcas")
+		window.localStorage.removeItem("referencias")
   setUser({})
   //callback()
 }

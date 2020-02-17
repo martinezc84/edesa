@@ -421,7 +421,7 @@ Selectempleado = (e, item) => {
 	crear_item=async (data)=>{
 		let status = data.reparacion ? 'malo' : 'bueno';
 		let marca =  this.get_marca(data.marca)
-		let descripcion = '{\"madre\":\"'+data.madre+'\", \"marca\":\"'+marca+'\", \"empleado\":\"'+data.empleado+'\"}'
+		let descripcion = '{\\"madre\\":\\"'+data.madre+'\\", \\"marca\\":\\"'+marca+'\\", \\"empleado\\":\\"'+data.empleado+'\\"}'
 		//let descripcionjson = JSON.stringify(descripcion)
 
 		let string = '{"item":{"name":"'+data.name.replace('"', '\\"')+'-'+marca+'", "code":"'+data.code+'","ean13":"'+data.code+'","item_category_id":"'+data.item_category_id+'", "stockable":"true","measurement_unit":"'+data.measurement_unit+'","purchasable":"true", "product_type":"'+data.product_type+'","weight":"'+data.peso+'","payee_id":"'+data.payee_id+'","description":"'+descripcion+'"}}';
@@ -558,8 +558,9 @@ Selectempleado = (e, item) => {
 						
 						let itemdata  = await this.crear_item(newitem)
 						//let itemdata={id:1587455}
+						let marcan =  this.get_marca(referencias[refer].marca)
 						if(x>0) stringdet+=","
-						stringdet+='"'+x+'":{"item_id":"'+itemdata.id+'", "booked_quantity":"1","reference":"'+referencias[refer].marca+'"}'
+						stringdet+='"'+x+'":{"item_id":"'+itemdata.id+'", "booked_quantity":"1","reference":"'+marcan+'"}'
 						x++
 						generadototal=generadototal+parseInt("1")
 						let status = referencias[refer].reparacion ? 'malo' : 'bueno';

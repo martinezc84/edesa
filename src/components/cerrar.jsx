@@ -421,10 +421,10 @@ Selectempleado = (e, item) => {
 	crear_item=async (data)=>{
 		let status = data.reparacion ? 'malo' : 'bueno';
 		let marca =  this.get_marca(data.marca)
-		let descripcion = {madre:data.madre, marca:marca, empleado:data.empleado}
-		let descripcionjson = JSON.stringify(descripcion)
+		let descripcion = '{\"madre\":\"'+data.madre+'\", \"marca\":\"'+marca+'\", \"empleado\":\"'+data.empleado+'\"}'
+		//let descripcionjson = JSON.stringify(descripcion)
 
-		let string = '{"item":{"name":"'+data.name.replace('"', '\\"')+'-'+marca+'", "code":"'+data.code+'","ean13":"'+data.code+'","item_category_id":"'+data.item_category_id+'", "stockable":"true","measurement_unit":"'+data.measurement_unit+'","purchasable":"true", "product_type":"'+data.product_type+'","weight":"'+data.peso+'","payee_id":"'+data.payee_id+'","description":"'+descripcionjson+'"}}';
+		let string = '{"item":{"name":"'+data.name.replace('"', '\\"')+'-'+marca+'", "code":"'+data.code+'","ean13":"'+data.code+'","item_category_id":"'+data.item_category_id+'", "stockable":"true","measurement_unit":"'+data.measurement_unit+'","purchasable":"true", "product_type":"'+data.product_type+'","weight":"'+data.peso+'","payee_id":"'+data.payee_id+'","description":"'+descripcion+'"}}';
 
 		let res = await Axios.post(FUNCIONES.crearitem, string)
 

@@ -85,8 +85,8 @@ const FUNCIONES = {
 	pedido:URL_PREFIX+process.env.GATSBY_URL_PEDIDO,
 	guardarpedido:URL_PREFIX+process.env.GATSBY_URL_GUARDARPEDIDO,
 	editarpedido:URL_PREFIX+process.env.GATSBY_URL_EDITARPEDIDO,
-	editaritem:URL_PREFIX+"/EditarItem",
-	reportebobinas:URL_PREFIX+"/ReporteBobinas",
+	editaritem:URL_PREFIX+"/.netlify/functions/EditarItem",
+	reportebobinas:URL_PREFIX+"/.netlify/functions/ReporteBobinas",
 };
 
 const ZAURU = {

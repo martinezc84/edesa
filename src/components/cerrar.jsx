@@ -1027,7 +1027,8 @@ Selectempleado = (e, item) => {
 				  </Table.Cell>
 				  <Table.Cell>{<input
 					autoFocus
-                    type="number"
+					type="number"
+					step="0.1"
 					name="peso"
 					id={"peso_"+t.id}
                     value={t.peso}

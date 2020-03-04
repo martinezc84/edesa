@@ -111,7 +111,7 @@ export default class OrdenP extends Component {
 	}; 
 
 	async formulas(){
-		let res = await Axios.get(FUNCIONES.formulas+'?id=3');
+		let res = await Axios.get(FUNCIONES.formulas+'?id=4');
 		
 						
 						let Formulas = res.data;						

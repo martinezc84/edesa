@@ -507,7 +507,7 @@ export default class NuevaOrden extends Component {
 	
 		agregar_linea = () =>{
 			let id =this.state.insumoscont;
-			let linedet = {id:id,  formula_id:0,item_bundle_name:"",quantity:0,cantidad:0}
+			let linedet = {id:id,  formula_id:0,item_bundle_name:"",item_cantidad:0,cantidad:0}
 			
 			id++;
 			let detalle = [...this.state.detalle, linedet]

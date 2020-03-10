@@ -193,3 +193,17 @@ margin-left: 10px;
 .msjerror{
 	color: red;
 }
+
+@media print {
+	body * {
+		visibility: hidden;
+	}
+	#printable, #printable * {
+		visibility: visible;
+	}
+	#printable {
+		position: fixed;
+		left: 0;
+		top: 0;
+	}
+	}

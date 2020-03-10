@@ -561,7 +561,7 @@ export default class App extends Component {
 			<RutaPrivada  path="/app/ordencompra/:action/:id" component={OrdenCompra} guardar={this.guardar} {...propsPOD}  ></RutaPrivada>
 			<RutaPrivada  path="/app/transferencias/:action/:id" component={Transfer} guardar={this.guardar} {...propstrans}  ></RutaPrivada>
 			<RutaPrivada  path="/app/orden/iniciar/:id" component={Iniciar} guardar={this.guardar} {...propsIni}  ></RutaPrivada>
-			<RutaPrivada  path="/app/orden/terminar/:id" component={Terminar} guardar={this.guardar} {...propsIni}  ></RutaPrivada>
+			<RutaPrivada  path="/app/orden/terminar/:id/:lineid" component={Terminar} guardar={this.guardar} {...propsIni}  ></RutaPrivada>
 			<RutaPrivada  path="/app/ordenp/:action/:id" component={OrdenP} guardar={this.guardar} {...propson}  ></RutaPrivada>
 			<RutaPrivada  path="/app/existencias" component={Existencias} guardar={this.guardar} {...propson}  ></RutaPrivada>
 			<RutaPrivada  path="/app/reparacion" component={Reparacion} guardar={this.guardar} {...propson}  ></RutaPrivada>

@@ -16,6 +16,8 @@ export default function HTML(props) {
 				  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
 				  
 				{props.headComponents}
+
+			
 			</head>
 			<body {...props.bodyAttributes}>
 				{props.preBodyComponents}

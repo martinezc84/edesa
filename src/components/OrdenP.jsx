@@ -50,11 +50,12 @@ export default class OrdenP extends Component {
 	 
 	printOrder = () => {
 		const printableElements = document.getElementById('barcodes').innerHTML;
-		const orderHtml = '<html><head><title></title></head><body>' + printableElements + '</body></html>'
+		const orderHtml = '<html><head><title>Barcode</title></head><body>' + printableElements + '</body></html>'
 		const oldPage = document.body.innerHTML;
 		document.body.innerHTML = orderHtml;
 		window.print();
 		document.body.innerHTML = oldPage
+		return false;
 	}
    
 
@@ -611,6 +612,36 @@ export default class OrdenP extends Component {
 				fechahora_entrega:date
 			});
 					  }
+
+					  createTable = () => {
+						let table = []
+						let children = []
+						// Outer loop to create parent
+						let x=1
+						for (let item in  this.state.itemsgenerados ) {
+						  
+						  //Inner loop to create children
+						  
+							children.push(<Grid.Column><Barcode 
+								value={this.state.itemsgenerados[item].code}
+								format="CODE128"
+								/></Grid.Column>)
+						  
+						  //Create the parent and add the children
+						  x++
+						  if(x==3){
+							table.push(<Grid.Row >{children}</Grid.Row>)
+							children=[]
+							x=1
+						  }
+						  
+						}
+						if(x>1){
+							table.push(<Grid.Row>{children}</Grid.Row>)
+							
+						  }
+						return table
+					  }			  
 				
 
 	render() {
@@ -623,6 +654,9 @@ export default class OrdenP extends Component {
 		
 		} = this.state;
 		orden.employee_id = parseInt(orden.employee_id.toString())
+
+
+		
 		if (loading) {
 			return <Loader active inline="centered" />;
 		} else
@@ -845,19 +879,21 @@ export default class OrdenP extends Component {
 			)
 			else if (action=='pdf')
 			return (
-				<div>
+				<div >
 					<Button type="button" variant="primary"  className="submitform" onClick={() => {
 							this.regresar();
 						}}	>Regresr</Button>
-					<Button type="button" variant="primary"  className="submitform"onClick={() => this.printOrder()}>Imprimir</Button>
-				<div id="barcodes">
-				{itemsgenerados.map((t, i)=> (
-					<Grid.Row><Grid.Column><Barcode
-					value={t.code}
-					format="CODE128"
-					/></Grid.Column></Grid.Row>
-		
-				))}
+					
+				<div id={"printable"}>
+				<div id="barcodes" >
+				
+
+				<Grid columns={2}>
+				{this.createTable()
+
+				}</Grid>
+				
+				</div>
 				</div>
 				</div>
 			)

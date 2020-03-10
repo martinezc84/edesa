@@ -33,8 +33,8 @@ export default class Iniciar extends Component {
 		date:new Date().toLocaleDateString('en-GB'),
 		consumototal:0, 
 		empleado:0,
-		empleados:[]
-				
+		empleados:[],
+		lineid:0
 	};
 	
 	
@@ -136,6 +136,7 @@ export default class Iniciar extends Component {
 			let { action, comprables, vendibles  } = this.props;
 		
 				let id = this.props.id
+				let lineid = this.props.lineid
 				let formula={}
 				let formula_id
 				let resp = await Axios.get(FUNCIONES.orden+"?id="+id)
@@ -162,93 +163,131 @@ export default class Iniciar extends Component {
 						
 						consumototal = consumototal +  parseInt(consumidos[linea].cantidad)
 					}
-					
-				
-					for(let linea in detalle){
-						formula_id = detalle[linea].formula_id
-						detalle[linea].generar=true
-						formulas.map((formu, i)=> (		
-						formu.id == formula_id ? formula= formu : null 					
-						));	
-						to_agency=formula.to_agency
+						if(lineid>0){
+							for(let linea in detalle){
+								formula_id = detalle[linea].formula_id
+								detalle[linea].generar=true
+								formulas.map((formu, i)=> (		
+								formu.id == formula_id ? formula= formu : null 					
+								));	
+								to_agency=formula.to_agency
+								let exist =true
+								let code
+								let x=1
+								if(detalle[linea].id == lineid){
+									if (formula.genera_unico=="1"){
+										detalle[linea].generar=false
+										//console.log("genera unico")						
+										for(let lineapt in formula.pt){
+											let lineas = formula.pt[lineapt].cantidad * detalle[linea].cantidad
+											
+			
+											for (let y=0; y<lineas;y++){
+												exist = true
+											while(exist!==false){
+												exist = await this.get_item(detalle[linea].serie+"-"+x)
+												code = detalle[linea].serie+"-"+x
+												x++
+											}
+											refer = {id:ids, lineid:detalle[linea].id, description: detalle[linea].serie, codigo:code, producto:formula.pt[lineapt].name, referencia:detalle[linea].serie,item_id:formula.pt[lineapt].item_id, peso:0, marca:0, reparacion:false}
+											referencias.push(refer)
+											ids++
+											//x++
+											}
+										}
+									}
+								}
+							}
+						}else{
+							for(let linea in detalle){
+								formula_id = detalle[linea].formula_id
+							detalle[linea].generar=true
+							formulas.map((formu, i)=> (		
+							formu.id == formula_id ? formula= formu : null 					
+							));	
+							to_agency=formula.to_agency
 							//console.log(formula)
-						if (formula.gd==1){	
-							//console.log("genera desperdicio")						
-							for(let desperdicio in formula.desperdicios){
-								desperdiciol = {id:ids, producto:formula.desperdicios[desperdicio].name, cantidad:(formula.desperdicios[desperdicio].cantidad), item_id:formula.desperdicios[desperdicio].item_id}
-								desperdicios.push(desperdiciol)
-								ids++
-							}
-						}
-						let x=1
-						let exist =true
-						let code
-						let lote
-						//console.log(formula)
-						if (formula.genera_unico=="1"){
-							detalle[linea].generar=false
-							//console.log("genera unico")						
-							for(let lineapt in formula.pt){
-								let lineas = formula.pt[lineapt].cantidad * detalle[linea].cantidad
-								
-
-								for (let y=0; y<lineas;y++){
-									exist = true
-								while(exist!==false){
-									exist = await this.get_item(detalle[linea].serie+"-"+x)
-									code = detalle[linea].serie+"-"+x
-									x++
-								}
-								refer = {id:ids, lineid:detalle[linea].id, description: detalle[linea].serie, codigo:"", producto:formula.pt[lineapt].name, referencia:detalle[linea].serie,item_id:formula.pt[lineapt].item_id, peso:0, marca:0, reparacion:false}
-								referencias.push(refer)
-								ids++
-								//x++
+							if (formula.gd==1){	
+								//console.log("genera desperdicio")						
+								for(let desperdicio in formula.desperdicios){
+									desperdiciol = {id:ids, producto:formula.desperdicios[desperdicio].name, cantidad:(formula.desperdicios[desperdicio].cantidad), item_id:formula.desperdicios[desperdicio].item_id}
+									desperdicios.push(desperdiciol)
+									ids++
 								}
 							}
-						}
-
-						if (formula.gl==1){
-							let cont =1
-							let date = new Date();
-							let fechastr = date.toLocaleString();
-							//console.log(fechastr)
-							let hotastr = fechastr.substring(11,17)
-							//console.log(hotastr)
-							fechastr = fechastr.substring(0,10)
-							fechastr = fechastr.trim();
-							let fecha = fechastr.split('/');
-							let hora = hotastr.split(":")
-							fechastr = fecha[2]+fecha[1]+fecha[0]+hora[0]+hora[1]
-							detalle[linea].generar=false
-							//console.log("genera unico")						
-							for(let lineapt in formula.pt){
-
-								lote = {id:ids, lote:fechastr+cont, producto:formula.pt[lineapt].name, item_id:formula.pt[lineapt].item_id, cantidad:( formula.pt[lineapt].cantidad * detalle[linea].cantidad)}
-								lotes.push(lote)
-								ids++
-								cont++
-								//x++
-								
-							}
-						}
-						//console.log(lotes)
-						
-						exist =true
-						
-
-						if (formula.rv==1 && formula.gl==0){
-							detalle[linea].generar=false
-							//console.log("genera unico")						
-							for(let lineapt in formula.pt){
-								let lineas = formula.pt[lineapt].cantidad * detalle[linea].cantidad
+							let x=1
+							let exist =true
+							let code
+							let lote
+							//console.log(formula)
+							if (formula.genera_unico=="1"){
+								detalle[linea].generar=false
+								//console.log("genera unico")						
+								for(let lineapt in formula.pt){
+									let lineas = formula.pt[lineapt].cantidad * detalle[linea].cantidad
 									
-								rendimiento = {id:ids,producto:formula.pt[lineapt].name, cantidad:lineas,item_id:formula.pt[lineapt].item_id}
-								rendimientos.push(rendimiento)
-								ids++
-							
+
+									for (let y=0; y<lineas;y++){
+										exist = true
+									while(exist!==false){
+										exist = await this.get_item(detalle[linea].serie+"-"+x)
+										code = detalle[linea].serie+"-"+x
+										x++
+									}
+									refer = {id:ids, lineid:detalle[linea].id, description: detalle[linea].serie, codigo:"", producto:formula.pt[lineapt].name, referencia:detalle[linea].serie,item_id:formula.pt[lineapt].item_id, peso:0, marca:0, reparacion:false}
+									referencias.push(refer)
+									ids++
+									//x++
+									}
+								}
 							}
-						}
-					}
+
+							if (formula.gl==1){
+								let cont =1
+								let date = new Date();
+								let fechastr = date.toLocaleString();
+								//console.log(fechastr)
+								let hotastr = fechastr.substring(11,17)
+								//console.log(hotastr)
+								fechastr = fechastr.substring(0,10)
+								fechastr = fechastr.trim();
+								let fecha = fechastr.split('/');
+								let hora = hotastr.split(":")
+								fechastr = fecha[2]+fecha[1]+fecha[0]+hora[0]+hora[1]
+								detalle[linea].generar=false
+								//console.log("genera unico")						
+								for(let lineapt in formula.pt){
+
+									lote = {id:ids, lote:fechastr+cont, producto:formula.pt[lineapt].name, item_id:formula.pt[lineapt].item_id, cantidad:( formula.pt[lineapt].cantidad * detalle[linea].cantidad)}
+									lotes.push(lote)
+									ids++
+									cont++
+									//x++
+									
+								}
+							}
+							//console.log(lotes)
+							
+							exist =true
+							
+
+							if (formula.rv==1 && formula.gl==0){
+								detalle[linea].generar=false
+								//console.log("genera unico")						
+								for(let lineapt in formula.pt){
+									let lineas = formula.pt[lineapt].cantidad * detalle[linea].cantidad
+										
+									rendimiento = {id:ids,producto:formula.pt[lineapt].name, cantidad:lineas,item_id:formula.pt[lineapt].item_id}
+									rendimientos.push(rendimiento)
+									ids++
+								
+								}
+							}
+							}
+								
+							}
+						
+					
 
 
 					this.setState({
@@ -522,99 +561,134 @@ Selectempleado = (e, item) => {
 					let x = 0
 					let y=0
 					let generardetalle = false
-					if(desperdicios.length>0){
-						generadescarte=true
-						for(let desper in desperdicios){
-							if(y>0) stringdesper+=","
-							stringdesper+='"'+y+'":{"item_id":"'+desperdicios[desper].item_id+'", "booked_quantity":"'+desperdicios[desper].cantidad+'"}'
-							generadototal=generadototal+parseInt(desperdicios[desper].cantidad)
-							y++
-						}
-					}
-					stringdesper+="}"
-					y=0
-					if(rendimientos.length>0){
-						generarendimiento=true
-						for(let rend in rendimientos){
-							if(y>0) stringrend+=","
-							stringrend+='"'+y+'":{"item_id":"'+rendimientos[rend].item_id+'", "booked_quantity":"'+rendimientos[rend].cantidad+'"}'
-							y++
-							let itemgen = {id:z,orden_id:this.state.orden.id, item_id:rendimientos[rend].item_id,cantidad:rendimientos[rend].cantidad,nombre:rendimientos[rend].producto}
-							generados.push(itemgen)
-							z++
-							generadototal=generadototal+parseInt(rendimientos[rend].cantidad)
-						}
-					}
-					stringrend+="}"
-					//console.log(referencias)
-					for(let refer in referencias){
-						generardetalle = true
-						iteminfo = await this.get_itemz(referencias[refer].item_id)
-						//console.log(iteminfo)
-						let empleado = this.buscarimpresor(this.state.empleado,this.state.empleados)
-												
-						let newitem = {empleado:empleado,  name:iteminfo.name, code:referencias[refer].codigo, madre: referencias[refer].description,  item_category_id:iteminfo.item_category_id,measurement_unit:iteminfo.measurement_unit, product_type:iteminfo.product_type, payee_id:iteminfo.payee_id, peso:referencias[refer].peso, reparacion:referencias[refer].reparacion, marca:referencias[refer].marca }
-						//console.log(JSON.stringify(newitem)) 
-						
-						let itemdata  = await this.crear_item(newitem)
-						//let itemdata={id:1587455}
-						let marcan =  this.get_marca(referencias[refer].marca)
-						if(x>0) stringdet+=","
-						stringdet+='"'+x+'":{"item_id":"'+itemdata.id+'", "booked_quantity":"1","reference":"'+marcan+'"}'
-						x++
-						generadototal=generadototal+parseInt("1")
-						let status = referencias[refer].reparacion ? 'malo' : 'bueno';
-						let marca =  this.get_marca(referencias[refer].marca)
-						let itemgen = {id:z, payee_id:referencias[refer].marca, peso:referencias[refer].peso, orden_line_id:referencias[refer].lineid , orden_id:this.state.orden.id,item_id:itemdata.id,cantidad:1,nombre:iteminfo.name+"-"+referencias[refer].referencia,codigo:referencias[refer].codigo, reparacion:referencias[refer].reaparacion, estado:status,  madre:referencias[refer].description, marca:marca,empleado:empleado}
-							generados.push(itemgen)
-							z++
-					}
+					let estado = "finalizada"
 
-					for(let lote in lotes){
-						generardetalle = true
-						
-						//console.log(iteminfo)
-						let newlote = {item_id:lotes[lote].item_id, lote:lotes[lote].lote, cantidad:lotes[lote].cantidad}
-						//console.log(JSON.stringify(newitem)) 
-						
-						let lotedata  = await this.crear_lote(newlote)
-						//let itemdata={id:1587455}
-						//console.log(lotedata)
-						if(x>0) stringdet+=","
-						stringdet+='"'+x+'":{"item_id":"'+lotes[lote].item_id+'", "booked_quantity":"'+lotes[lote].cantidad+'","lot_id":"'+lotedata+'"}'
-						x++
-						generadototal=generadototal+parseInt(lotes[lote].cantidad)
+					if(this.props.lineid>0){
 
-					}
+						estado = "espera"
 
-
-					let formula_id
-					let formula={}
-					consumototal = consumototal+z
-					for(let linea in detalle){
-						let formulas = this.state.formulas
-						if(detalle[linea].generar){
+						for(let refer in referencias){
 							generardetalle = true
-							formula_id = detalle[linea].formula_id
-
-							formulas.map((formu, i)=> (		
-							formu.id == formula_id ? formula= formu : null 					
-							));	
-
+							iteminfo = await this.get_itemz(referencias[refer].item_id)
+							//console.log(iteminfo)
+							let empleado = this.buscarimpresor(this.state.empleado,this.state.empleados)
+													
+							let newitem = {empleado:empleado,  name:iteminfo.name, code:referencias[refer].codigo, madre: referencias[refer].description,  item_category_id:iteminfo.item_category_id,measurement_unit:iteminfo.measurement_unit, product_type:iteminfo.product_type, payee_id:iteminfo.payee_id, peso:referencias[refer].peso, reparacion:referencias[refer].reparacion, marca:referencias[refer].marca }
+							//console.log(JSON.stringify(newitem)) 
 							
-							for(let ptl in formula.pt){
+							let itemdata  = await this.crear_item(newitem)
+							//let itemdata={id:1587455}
+							let marcan =  this.get_marca(referencias[refer].marca)
+							if(x>0) stringdet+=","
+							stringdet+='"'+x+'":{"item_id":"'+itemdata.id+'", "booked_quantity":"1","reference":"'+marcan+'"}'
+							x++
+							generadototal=generadototal+parseInt("1")
+							let status = referencias[refer].reparacion ? 'malo' : 'bueno';
+							let marca =  this.get_marca(referencias[refer].marca)
+							let itemgen = {id:z, payee_id:referencias[refer].marca, peso:referencias[refer].peso, orden_line_id:referencias[refer].lineid , orden_id:this.state.orden.id,item_id:itemdata.id,cantidad:1,nombre:iteminfo.name+"-"+referencias[refer].referencia,codigo:referencias[refer].codigo, reparacion:referencias[refer].reaparacion, estado:status,  madre:referencias[refer].description, marca:marca,empleado:empleado}
+								generados.push(itemgen)
+								z++
+						}
+						stringdet+="}"
 
-								if(x>0) stringdet+=","
-								stringdet+='"'+x+'":{"item_id":"'+formula.pt[ptl].item_id+'", "booked_quantity":"'+(detalle[linea].cantidad*formula.pt[ptl].cantidad)+'"}'
-								x++
-								let itemgen = {id:z,orden_id:this.state.orden.id,item_id:formula.pt[ptl].item_id,cantidad:(detalle[linea].cantidad*formula.pt[ptl].cantidad),nombre:formula.pt[ptl].name}
-							generados.push(itemgen)
-							z++
-							generadototal+=detalle[linea].cantidad*formula.pt[ptl].cantidad
+					}else{
+						if(desperdicios.length>0){
+							generadescarte=true
+							for(let desper in desperdicios){
+								if(y>0) stringdesper+=","
+								stringdesper+='"'+y+'":{"item_id":"'+desperdicios[desper].item_id+'", "booked_quantity":"'+desperdicios[desper].cantidad+'"}'
+								generadototal=generadototal+parseInt(desperdicios[desper].cantidad)
+								y++
 							}
 						}
-					}
+						stringdesper+="}"
+						y=0
+						if(rendimientos.length>0){
+							generarendimiento=true
+							for(let rend in rendimientos){
+								if(y>0) stringrend+=","
+								stringrend+='"'+y+'":{"item_id":"'+rendimientos[rend].item_id+'", "booked_quantity":"'+rendimientos[rend].cantidad+'"}'
+								y++
+								let itemgen = {id:z,orden_id:this.state.orden.id, item_id:rendimientos[rend].item_id,cantidad:rendimientos[rend].cantidad,nombre:rendimientos[rend].producto}
+								generados.push(itemgen)
+								z++
+								generadototal=generadototal+parseInt(rendimientos[rend].cantidad)
+							}
+						}
+						stringrend+="}"
+						//console.log(referencias)
+						for(let refer in referencias){
+							generardetalle = true
+							iteminfo = await this.get_itemz(referencias[refer].item_id)
+							//console.log(iteminfo)
+							let empleado = this.buscarimpresor(this.state.empleado,this.state.empleados)
+													
+							let newitem = {empleado:empleado,  name:iteminfo.name, code:referencias[refer].codigo, madre: referencias[refer].description,  item_category_id:iteminfo.item_category_id,measurement_unit:iteminfo.measurement_unit, product_type:iteminfo.product_type, payee_id:iteminfo.payee_id, peso:referencias[refer].peso, reparacion:referencias[refer].reparacion, marca:referencias[refer].marca }
+							//console.log(JSON.stringify(newitem)) 
+							
+							let itemdata  = await this.crear_item(newitem)
+							//let itemdata={id:1587455}
+							let marcan =  this.get_marca(referencias[refer].marca)
+							if(x>0) stringdet+=","
+							stringdet+='"'+x+'":{"item_id":"'+itemdata.id+'", "booked_quantity":"1","reference":"'+marcan+'"}'
+							x++
+							generadototal=generadototal+parseInt("1")
+							let status = referencias[refer].reparacion ? 'malo' : 'bueno';
+							let marca =  this.get_marca(referencias[refer].marca)
+							let itemgen = {id:z, payee_id:referencias[refer].marca, peso:referencias[refer].peso, orden_line_id:referencias[refer].lineid , orden_id:this.state.orden.id,item_id:itemdata.id,cantidad:1,nombre:iteminfo.name+"-"+referencias[refer].referencia,codigo:referencias[refer].codigo, reparacion:referencias[refer].reaparacion, estado:status,  madre:referencias[refer].description, marca:marca,empleado:empleado}
+								generados.push(itemgen)
+								z++
+						}
+	
+						for(let lote in lotes){
+							generardetalle = true
+							
+							//console.log(iteminfo)
+							let newlote = {item_id:lotes[lote].item_id, lote:lotes[lote].lote, cantidad:lotes[lote].cantidad}
+							//console.log(JSON.stringify(newitem)) 
+							
+							let lotedata  = await this.crear_lote(newlote)
+							//let itemdata={id:1587455}
+							//console.log(lotedata)
+							if(x>0) stringdet+=","
+							stringdet+='"'+x+'":{"item_id":"'+lotes[lote].item_id+'", "booked_quantity":"'+lotes[lote].cantidad+'","lot_id":"'+lotedata+'"}'
+							x++
+							generadototal=generadototal+parseInt(lotes[lote].cantidad)
+	
+						}
+
+						let formula_id
+						let formula={}
+						consumototal = consumototal+z
+						for(let linea in detalle){
+							let formulas = this.state.formulas
+							if(detalle[linea].generar){
+								generardetalle = true
+								formula_id = detalle[linea].formula_id
+
+								formulas.map((formu, i)=> (		
+								formu.id == formula_id ? formula= formu : null 					
+								));	
+
+								
+								for(let ptl in formula.pt){
+
+									if(x>0) stringdet+=","
+									stringdet+='"'+x+'":{"item_id":"'+formula.pt[ptl].item_id+'", "booked_quantity":"'+(detalle[linea].cantidad*formula.pt[ptl].cantidad)+'"}'
+									x++
+									let itemgen = {id:z,orden_id:this.state.orden.id,item_id:formula.pt[ptl].item_id,cantidad:(detalle[linea].cantidad*formula.pt[ptl].cantidad),nombre:formula.pt[ptl].name}
+								generados.push(itemgen)
+								z++
+								generadototal+=detalle[linea].cantidad*formula.pt[ptl].cantidad
+								}
+							}
+						}
 						stringdet+="}"
+					}
+					
+
+
+					
 						//console.log(generadototal)
 						//console.log(consumototal)
 						if (generadototal<=consumototal){
@@ -671,7 +745,7 @@ Selectempleado = (e, item) => {
 									//console.log(minutes)
 									let fecha = fechastr.split('/');
 									fechastr = fecha[2]+'/'+fecha[0]+'/'+fecha[1]+" "+horastr+":"+minutes
-									let ordenstring = '{"id":'+this.state.orden.id+', "fechahora_fin":"'+fechastr+'",  "estado":"finalizada","detalle":{},"generados":'+JSON.stringify(generados)+'}'
+									let ordenstring = '{"id":'+this.state.orden.id+', "fechahora_fin":"'+fechastr+'",  "estado":"'+estado+'","detalle":{},"generados":'+JSON.stringify(generados)+'}'
 									//console.log(ordenstring)
 									resp = await Axios.post(`${FUNCIONES.editarorden}`,ordenstring)
 									this.setState({
@@ -686,6 +760,7 @@ Selectempleado = (e, item) => {
 										errormsj:"Sus datos no se guardaron, contacte al Administrador"
 									});	
 								}
+							
 							}else{
 								if(errorgen){
 									

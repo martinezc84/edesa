@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import '../css/style.css';
 import Axios from 'axios';
 import { FUNCIONES, production } from '../utils/utils';
-import { Header, Table, Loader, Grid, Dropdown} from 'semantic-ui-react';
+import { Header, Table, Loader, Grid, Dropdown, Button, Icon }  from 'semantic-ui-react';
 import sortBy from 'lodash/sortBy';
 import { MostrarMensaje } from './Mensajes';
 import { Msjerror } from './Mensajeserror';
@@ -31,6 +31,8 @@ export default class Iniciar extends Component {
 		buttonactive:false,
 		itemst:[],
 		date:new Date().toLocaleDateString('en-GB'),
+		cerrar:false,
+		lineid:0
 				
 	};
 	
@@ -108,7 +110,8 @@ export default class Iniciar extends Component {
 								detalle[linea].generar=false
 								//console.log("es unico")	
 								for (let y=0; y<formula.insumos[insumo].cantidad;y++){
-									serie = {id:ids, lineid:detalle[linea].id, producto:formula.insumos[insumo].name, serie:""}
+									let seriet = detalle[linea].serie==null? "" : detalle[linea].serie 
+									serie = {id:ids, lineid:detalle[linea].id, producto:formula.insumos[insumo].name, serie:seriet, generar:(detalle[linea].serie==null)}
 									series.push(serie)
 									ids++
 								}
@@ -280,7 +283,7 @@ async empleados(){
 	};
 	
 	
-	  iniciar = async () => {
+	  iniciar = async (id) => {
 	
 		this.setState({
 			loading: true
@@ -318,65 +321,106 @@ async empleados(){
 					let formula={}
 					let utilizados=[]
 					let error = {error:false,msj:""}
+					let estado = "iniciada"
 
-					for (let linea in detalle){
-						let formulas = this.state.formulas
-						if(detalle[linea].generar){
-							formula_id = detalle[linea].formula_id
+					let cerrar = false
+					if(id==0){
+						for (let linea in detalle){
+							let formulas = this.state.formulas
+							if(detalle[linea].generar){
+								formula_id = detalle[linea].formula_id
 
-							formulas.map((formu, i)=> (		
-							formu.id == formula_id ? formula= formu : null 					
-							));	
-							
+								formulas.map((formu, i)=> (		
+								formu.id == formula_id ? formula= formu : null 					
+								));	
+								
 
-							for(let insumo in formula.insumos){
-								if(x>0) stringdet+=","
-								stringdet+='"'+x+'":{"item_id":"'+formula.insumos[insumo].item_id+'", "booked_quantity":"'+(detalle[linea].cantidad*formula.insumos[insumo].cantidad)+'"}'
-								let item = {item_id:formula.insumos[insumo].item_id,cantidad:(detalle[linea].cantidad*formula.insumos[insumo].cantidad),orden_id:this.state.orden.id, nombre:formula.insumos[insumo].name}
-								utilizados.push(item)
-								z++
-								x++
+								for(let insumo in formula.insumos){
+									if(x>0) stringdet+=","
+									stringdet+='"'+x+'":{"item_id":"'+formula.insumos[insumo].item_id+'", "booked_quantity":"'+(detalle[linea].cantidad*formula.insumos[insumo].cantidad)+'"}'
+									let item = {item_id:formula.insumos[insumo].item_id,cantidad:(detalle[linea].cantidad*formula.insumos[insumo].cantidad),orden_id:this.state.orden.id, nombre:formula.insumos[insumo].name}
+									utilizados.push(item)
+									z++
+									x++
+								}
+
+								
 							}
-
-							
 						}
-					}
 
-					for (let linea in recursos){
-						if(x>0) stringdet+=","
-						let lot_id
+						for (let linea in recursos){
+							if(x>0) stringdet+=","
+							let lot_id
 
-						if(recursos[linea].lote!=""){
-							 lot_id = await Axios.get(FUNCIONES.lote+'?id='+recursos[linea].lote)
-							 lot_id = lot_id.data.id
-						}else{
-							lot_id = ""
+							if(recursos[linea].lote!=""){
+								lot_id = await Axios.get(FUNCIONES.lote+'?id='+recursos[linea].lote)
+								lot_id = lot_id.data.id
+							}else{
+								lot_id = ""
+							}
+									stringdet+='"'+x+'":{"item_id":"'+recursos[linea].item_id+'", "booked_quantity":"'+recursos[linea].cantidad+'", "lot_id":"'+lot_id+'"}'
+									let item = {id:z,item_id:recursos[linea].item_id,cantidad:(recursos[linea].cantidad),orden_id:this.state.orden.id, nombre:recursos[linea].producto}
+									utilizados.push(item)
+									x++
+									z++
 						}
-								stringdet+='"'+x+'":{"item_id":"'+recursos[linea].item_id+'", "booked_quantity":"'+recursos[linea].cantidad+'", "lot_id":"'+lot_id+'"}'
-								let item = {id:z,item_id:recursos[linea].item_id,cantidad:(recursos[linea].cantidad),orden_id:this.state.orden.id, nombre:recursos[linea].producto}
+
+						let y=0;
+						for (let linea in series){
+							if(series[linea].generar){
+								itemserie= await this.get_item(series[linea].serie)
+								let item = {id:z, referencia:series[linea].serie , item_id:itemserie.id,cantidad:1,orden_id:this.state.orden.id, nombre:itemserie.name,orden_line_id:series[linea].lineid}
 								utilizados.push(item)
-								x++
 								z++
-					}
-					let y=0;
-					for (let linea in series){
-						itemserie= await this.get_item(series[linea].serie)
-						let item = {id:z, referencia:series[linea].serie , item_id:itemserie.id,cantidad:1,orden_id:this.state.orden.id, nombre:itemserie.name,orden_line_id:series[linea].lineid}
-						utilizados.push(item)
-						z++
-						if(itemserie!==undefined){
-						if(x>0) stringdet+=","
-						if(y>0) stringorden+=","
-								stringdet+='"'+x+'":{"item_id":"'+itemserie.id+'", "booked_quantity":"1"}'
-								stringorden+='"'+y+'":{"id":"'+series[linea].lineid+'", "serie":"'+series[linea].serie+'"}'
-								x++
-								y++
-						}else{
-						
-							error = {error:true,msj:"No se encontro el numero de serie "+series[linea].serie}
+								if(itemserie!==undefined){
+								if(x>0) stringdet+=","
+								if(y>0) stringorden+=","
+										stringdet+='"'+x+'":{"item_id":"'+itemserie.id+'", "booked_quantity":"1"}'
+										stringorden+='"'+y+'":{"id":"'+series[linea].lineid+'", "serie":"'+series[linea].serie+'"}'
+										x++
+										y++
+								}else{
+								
+									error = {error:true,msj:"No se encontro el numero de serie "+series[linea].serie}
+									
+								}
+							}
+						}
+					}else{
+						let y=0;
+						for (let linea in series){
+							if (series[linea].id==id  && series[linea].generar){
+								estado = "espera"
+								cerrar = true
+								itemserie= await this.get_item(series[linea].serie)
+								let item = {id:z, referencia:series[linea].serie , item_id:itemserie.id,cantidad:1,orden_id:this.state.orden.id, nombre:itemserie.name,orden_line_id:series[linea].lineid}
+								utilizados.push(item)
+								z++
+								if(itemserie!==undefined){
+								if(x>0) stringdet+=","
+								if(y>0) stringorden+=","
+										stringdet+='"'+x+'":{"item_id":"'+itemserie.id+'", "booked_quantity":"1"}'
+										stringorden+='"'+y+'":{"id":"'+series[linea].lineid+'", "serie":"'+series[linea].serie+'"}'
+										x++
+										y++
+								}else{
+								
+									error = {error:true,msj:"No se encontro el numero de serie "+series[linea].serie}
+									
+								}
+
+								this.setState(
+									{
+										lineid:series[linea].lineid
+									})
+
+							}
 							
 						}
+
 					}
+
+					
 					stringdet+="}"
 
 					if(error.error){
@@ -407,12 +451,13 @@ async empleados(){
 								//console.log(minutes)
 								let fecha = fechastr.split('/');
 								fechastr = fecha[2]+'/'+fecha[0]+'/'+fecha[1]+" "+horastr+":"+minutes
-								let editorden = '{"id":'+this.state.orden.id+', "fechahora_ini":"'+fechastr+'", "estado":"iniciada","detalle":{'+stringorden+'},"consumidos":'+JSON.stringify(utilizados)+'}'
+								let editorden = '{"id":'+this.state.orden.id+', "fechahora_ini":"'+fechastr+'", "estado":"'+estado+'","detalle":{'+stringorden+'},"consumidos":'+JSON.stringify(utilizados)+'}'
 								//console.log(editorden)
 								 resp = await Axios.post(`${FUNCIONES.editarorden}`,editorden)
 								this.setState({
 									loading: false,
 									visible:true,
+									cerrar:cerrar
 									
 								});
 							}else{
@@ -457,7 +502,13 @@ async empleados(){
 				visible:false,
 				
 			});
-			navigate('/app/ordenesp/')
+
+			if(this.state.cerrar){
+				navigate('/app/orden/terminar/'+this.props.id+"/"+this.state.lineid)
+			}else{
+				navigate('/app/ordenesp/')
+			}
+			
 		}
 
 		onConfirme = ()=>{
@@ -523,9 +574,14 @@ async empleados(){
           handleSubmit = event => {
 			  //console.log("enviando info")
             event.preventDefault()
-            this.iniciar()
+            this.iniciar(0)
             //alert(`Welcome ${this.state.firstName} ${this.state.lastName}!`)
 					}
+
+
+		 hijas(id){
+			 this.iniciar(id)
+		 }
 					
 
 				
@@ -611,6 +667,7 @@ async empleados(){
 					onChange={this.handleInputChangelote}				
                     className="inputform"
                   />}</Table.Cell>
+				
 											
 					
 						
@@ -633,6 +690,10 @@ async empleados(){
 				>
 					SERIE
 				</Table.HeaderCell>
+				<Table.HeaderCell
+				>
+					
+				</Table.HeaderCell>
 				
 				</Table.Row>
 			</Table.Header>
@@ -643,15 +704,30 @@ async empleados(){
 						<Table.Row>
 										
 					<Table.Cell>{t.producto}</Table.Cell>
-					<Table.Cell>{<input
+					<Table.Cell>{(t.generar) ? (<input
 					autoFocus
                     type="text"
 					name="serie"
 					id={t.id}
                     value={t.serie}
 					onChange={this.handleInputChange}				
-                    className="inputform"
-                  />}</Table.Cell>
+					className="inputform"
+					
+                  />):(t.serie)  }</Table.Cell>
+				  <Table.Cell>{(t.generar) ? <Button
+								
+								class="ui orange button"
+								onClick={() => {
+									this.hijas(
+										t.id
+									);
+								}}								
+								icon
+								labelPosition="right"
+							>
+				<Icon name="plus" />
+								Ingresar
+						</Button> : ('')}</Table.Cell>
 											
 					
 						

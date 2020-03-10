@@ -359,7 +359,7 @@ export default class OrdenesP extends Component {
 		async continuar  (id) {
 			//let res = await Axios.get(FUNCIONES.orden+"?id="+id)
 			//console.log(res.data)
-			navigate('/app/orden/terminar/'+id)
+			navigate('/app/orden/terminar/'+id+"/0")
 		}
 
 		 ver  (id) {

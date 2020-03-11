@@ -32,7 +32,8 @@ export default class Iniciar extends Component {
 		itemst:[],
 		date:new Date().toLocaleDateString('en-GB'),
 		cerrar:false,
-		lineid:0
+		lineid:0,
+		verboton:false
 				
 	};
 	
@@ -73,6 +74,7 @@ export default class Iniciar extends Component {
 				let formula
 				let formula_id
 				let res = await this.empleados();
+				let verboton = false;
 				Axios.get(FUNCIONES.orden+"?id="+id)
 				.then(({ data }) => {
 					//console.log(data)
@@ -111,6 +113,9 @@ export default class Iniciar extends Component {
 								//console.log("es unico")	
 								for (let y=0; y<formula.insumos[insumo].cantidad;y++){
 									let seriet = detalle[linea].serie==null? "" : detalle[linea].serie 
+									if (detalle[linea].serie==null)
+										verboton = true
+
 									serie = {id:ids, lineid:detalle[linea].id, producto:formula.insumos[insumo].name, serie:seriet, generar:(detalle[linea].serie==null)}
 									series.push(serie)
 									ids++
@@ -126,7 +131,8 @@ export default class Iniciar extends Component {
 						formulas,
 						series,
 						recursos,
-						from_agency:from_agency
+						from_agency:from_agency,
+						verboton
 						
 					});
 				})
@@ -592,7 +598,7 @@ async empleados(){
 
 		let {
 				
-			series, recursos, loading, empleado, empleados
+			series, recursos, loading, empleado, empleados, verboton
            
 			
 		} = this.state;
@@ -735,7 +741,8 @@ async empleados(){
 					))}
 			</Table.Body>
 			</Table></React.Fragment>):('')}
-			<button type="submit" className="submitform">Iniciar</button>
+			{(verboton) ? (<button type="submit" className="submitform">Iniciar</button>) : ('')}
+			
 			</form>	
 			<MostrarMensaje titulo={'Sus Datos fueron guardados con exito'} mensajes={'Guardar'}  visible={this.state.visible} onConfirm={this.onConfirm} />
 			<Msjerror titulo={this.state.errormsj} mensajes={'Error'}  visible={this.state.visiblee} onConfirm={this.onConfirme} />

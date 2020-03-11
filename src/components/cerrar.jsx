@@ -159,10 +159,16 @@ export default class Iniciar extends Component {
 					let ids=1
 					let consumototal=0;
 
-					for(let linea in consumidos){
-						
-						consumototal = consumototal +  parseInt(consumidos[linea].cantidad)
-					}
+					
+						if(lineid>0 )
+							for(let linea in consumidos){
+								if (lineid==consumidos[linea].orden_line_id)
+									consumototal = consumototal +  (parseFloat(consumidos[linea].referencia.substring(19,24))* parseFloat("2.2"))
+								}
+							else
+								for(let linea in consumidos){
+									consumototal = consumototal +  parseFloat(consumidos[linea].cantidad)
+								}
 						if(lineid>0){
 							for(let linea in detalle){
 								formula_id = detalle[linea].formula_id
@@ -289,7 +295,7 @@ export default class Iniciar extends Component {
 						
 					
 
-
+							console.log(consumototal)
 					this.setState({
 						orden,
 						detalle,
@@ -691,7 +697,7 @@ Selectempleado = (e, item) => {
 					
 						//console.log(generadototal)
 						//console.log(consumototal)
-						if (generadototal<=consumototal){
+						if (generadototal<=(consumototal*1.02)){
 						
 							let shipment = {shipment:booking}
 							let poststr = JSON.stringify(shipment)

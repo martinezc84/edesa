@@ -401,8 +401,8 @@ export default class PurchaseDetail extends Component {
 							detalle[linea].code =series[x].serie
 							detalle[linea].peso = series[x].serie.substring(19,24)
 							let prouctcode = series[x].serie.substring(0,7)
-							console.log(prouctcode)
-							console.log(detalle[linea])
+							//console.log(prouctcode)
+							//console.log(detalle[linea])
 							let itemres = this.buscaritemcode(prouctcode, this.state.comprables)
 							if(itemres!=null){
 								detalle[linea].item_id = itemres.key

@@ -629,7 +629,7 @@ export default class OrdenP extends Component {
 						  
 						  //Create the parent and add the children
 						  x++
-						  if(x==3){
+						  if(x==2){
 							table.push(<Grid.Row >{children}</Grid.Row>)
 							children=[]
 							x=1
@@ -888,7 +888,7 @@ export default class OrdenP extends Component {
 				<div id="barcodes" >
 				
 
-				<Grid columns={2}>
+				<Grid columns={1}>
 				{this.createTable()
 
 				}</Grid>

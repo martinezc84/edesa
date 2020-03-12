@@ -528,7 +528,7 @@ export default class App extends Component {
 		let propsOP = {
 			guardarmem:this.guardarmem,
 			getmem:this.getmem,
-			valores:this.state.Ordenes,
+			valores:[],
 			empleados:this.state.empleados
 			
 		};

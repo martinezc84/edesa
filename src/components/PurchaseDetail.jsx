@@ -449,7 +449,6 @@ export default class PurchaseDetail extends Component {
 				}
 
 				if(edit){
-
 					let stringorden = '{"purchase_order":{"purchase_order_details_attributes":{'+stringedit+'}},"exchange_rate":"1"}'
 					//console.log(stringorden)
 					res = await Axios.post(FUNCIONES.PurchaseOrderEdit+'?id='+this.props.id, stringorden)
@@ -475,7 +474,7 @@ export default class PurchaseDetail extends Component {
 
 				}else{
 					let request='{"id":"'+this.state.orden.id+'", "agency_id":"'+this.state.orden.agency_id+'","exchange_rate":"1","delivery_date":"'+fechastr+'","purchase_order_details_attributes":{'+stringdet+'}}';
-					console.log(request)
+					//console.log(request)
 					res = await Axios.post(FUNCIONES.recibir, request) 
 					
 					if (capturarlotes)

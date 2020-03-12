@@ -11,6 +11,7 @@ import Formula from '../components/Formula';
 import Config from '../components/Config'
 import OrdenesP from '../components/OrdenesP';
 import OrdenP from '../components/OrdenP';
+import OrdenPb from '../components/OrdenPCodigos';
 import Iniciar from '../components/Iniciar';
 import Terminar from '../components/cerrar';
 import Existencias from '../components/Existencias';
@@ -569,6 +570,7 @@ export default class App extends Component {
 			<RutaPrivada  path="/app/pedidos" component={Pedidos} guardar={this.guardar} {...propspedidos}  ></RutaPrivada>
 			<RutaPrivada  path="/app/nuevopedido" component={NuevoPedido} guardar={this.guardar} {...propsnuevop}  ></RutaPrivada>
 			<RutaPrivada  path="/app/reporte" component={ReporteBobinas} guardar={this.guardar} {...propsnuevop}  ></RutaPrivada>
+			<RutaPrivada  path="/app/ordenp/barcode/:id/:lineid" component={OrdenPb} guardar={this.guardar} {...propson}  ></RutaPrivada>
 				<Login path='/app/login/:error' />
 				
 				

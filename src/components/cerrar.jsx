@@ -34,7 +34,8 @@ export default class Iniciar extends Component {
 		consumototal:0, 
 		empleado:0,
 		empleados:[],
-		lineid:0
+		lineid:0,
+		id:0
 	};
 	
 	
@@ -305,7 +306,9 @@ export default class Iniciar extends Component {
 						rendimientos,
 						to_agency,
 						consumototal,
-						lotes
+						lotes,
+						id,
+						lineid
 						
 						
 					});
@@ -821,7 +824,7 @@ Selectempleado = (e, item) => {
 				visible:false,
 				
 			});
-			navigate('/app/ordenesp/')
+			navigate('/app/ordenp/barcode/'+this.state.id+'/'+this.state.lineid)
 		}
 
 		onConfirme = ()=>{
@@ -983,7 +986,7 @@ Selectempleado = (e, item) => {
             event.preventDefault()
             this.guardar_formula()
             //alert(`Welcome ${this.state.firstName} ${this.state.lastName}!`)
-					}
+		 }
 
 					Selectmarca = (e, item) => {
 						//console.log(item)

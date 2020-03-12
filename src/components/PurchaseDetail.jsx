@@ -404,8 +404,9 @@ export default class PurchaseDetail extends Component {
 							let prouctcode = series[x].serie.substring(0,7)
 
 							detalle[linea].peso = parseFloat(detalle[linea].peso)*2.20462
-							detalle[linea].unit_cost=detalle[linea].unit_cost*detalle[linea].peso
-
+							detalle[linea].peso = detalle[linea].peso.toPrecision(4)
+							detalle[linea].unit_cost=parseFloat(detalle[linea].unit_cost)*parseFloat(detalle[linea].peso)
+							detalle[linea].unit_cost = detalle[linea].unit_cost.toPrecision(4)
 							//console.log(prouctcode)
 							//console.log(detalle[linea])
 							let itemres = this.buscaritemcode(prouctcode, this.state.comprables)

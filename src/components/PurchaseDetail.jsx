@@ -51,7 +51,7 @@ export default class PurchaseDetail extends Component {
 
 
 	guardarcantidad = (id, cantidad) => {
-		console.log(id)
+		//console.log(id)
 		let detalle = this.state.detalle
 		detalle.map((linea, i)=> (
 		
@@ -67,7 +67,7 @@ export default class PurchaseDetail extends Component {
 	};
 
 	guardarlote = (id, lote) => {
-		console.log(id)
+		//console.log(id)
 		let detalle = this.state.detalle
 		detalle.map((linea, i)=> (
 		
@@ -83,7 +83,7 @@ export default class PurchaseDetail extends Component {
 	};
 
 	guardarserie = (id, serie) => {
-		console.log(id)
+		//console.log(id)
 		let detalle = this.state.detalle
 		detalle.map((linea, i)=> (
 		
@@ -133,7 +133,7 @@ export default class PurchaseDetail extends Component {
 				let id = parseInt(this.props.id)
 				let detalle = []
 				let linedet
-				console.log(comprables)
+				//console.log(comprables)
 				this.setState({
 					loading: true
 				});
@@ -142,9 +142,9 @@ export default class PurchaseDetail extends Component {
 					//console.log(data)
 					let date = new Date();
 					let fechastr = date.toLocaleString();
-					console.log(fechastr)
+					//console.log(fechastr)
 					let hotastr = fechastr.substring(11,17)
-					console.log(hotastr)
+					//console.log(hotastr)
 					fechastr = fechastr.substring(0,10)
 					fechastr = fechastr.trim();
 					let fecha = fechastr.split('/');
@@ -277,7 +277,7 @@ export default class PurchaseDetail extends Component {
 	};
 
 	buscaritemcode = (code, items) => {
-		console.log(items)
+		//console.log(items)
 		let itemr = null
 		items.map((item, i)=> (
 		
@@ -396,6 +396,7 @@ export default class PurchaseDetail extends Component {
 				let capturarlotes = false;
 				for(let linea in detalle){
 					let series = detalle[linea].series
+					let costo =detalle[linea].unit_cost
 					if(detalle[linea].unico){
 						edit = true;
 						for(let x = 0 ; x<series.length; x++ ){
@@ -404,9 +405,12 @@ export default class PurchaseDetail extends Component {
 							let prouctcode = series[x].serie.substring(0,7)
 
 							detalle[linea].peso = parseFloat(detalle[linea].peso)*2.20462
-							detalle[linea].peso = detalle[linea].peso.toPrecision(4)
-							detalle[linea].unit_cost=parseFloat(detalle[linea].unit_cost)*parseFloat(detalle[linea].peso)
+							
+							detalle[linea].peso = detalle[linea].peso.toPrecision(6)
+							//console.log(detalle[linea].peso)
+							detalle[linea].unit_cost=parseFloat(costo)*parseFloat(detalle[linea].peso)
 							detalle[linea].unit_cost = detalle[linea].unit_cost.toPrecision(4)
+							//console.log(detalle[linea].unit_cost)
 							//console.log(prouctcode)
 							//console.log(detalle[linea])
 							let itemres = this.buscaritemcode(prouctcode, this.state.comprables)
@@ -477,11 +481,11 @@ export default class PurchaseDetail extends Component {
 					if (capturarlotes)
 					{
 						let lotesdata =res.data
-						console.log(lotesdata)
+						//console.log(lotesdata)
 						let entregas  = lotesdata.shipment_purchase_orders
 						 for(let entrega in entregas){
 							let ide=entregas[entrega].shipment_id
-							console.log(ide)
+							//console.log(ide)
 						let movements = await Axios.get(FUNCIONES.entrega+'?id='+ide)
 							movements = movements.data.movements
 						for(let linea in movements){
@@ -552,7 +556,7 @@ export default class PurchaseDetail extends Component {
 		}
 		
 		handleDateChange = (event, {name, value}) => {
-			console.log(value)
+			//console.log(value)
 			if (this.state.hasOwnProperty(name)) {
 			  this.setState({ [name]: value });
 			}

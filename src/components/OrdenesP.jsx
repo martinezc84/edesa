@@ -172,7 +172,6 @@ export default class OrdenesP extends Component {
 		});
 
 		
-		
 			let { guardar, valores,   empleados } = this.props;
 			if (valores.length === 0) {
 				this.setState({

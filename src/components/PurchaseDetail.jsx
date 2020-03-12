@@ -166,6 +166,7 @@ export default class PurchaseDetail extends Component {
 							unico:false, 
 							series:[],
 							lote:fechastr+cont,
+							
 							item_category_id:detalleinf[linea].item.item_category_id,
 							product_type:detalleinf[linea].item.product_type,
 							measurement_unit:detalleinf[linea].item.measurement_unit,
@@ -401,6 +402,10 @@ export default class PurchaseDetail extends Component {
 							detalle[linea].code =series[x].serie
 							detalle[linea].peso = series[x].serie.substring(19,24)
 							let prouctcode = series[x].serie.substring(0,7)
+
+							detalle[linea].peso = parseFloat(detalle[linea].peso)*2.20462
+							detalle[linea].unit_cost=detalle[linea].unit_cost*detalle[linea].peso
+
 							//console.log(prouctcode)
 							//console.log(detalle[linea])
 							let itemres = this.buscaritemcode(prouctcode, this.state.comprables)

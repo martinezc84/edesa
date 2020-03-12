@@ -406,10 +406,10 @@ export default class PurchaseDetail extends Component {
 
 							detalle[linea].peso = parseFloat(detalle[linea].peso)*2.20462
 							
-							detalle[linea].peso = detalle[linea].peso.toPrecision(6)
+							detalle[linea].peso = detalle[linea].peso
 							//console.log(detalle[linea].peso)
 							detalle[linea].unit_cost=parseFloat(costo)*parseFloat(detalle[linea].peso)
-							detalle[linea].unit_cost = detalle[linea].unit_cost.toPrecision(4)
+							detalle[linea].unit_cost = detalle[linea].unit_cost
 							//console.log(detalle[linea].unit_cost)
 							//console.log(prouctcode)
 							//console.log(detalle[linea])

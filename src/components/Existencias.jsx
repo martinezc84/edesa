@@ -17,9 +17,9 @@ export default class OrdenesP extends Component {
 		
 		paginaSeleccionada: 1,
 		cantidadPaginas: 0,
-		first: 20,
+		first: 50,
 		offset: 0,
-		step: 20,
+		step: 50,
 		buscar:"",
 		column: null,
 		direction: null,
@@ -115,7 +115,7 @@ export default class OrdenesP extends Component {
 						//console.log(Ordenes)
 
 						for (let Item in Resp) {
-							let itemex={codigo:Resp[Item].code,nombre:Resp[Item].name,peso:Resp[Item].peso,cantidad:Resp[Item].quantity,referencia:Resp[Item].referencia,marca:Resp[Item].marca,empleado:Resp[Item].empleado}
+							let itemex={codigo:Resp[Item].code,nombre:Resp[Item].name,peso:Resp[Item].peso,cantidad:Resp[Item].quantity,referencia:Resp[Item].referencia,marca:Resp[Item].marca,empleado:Resp[Item].empleado, edit:false}
 							Items.push(itemex);
 						}
 
@@ -187,6 +187,49 @@ export default class OrdenesP extends Component {
 		
 	  }
 
+	  editar = async (codigo)=>{
+		let Items = this.state.Items
+		//console.log(codigo)
+		Items.map((t)=>(
+			t.codigo == codigo ? t.edit = true : false
+		))
+
+		this.setState({
+				
+			Items:Items
+		});
+
+	  }
+
+	  guardar = async (codigo)=>{
+		let Items = this.state.Items
+		//console.log(codigo)
+		let itemnuevo
+		Items.map((t)=>(
+			t.codigo == codigo ? itemnuevo = t : false
+		))
+			let itemdata
+			let id
+		await Axios.get(FUNCIONES.itemserie+"?serie="+codigo).then(({data})=>{
+			//console.log(data)
+			let descripcion = '{\\"madre\\":\\"'+itemnuevo.referencia+'\\", \\"marca\\":\\"'+itemnuevo.marca+'\\", \\"empleado\\":\\"'+itemnuevo.empleado+'\\"}'
+			 itemdata = '{"item":{"id":"'+data.id+'","description":"'+descripcion+'"}}'
+			id=data.id
+			 console.log(itemdata)
+		})
+		
+		let res = await Axios.post(FUNCIONES.editaritem+"?id="+id,itemdata);
+
+		Items.map((t)=>(
+			t.codigo == codigo ? t.edit = false : false
+		))
+		this.setState({
+				
+			Items:Items
+		});
+
+	  }
+
 	
 
 		cargarxistencias = async (agg)=>{
@@ -214,7 +257,23 @@ export default class OrdenesP extends Component {
 			});
 		}
 		
+		handleInputChange = event => {
+		
+			const target = event.target
+			const value = target.value
+			const name = target.name
+			const id = target.id
+			let Items = this.state.Items
+			console.log(id)
+			Items.map((t)=>(
+				t.codigo == id ? t.marca = target.value : false
+			))
 
+			this.setState({
+				
+				Items:Items
+			});
+		  }
 
 
 	render() {
@@ -345,7 +404,19 @@ export default class OrdenesP extends Component {
 												{t.nombre}
 											</Table.Cell>
 											<Table.Cell>
-												{t.marca}
+											{(t.edit)?(<input
+												placeholder="Marca"
+												autoFocus
+												type="text"
+												name="marca"
+												id={t.codigo}
+												value={t.marca}
+												onChange={this.handleInputChange}
+												
+												className="inputform"
+											/>
+
+											):(t.marca)}
 											</Table.Cell>
 											<Table.Cell>
 												{t.cantidad}
@@ -357,20 +428,42 @@ export default class OrdenesP extends Component {
 												{t.empleado}
 											</Table.Cell>
 											<Table.Cell>
-											<Button 
-												positive					
+												
+										{(t.empleado!=null)?(<Button 
+																	
 												icon
 												labelPosition="right"
+												onClick={() => {
+													this.editar(
+														t.codigo
+													);
+												}}
 												
 											>
-											<Icon name="save" />
+											<Icon name="pencil" />
 												Edit
-										</Button>
+										</Button>):('')}{(t.edit)?(<Button 
+												positive					
+												icon
+												variant="secondary"
+												labelPosition="right"
+												onClick={() => {
+													this.guardar(
+														t.codigo
+													);
+												}}
+												
+											>
+											<Icon name="disk" />
+												Guardar
+										</Button>):('')}
+											
 											</Table.Cell>
 											</Table.Row>
 
 											</React.Fragment>
 											))}
+											
 									</Table.Body>
 								</Table>
 

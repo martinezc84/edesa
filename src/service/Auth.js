@@ -4,7 +4,7 @@ import { headers } from '../utils/utils';
 import JSON from 'circular-json';
 
 const headersr = {
-	
+	'Access-Control-Allow-Origin': '*',
 	'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
 	'Content-Type': 'application/json',
 	'Access-Control-Allow-Methods': '*',

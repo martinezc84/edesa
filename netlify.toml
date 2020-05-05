@@ -29,6 +29,7 @@
 	GATSBY_URL_GUARDARSECUENCIA='/.netlify/functions/GuardarSecuencia'
 	GATSBY_URL_GUARDARFORMULA='/.netlify/functions/GuardarFormula'
 	GATSBY_URL_LOGIN='/.netlify/functions/Login'
+	GATSBY_URL_AUTH='/.netlify/functions/Auth'
 	GATSBY_URL_COMPRABLES='/.netlify/functions/ProductosComprables'
 	GATSBY_URL_VENDIBLES='/.netlify/functions/ProductosVendibles'
 	GATSBY_URL_AGENCIAS='/.netlify/functions/Agencias'

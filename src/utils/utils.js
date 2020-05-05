@@ -39,6 +39,7 @@ const FUNCIONES = {
 	saveimage :URL_PREFIX+process.env.GATSBY_URL_FIRMA,
 	savephoto :URL_PREFIX+process.env.GATSBY_URL_PHOTO,
 	login: URL_PREFIX+process.env.GATSBY_URL_LOGIN,
+	auth: URL_PREFIX+process.env.GATSBY_URL_AUTH,
 	editarformula:URL_PREFIX+process.env.GATSBY_URL_EDITARFORMULA,
 	editarorden:URL_PREFIX+process.env.GATSBY_URL_EDITARORDENP,
 	editarsecuencia:URL_PREFIX+process.env.GATSBY_URL_EDITARSECUENCIA,

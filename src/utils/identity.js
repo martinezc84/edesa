@@ -14,7 +14,7 @@ const setUser = user =>
 
 export const handleLogin = async ({ username, password }) => {
 
-	await Axios.post(`${FUNCIONES.login}`,'{"username":"'+username+'","password":"'+password+'"}')
+	await Axios.post(`${FUNCIONES.auth}`,'{"username":"'+username+'","password":"'+password+'"}')
 					.then(({ data }) => {
 						console.log(data)
 						 setUser({

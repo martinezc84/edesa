@@ -26,7 +26,7 @@ export const handleLogin = async ({ username, password }) => {
 							store:data.store_id,
 							redirect:data.avatar
 							})
-
+							console.log(data)
 							if(data.group_id == "2"){
 								navigate(`/app/ordenesp`)
 							}else{

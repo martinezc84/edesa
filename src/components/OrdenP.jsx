@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import '../css/style.css';
 import Axios from 'axios';
 import { FUNCIONES } from '../utils/utils';
-import { Loader, Table, Dropdown, TextArea, Button, Grid } from 'semantic-ui-react';
+import { Loader, Table, Dropdown, TextArea, Button, Grid, GridColumn } from 'semantic-ui-react';
 import sortBy from 'lodash/sortBy';
 import { MostrarMensaje } from './Mensajes';
 import { Msjerror } from './Mensajeserror';
@@ -655,7 +655,7 @@ export default class OrdenP extends Component {
 		} = this.state;
 		orden.employee_id = parseInt(orden.employee_id.toString())
 
-
+		console.log(generados)
 		
 		if (loading) {
 			return <Loader active inline="centered" />;
@@ -889,9 +889,20 @@ export default class OrdenP extends Component {
 				
 
 				<Grid columns={1}>
-				{this.createTable()
 
-				}</Grid>
+					<Grid.Column>
+					{
+					
+					generados
+					.map((t) => (
+						<Grid.Row><Barcode 
+								value={t.codigo}
+								format="CODE128"
+								/></Grid.Row>
+								))}
+								
+								</Grid.Column>
+				</Grid>
 				
 				</div>
 				</div>

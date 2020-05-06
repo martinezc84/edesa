@@ -898,6 +898,10 @@ export default class OrdenP extends Component {
 						<Grid.Row><Barcode 
 								value={t.codigo}
 								format="CODE128"
+								height="50"
+								fontSize="13"
+
+
 								/></Grid.Row>
 								))}
 								

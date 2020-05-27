@@ -375,10 +375,11 @@ async empleados(){
 						for (let linea in series){
 							if(series[linea].generar){
 								itemserie= await this.get_item(series[linea].serie)
-								let item = {id:z, referencia:series[linea].serie , item_id:itemserie.id,cantidad:1,orden_id:this.state.orden.id, nombre:itemserie.name,orden_line_id:series[linea].lineid}
-								utilizados.push(item)
+								console.log(itemserie)
 								z++
-								if(itemserie!==undefined){
+								if(itemserie!==false){
+									let item = {id:z, referencia:series[linea].serie , item_id:itemserie.id,cantidad:1,orden_id:this.state.orden.id, nombre:itemserie.name,orden_line_id:series[linea].lineid}
+									utilizados.push(item)
 								if(x>0) stringdet+=","
 								if(y>0) stringorden+=","
 										stringdet+='"'+x+'":{"item_id":"'+itemserie.id+'", "booked_quantity":"1"}'
@@ -399,10 +400,12 @@ async empleados(){
 								estado = "espera"
 								cerrar = true
 								itemserie= await this.get_item(series[linea].serie)
-								let item = {id:z, referencia:series[linea].serie , item_id:itemserie.id,cantidad:1,orden_id:this.state.orden.id, nombre:itemserie.name,orden_line_id:series[linea].lineid}
-								utilizados.push(item)
+								console.log(itemserie)
+								
 								z++
-								if(itemserie!==undefined){
+								if(itemserie!==false){
+									let item = {id:z, referencia:series[linea].serie , item_id:itemserie.id,cantidad:1,orden_id:this.state.orden.id, nombre:itemserie.name,orden_line_id:series[linea].lineid}
+									utilizados.push(item)	
 								if(x>0) stringdet+=","
 								if(y>0) stringorden+=","
 										stringdet+='"'+x+'":{"item_id":"'+itemserie.id+'", "booked_quantity":"1"}'

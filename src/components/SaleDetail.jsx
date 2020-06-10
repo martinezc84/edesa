@@ -237,7 +237,7 @@ export default class NuevaOrden extends Component {
 					let orden_id = data.id
 					detalle = []
 					for(let linea in detalleinf){
-						linedet = {id:detalleinf[linea].id,  formula_id:0,item_bundle_name:detalleinf[linea].item_bundle_name,item_cantidad:detalleinf[linea].quantity,cantidad:0}
+						linedet = {id:detalleinf[linea].id,  formula_id:0,item_bundle_name:detalleinf[linea].reference,item_cantidad:detalleinf[linea].quantity,cantidad:0}
 						detalle.push(linedet)
 					}
 					//console.log(detalle)

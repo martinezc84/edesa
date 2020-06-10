@@ -130,11 +130,11 @@ export default class SaleOrders extends Component {
 				this.setState({
 					loading: true
 				});
-                console.log(FUNCIONES.ordenesventordenesventaa)
+                //console.log(FUNCIONES.ordenesventordenesventaa)
 				Axios.post(`${FUNCIONES.ordenesventa}`,'{"valor":"'+buscar+'"}')
 					.then(({ data }) => {
 						
-						console.log(data)
+						//console.log(data)
 						let Invoices = data.data;
 						
 						Invoices.map((invoice, i)=> (
@@ -145,12 +145,14 @@ export default class SaleOrders extends Component {
 							//console.log(invoice.ref)
 							invoice.ref != '' ? invoice.ref = this.quitarlink(invoice.ref) :''
 						));
-
-						Invoices = Invoices.filter((s) =>  s.ref == 'IMPRIMIR');
-
-
+						let imprimir = Invoices.filter((s) =>  s.ref == 'IMPRIMIR');
+						let producir = Invoices.filter((s) =>  s.ref == 'PRODUCIR');
+						
+						Invoices =  producir
+						Invoices = [...Invoices, ...imprimir]
+						//console.log(Invoices)
 						Invoices.map((invoice, i)=> (
-							
+							//console.log(invoice.zid)							
 							invoice.zid != '' ? invoice.zid = this.quitarlink(invoice.zid) :''
 						));
 
@@ -165,7 +167,7 @@ export default class SaleOrders extends Component {
 							invoice.cli != '' ? invoice.cli = this.quitarlink(invoice.cli) :''
 						));
 
-						console.log(Invoices)
+						//console.log(Invoices)
 						guardar('ordenesdeventa', Invoices);
 						this.setState({
 							Invoices: Invoices,

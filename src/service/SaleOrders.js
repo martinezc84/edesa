@@ -20,9 +20,11 @@ exports.handler = async (event, context) => {
 		let body = JSON.parse(event.body);
 	    const { valor}  = body;
 		let { data } = await axios.post(url, '{"draw":"1", "start":"0", "length":"40","search":{"value":"'+valor+'","regex":"false"},"order":{"0":{"column":3,"dir":"asc"}}}' ,{ headers });
+		console.log(data)
 		return {
 			statusCode: 200,
 			headers:headersr,
+			
 			body: JSON.stringify(data)
 		};
 	} catch (error) {

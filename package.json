@@ -8,7 +8,7 @@
     "@material-ui/core": "^3.9.3",
     "@material-ui/icons": "^3.0.2",
     "@react-pdf/renderer": "^2.0.0-beta.6",
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "circular-json": "^0.5.9",
     "date-fns": "^1.30.1",
     "dotenv": "^6.2.0",

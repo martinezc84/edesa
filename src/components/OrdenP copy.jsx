@@ -29,7 +29,6 @@ export default class OrdenP extends Component {
 		equipos:[],
 		empleados:[],
 		generados:[],
-		codigos:[],
 		id:0,
 		show:false,
 		getmem:null,
@@ -561,13 +560,10 @@ export default class OrdenP extends Component {
 			//navigate('/app/formulas/')
 		}
 
-		codigos = (id)=>{
-
-			let codigos = this.state.generados.filter((s) => s.id == id);
+		codigos = ()=>{
 			this.setState({				
 			
-				action:"pdf",
-				codigos:codigos
+				action:"pdf"
 			});
 		
 		}
@@ -654,12 +650,17 @@ export default class OrdenP extends Component {
 		
 		items = [items,...itemst]
 		let { orden, fechahora_entrega,
-		loading, pdf, generados, codigos, itemsgenerados ,equipos, action, Selectequipo, Selectempleado, equipo_id, empleados, empleado, detalle,  Formulas, from_orden
+		loading, pdf, generados, itemsgenerados ,equipos, action, Selectequipo, Selectempleado, equipo_id, empleados, empleado, detalle,  Formulas, from_orden
 		
 		} = this.state;
 		orden.employee_id = parseInt(orden.employee_id.toString())
 
-		console.log(generados)
+		//console.log(generados)
+
+		const etiqueta = {			
+			paddingBottom: "2cm",
+			pagebreakafter: "always",
+		  };
 		
 		if (loading) {
 			return <Loader active inline="centered" />;
@@ -669,7 +670,9 @@ export default class OrdenP extends Component {
 				return(
 					<div >
 
-
+	<Button type="button" variant="primary"  className="submitform" onClick={() => {
+							this.codigos();
+						}}	>CODIGOS DE BARRA</Button>
 						
 						<form onSubmit={this.handleSubmit}>
 					<Grid.Row><Grid.Column> <label>Fecha: {orden.fecha}
@@ -771,11 +774,6 @@ export default class OrdenP extends Component {
 								<Table.Cell>
 								{t.cantidad}
 							
-								</Table.Cell>
-								<Table.Cell>
-								<Button type="button" variant="primary"  className="submitform" onClick={() => {
-							this.codigos(t.id);
-						}}	>CODIGO DE BARRA</Button>
 								</Table.Cell>
 						</Table.Row>
 						))
@@ -900,13 +898,15 @@ export default class OrdenP extends Component {
 					<Grid.Column>
 					{
 					
-					codigos
+					generados
 					.map((t) => (
-						<Grid.Row><Barcode 
+						<Grid.Row style={etiqueta}><Barcode 
 								value={t.codigo}
 								format="CODE128"
 								height="100"
 								fontSize="20"
+								
+
 
 								/></Grid.Row>
 								))}

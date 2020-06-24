@@ -88,6 +88,7 @@ const FUNCIONES = {
 	editarpedido:URL_PREFIX+process.env.GATSBY_URL_EDITARPEDIDO,
 	editaritem:URL_PREFIX+"/.netlify/functions/EditarItem",
 	reportebobinas:URL_PREFIX+"/.netlify/functions/ReporteBobinas",
+	guardarprecio:URL_PREFIX+"/.netlify/functions/GuardarPrecio",
 };
 
 const ZAURU = {
@@ -114,6 +115,7 @@ const ZAURU = {
 	editaregistro:URL_PREFIX+'/EditarRegistro',
 	registro:URL_PREFIX+'/GetRegistro',
 	registros:URL_PREFIX+'/GetRegistros',
+	guardarprecio:URL_PREFIX+'/sales/suggested_prices.json',
 };
 
 const API_URL = {
@@ -156,7 +158,7 @@ const APIP_URL = {
 	guardarregistro:URL_APIP+'/guardarregistro',
 	editarregistro:URL_APIP+'/editar_registro',
 	registro:URL_APIP+'/registro',
-	registros:URL_APIP+'/registros',
+	registros:URL_APIP+'/registros'
 
 }
 

@@ -31,9 +31,9 @@ export default class ReporteBobinas extends Component {
 		
 		paginaSeleccionada: 1,
 		cantidadPaginas: 0,
-		first: 20,
+		first: 50,
 		offset: 0,
-		step: 20,
+		step: 50,
 		buscar:"",
 		column: null,
 		direction: null,
@@ -720,7 +720,7 @@ export default class ReporteBobinas extends Component {
 												{t.codigo}
 											</Table.Cell>
 											<Table.Cell>
-												{t.madre}
+												'{t.madre}
 											</Table.Cell>
 											<Table.Cell>
 												{t.nombre}

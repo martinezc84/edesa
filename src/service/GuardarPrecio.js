@@ -22,7 +22,7 @@ exports.handler = (event, context, callback) => {
 	return axios
 		.post(URL, event.body, { headers: headers })
 		.then((data) => {
-			//console.log({ response: JSON.stringify(data.data) });
+			console.log({ response: JSON.stringify(data.data) });
 			return {
 				statusCode: 200,
 				body: JSON.stringify(data.data),
@@ -30,6 +30,7 @@ exports.handler = (event, context, callback) => {
 			};
 		})
 		.catch((error) => ({
+			
 			statusCode: 422,
 			body: `Oops! Something went wrong. ${error}`,
 			headers:headersr,

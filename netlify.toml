@@ -119,9 +119,9 @@
 	GATSBY_API_BENEFICIARIOS='/settings/payees/datatables.json?scope=clients'
 
 	# Email y token de autenticación para utilizar las APIs 
-        GATSBY_EMAIL='api@edesa.com'
-    	GATSBY_TOKEN='y749fGvk3B6nC8pMUy4j'
-		GATSBY_API_KEY='y749fGvk3B6nC8pMUy4j'
+        GATSBY_EMAIL='api@edesa.com.gt'
+    	GATSBY_TOKEN='q1DKsGS5RZVLGGZ25oGs'
+		GATSBY_API_KEY='q1DKsGS5RZVLGGZ25oGs'
 		#GATSBY_EMAIL='api@discogua.com.gt'
         #GATSBY_TOKEN='uuvDJ6vscs1ewsxbRVHU'
 		#GATSBY_API_KEY='uuvDJ6vscs1ewsxbRVHU'

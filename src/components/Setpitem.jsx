@@ -15,7 +15,7 @@ export default class Stepitem extends Component {
 						navigate(ruta)
 					}}
 					name={label}
-					icon={iconname}
+					icon={iconname} 
 				></Menu.Item>
 			);
 	

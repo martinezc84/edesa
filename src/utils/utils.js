@@ -116,7 +116,7 @@ const ZAURU = {
 	editaregistro:URL_PREFIX+'/EditarRegistro',
 	registro:URL_PREFIX+'/GetRegistro',
 	registros:URL_PREFIX+'/GetRegistros',
-	guardarprecio:URL_PREFIX+'/sales/suggested_prices.json',
+	guardarprecio:ZAURU_URL+'/sales/suggested_prices.json',
 };
 
 const API_URL = {

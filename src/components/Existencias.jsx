@@ -84,7 +84,9 @@ export default class OrdenesP extends Component {
 	
 
 
-
+	timeout(ms) { //pass a time in milliseconds to this function
+		return new Promise(resolve => setTimeout(resolve, ms));
+	  }
 
 	async componentDidMount() {
 		
@@ -103,9 +105,12 @@ export default class OrdenesP extends Component {
 					loading: true
 				});
 				
-
-                //console.log(FUNCIONES.ordenes)
 				Axios.get(FUNCIONES.existencias+"?store_id=4&agg=3354")
+					.then(({ data }) => {
+				//console.log(FUNCIONES.ordenes)
+				
+						this.timeout(8000)
+				Axios.get(FUNCIONES.reportejson)
 					.then(({ data }) => {
 						let Items=[]
 						let Pesos=[]
@@ -135,6 +140,10 @@ export default class OrdenesP extends Component {
 					.catch((error) => {
 						console.error(error);
 					});
+				})
+				.catch((error) => {
+					console.error(error);
+				});
 
 					
 			

@@ -475,12 +475,14 @@ Selectempleado = (e, item) => {
 		let string = '{"item":{"name":"'+data.name.replace('"', '\\"')+'-'+marca+'", "code":"'+data.code+'","ean13":"'+data.code+'","item_category_id":"'+data.item_category_id+'", "stockable":"true","measurement_unit":"'+data.measurement_unit+'","purchasable":"true", "product_type":"'+data.product_type+'","weight":"'+data.peso+'","payee_id":"'+data.payee_id+'","description":"'+descripcion+'"}}';
 
 		let res = await Axios.post(FUNCIONES.crearitem, string)
-		let stringprecio = '{"suggested_price":{"price_list_id":"", "item_id":"'+res.data.id+'", "currency_id":"1", "flexible_price":"1", "amount": "0.01", "notes":""}}';
-		let resprecio = await Axios.post(FUNCIONES.guardarprecio, stringprecio)
+		
 
 		string = '{"code":"'+data.code+'","name":"'+data.name.replace('"', '\\"')+'-'+marca+'","category_id":"'+data.item_category_id+'","id":"'+res.data.id+'","store_id":"'+this.state.userdata.store+'", "details":"'+this.state.orden.id+'","status":"'+status+'", "quantity":"'+data.peso+'"}'
 		//console.log(string)
 		let res2 = await Axios.post(FUNCIONES.guardaritem, string) 
+
+		let stringprecio = '{"suggested_price":{"price_list_id":"", "item_id":"'+res.data.id+'", "currency_id":"1", "flexible_price":"1", "amount": "0.01", "notes":""}}';
+		let resprecio = await Axios.post(FUNCIONES.guardarprecio, stringprecio)
 		return res.data
 	}	
 

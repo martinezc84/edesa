@@ -89,6 +89,7 @@ const FUNCIONES = {
 	editaritem:URL_PREFIX+"/.netlify/functions/EditarItem",
 	reportebobinas:URL_PREFIX+"/.netlify/functions/ReporteBobinas",
 	guardarprecio:URL_PREFIX+"/.netlify/functions/GuardarPrecio",
+	reportejson:URL_PREFIX+"/.netlify/functions/GetReportjson",
 };
 
 const ZAURU = {
@@ -158,7 +159,8 @@ const APIP_URL = {
 	guardarregistro:URL_APIP+'/guardarregistro',
 	editarregistro:URL_APIP+'/editar_registro',
 	registro:URL_APIP+'/registro',
-	registros:URL_APIP+'/registros'
+	registros:URL_APIP+'/registros',
+	reporjson:URL_APIP+'/reporjson'
 
 }
 

@@ -160,7 +160,7 @@ const APIP_URL = {
 	editarregistro:URL_APIP+'/editar_registro',
 	registro:URL_APIP+'/registro',
 	registros:URL_APIP+'/registros',
-	reporjson:URL_APIP+'/reporjson'
+	reporjson:URL_APIP+'/reportjson'
 
 }
 

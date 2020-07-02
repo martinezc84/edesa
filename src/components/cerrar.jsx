@@ -828,7 +828,7 @@ Selectempleado = (e, item) => {
 				visible:false,
 				
 			});
-			navigate('/app/ordenp/barcode/'+this.state.id+'/'+this.state.lineid)
+			navigate('/app/ordenp/view/'+this.state.id)
 		}
 
 		onConfirme = ()=>{

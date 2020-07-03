@@ -101,7 +101,7 @@
 	#API DE ZAURU
 
 	GATSBY_API_EMPLEADOS='/settings/employees/'	
-	GATSBY_API_PRODUCTOSVENDIBLES='/pos/sale_orders/new.json'
+	GATSBY_API_PRODUCTOSVENDIBLES='/ecommerce/ecommerce_requests/get_items_for_ecommerce.json'
 	GATSBY_API_PRODUCTOSCOMPRABLES='/purchases/purchase_orders/new.json'
 	GATSBY_API_AGENCIAS = '/settings/agencies.json'
 	GATSBY_API_ORDENESDEVENTA='/sales/orders/datatables.json'

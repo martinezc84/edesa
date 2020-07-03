@@ -352,7 +352,7 @@ export default class PurchaseDetail extends Component {
 	
 	crear_item=async (data)=>{
 		
-		let string = '{"item":{"name":"'+data.name.replace('"', '\\"')+'", "code":"'+data.code+'","ean13":"'+data.code+'","item_category_id":"'+data.item_category_id+'", "stockable":"true","measurement_unit":"'+data.measurement_unit+'","purchasable":"true", "product_type":"'+data.product_type+'","weight":"'+data.peso+'","payee_id":"'+data.payee_id+'"}}';
+		let string = '{"item":{"name":"'+data.name.replace('"', '\\"')+'",  "ecommerce":"true", "code":"'+data.code+'","ean13":"'+data.code+'","item_category_id":"'+data.item_category_id+'", "stockable":"true","measurement_unit":"'+data.measurement_unit+'","purchasable":"true", "product_type":"'+data.product_type+'","weight":"'+data.peso+'","payee_id":"'+data.payee_id+'"}}';
 		//console.log(string)
 		let res = await Axios.post(FUNCIONES.crearitem, string)
 		//console.log(res.data) 

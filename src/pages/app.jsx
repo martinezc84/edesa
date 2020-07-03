@@ -226,14 +226,43 @@ export default class App extends Component {
 	async vendibles(){
 		
 		let vendibles
-		let itemst
+		let itemst=[]
+		//window.localStorage.removeItem("vendibles")
 		//console.log(this.getmem("vendibles"))
 		if(this.getmem("vendibles")===undefined){
 		let res = await Axios.get(`${FUNCIONES.vendibles}`)
 		
+			vendibles = res.data;
 
-			vendibles = res.data.bundles
+			for(let categoria in vendibles){
+				let itemes=vendibles[categoria];
+				
+
+				for(let item in itemes){
+
+					let itemdata={key: item,
+						value: item,
+						text: itemes[item].name,
+						code: itemes[item].code}
+
+						itemst.push(itemdata);
+					//console.log(item)
+					//console.log(itemes[item])
+
+				}
+				//itemst = this.trataItems(itemst)
+				//vendibles = this.trataItems(vendibles)
+				//console.log(itemst)
+				//console.log(vendibles)
+				vendibles = [];
+				this.guardar('vendibles', vendibles);
+				this.guardarmem("vendibles", vendibles);
+				this.guardarmem("itemst", itemst);
+			}
+
+			/*vendibles = res.data.bundles
 			itemst = res.data.items
+			console.log(vendibles)
 			console.log(itemst)
 			itemst = this.trataItems(itemst)
 			vendibles = this.trataItems(vendibles)
@@ -241,7 +270,7 @@ export default class App extends Component {
 			console.log(vendibles)
 			this.guardar('vendibles', vendibles);
 			this.guardarmem("vendibles", vendibles);
-			this.guardarmem("itemst", itemst);
+			this.guardarmem("itemst", itemst);*/
 			this.setState({
 				vendibles: vendibles,
 				itemst:itemst
@@ -254,8 +283,8 @@ export default class App extends Component {
 		
 	}else{
 		this.setState({
-			vendibles:this.getmem("vendibles"),
-			itemst:this.getmem("itemst")
+			//vendibles:this.getmem("vendibles"),
+			//itemst:this.getmem("itemst")
 			
 		});
 		return false

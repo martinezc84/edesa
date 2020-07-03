@@ -15,6 +15,7 @@ exports.handler = async (event, context) => {
 	try {
 		//@ts-ignore
 		let { data } = await axios.get(URL, { headers });
+		console.log(data)
 		return {
 			statusCode: 200,
 			body: JSON.stringify(data),

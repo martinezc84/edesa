@@ -320,7 +320,7 @@ export default class App extends Component {
 			beneficiarios = res.data.data
 			let marcas=[]
 			let referencias=[]
-			console.log(beneficiarios.length)
+			//console.log(beneficiarios.length)
 			for (var _i = 0; _i < beneficiarios.length; _i++) {
 				//console.log(beneficiarios[_i].DT_RowId)
 				let id = beneficiarios[_i].DT_RowId
@@ -343,7 +343,7 @@ export default class App extends Component {
 		//console.log(res.data)
 			beneficiarios = res.data.data
 			
-			console.log(beneficiarios.length)
+			//onsole.log(beneficiarios.length)
 			for (var _i = 0; _i < beneficiarios.length; _i++) {
 				//console.log(beneficiarios[_i].DT_RowId)
 				let id = beneficiarios[_i].DT_RowId
@@ -408,7 +408,7 @@ export default class App extends Component {
 					}
 			 
 			//console.log(marcas)
-			//console.log(referencias)
+			console.log(referencias)
 			this.guardar('referencias', referencias);
 			this.guardarmem("referencias", referencias);
 			this.guardar('marcas', marcas);

@@ -338,7 +338,7 @@ export default class App extends Component {
 				
 			}
 
-			res = await Axios.post(`${FUNCIONES.beneficiarios}`,'{"draw":"1", "start":"0","length":"300","desde":"0","hasta":"0","scope":"clients"}')
+			res = await Axios.post(`${FUNCIONES.beneficiarios}`,'{"draw":"1", "start":"300","length":"300","desde":"300","hasta":"0","scope":"clients"}')
 		
 		//console.log(res.data)
 			beneficiarios = res.data.data
@@ -361,7 +361,7 @@ export default class App extends Component {
 				
 			}
 
-			res = await Axios.post(`${FUNCIONES.beneficiarios}`,'{"draw":"1", "start":"600","length":"300","desde":"0","hasta":"0","scope":"clients"}')
+			res = await Axios.post(`${FUNCIONES.beneficiarios}`,'{"draw":"1", "start":"600","length":"300","desde":"600","hasta":"0","scope":"clients"}')
 		
 			//console.log(res.data)
 				beneficiarios = res.data.data
@@ -384,7 +384,7 @@ export default class App extends Component {
 					
 				}
 
-				res = await Axios.post(`${FUNCIONES.beneficiarios}`,'{"draw":"1", "start":"900","length":"300","desde":"0","hasta":"0","scope":"clients"}')
+				res = await Axios.post(`${FUNCIONES.beneficiarios}`,'{"draw":"1", "start":"900","length":"300","desde":"900","hasta":"0","scope":"clients"}')
 		
 				//console.log(res.data)
 					beneficiarios = res.data.data

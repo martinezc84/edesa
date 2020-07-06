@@ -337,6 +337,75 @@ export default class App extends Component {
 				}
 				
 			}
+
+			res = await Axios.post(`${FUNCIONES.beneficiarios}`,'{"draw":"1", "start":"0","length":"300","desde":"0","hasta":"0","scope":"clients"}')
+		
+		//console.log(res.data)
+			beneficiarios = res.data.data
+			
+			console.log(beneficiarios.length)
+			for (var _i = 0; _i < beneficiarios.length; _i++) {
+				//console.log(beneficiarios[_i].DT_RowId)
+				let id = beneficiarios[_i].DT_RowId
+				id = id.split("-")
+				let bene = {id:id[2], nombre:this.quitarlink(beneficiarios[_i].name), tin:beneficiarios[_i].tin}
+				marcas.push(bene)
+				let ref =this.quitarlink(beneficiarios[_i].reference)
+				if(referencias.length>0){
+					if(!this.existe(ref,referencias)){
+						referencias.push(ref)
+					}
+				}else{
+						referencias.push(ref)
+				}
+				
+			}
+
+			res = await Axios.post(`${FUNCIONES.beneficiarios}`,'{"draw":"1", "start":"600","length":"300","desde":"0","hasta":"0","scope":"clients"}')
+		
+			//console.log(res.data)
+				beneficiarios = res.data.data
+				
+				//console.log(beneficiarios.length)
+				for (var _i = 0; _i < beneficiarios.length; _i++) {
+					//console.log(beneficiarios[_i].DT_RowId)
+					let id = beneficiarios[_i].DT_RowId
+					id = id.split("-")
+					let bene = {id:id[2], nombre:this.quitarlink(beneficiarios[_i].name), tin:beneficiarios[_i].tin}
+					marcas.push(bene)
+					let ref =this.quitarlink(beneficiarios[_i].reference)
+					if(referencias.length>0){
+						if(!this.existe(ref,referencias)){
+							referencias.push(ref)
+						}
+					}else{
+							referencias.push(ref)
+					}
+					
+				}
+
+				res = await Axios.post(`${FUNCIONES.beneficiarios}`,'{"draw":"1", "start":"900","length":"300","desde":"0","hasta":"0","scope":"clients"}')
+		
+				//console.log(res.data)
+					beneficiarios = res.data.data
+					
+					//console.log(beneficiarios.length)
+					for (var _i = 0; _i < beneficiarios.length; _i++) {
+						//console.log(beneficiarios[_i].DT_RowId)
+						let id = beneficiarios[_i].DT_RowId
+						id = id.split("-")
+						let bene = {id:id[2], nombre:this.quitarlink(beneficiarios[_i].name), tin:beneficiarios[_i].tin}
+						marcas.push(bene)
+						let ref =this.quitarlink(beneficiarios[_i].reference)
+						if(referencias.length>0){
+							if(!this.existe(ref,referencias)){
+								referencias.push(ref)
+							}
+						}else{
+								referencias.push(ref)
+						}
+						
+					}
 			 
 			//console.log(marcas)
 			//console.log(referencias)

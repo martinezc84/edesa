@@ -105,7 +105,7 @@ export default class OrdenesP extends Component {
 					loading: true
 				});
 				
-				Axios.get(FUNCIONES.existencias+"?store_id=4&agg=3354")
+				Axios.get(FUNCIONES.existencias+"?store_id=4&agg=3994")
 					.then(({ data }) => {
 				//console.log(FUNCIONES.ordenes)
 				

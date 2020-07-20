@@ -331,6 +331,21 @@ export default class Formula extends Component {
 		
 	};
 
+	guardarconvertion = (id, convertion) => {
+		let insumos = this.state.insumos
+		insumos.map((insumo, i)=> (
+		
+			insumo.id == id ? insumo.convertion = convertion : false		
+
+		));		
+		//console.log(insumos)
+		this.setState(
+			{
+				insumos:insumos
+			})
+		
+	};
+
 	guardarcantidadflex = (id, cantidad) => {
 		let desperdicios = this.state.desperdicios
 		desperdicios.map((desperdicio, i)=> (
@@ -627,7 +642,7 @@ export default class Formula extends Component {
 		
 		agregar_insumo = () =>{
 			let id =this.state.insumoscont;
-			let insum={id:id,unico:false,item_id:0,cantidad:1}
+			let insum={id:id,unico:false,item_id:0,cantidad:1,convertion:0}
 			id++;
 			let insumos = [...this.state.insumos, insum]
 
@@ -807,6 +822,7 @@ export default class Formula extends Component {
 							esunico={this.esunicol}
 							buscaritem={this.buscariitem}
 							view={true}
+							convertion={t.convertion}
 						/>
 					))}
 			</Table.Body>
@@ -1038,7 +1054,9 @@ export default class Formula extends Component {
 							item_id={t.item_id}
 							cantidad={t.cantidad}
 							esunico={this.esunicol}
+							convertion={t.convertion}
 							guardarcantidad={guardarcantidad}
+							guardarconvertion={this.guardarconvertion}
 						/>))
 			):(<Table.Row>
 					
@@ -1282,6 +1300,8 @@ export default class Formula extends Component {
 							cantidad={t.cantidad}
 							esunico={this.esunicol}
 							guardarcantidad={guardarcantidad}
+							guardarconvertion={this.guardarconvertion}
+							convertion={t.convertion}
 						/>
 					))}
 			</Table.Body>

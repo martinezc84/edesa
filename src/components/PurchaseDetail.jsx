@@ -166,7 +166,7 @@ export default class PurchaseDetail extends Component {
 							unico:false, 
 							series:[],
 							lote:fechastr+cont,
-							
+							convertion:detalleinf[linea].item.months_warranty!=""?parseInt(detalleinf[linea].item.months_warranty):0,
 							item_category_id:detalleinf[linea].item.item_category_id,
 							product_type:detalleinf[linea].item.product_type,
 							measurement_unit:detalleinf[linea].item.measurement_unit,
@@ -174,7 +174,7 @@ export default class PurchaseDetail extends Component {
 						detalle.push(linedet)
 						cont++
 					}
-					//console.log(detalle)
+					console.log(detalle)
 						this.setState({
 							detalle:detalle,
 							orden_id:orden_id,
@@ -427,6 +427,13 @@ export default class PurchaseDetail extends Component {
 
 						stringedit+='"'+lineas+'":{"id":"'+detalle[linea].id+'", "item_id":"'+detalle[linea].item_id+'","_destroy":"true", "booked_quantity":"0"}'
 						lineas++
+					}else if(detalle[linea].convertion>0){
+						edit = true;
+						let cantidad =detalle[linea].item_cantidad *detalle[linea].convertion
+						let costo = detalle[linea].unit_cost / detalle[linea].convertion
+						stringedit+='"'+lineas+'":{"id":"'+detalle[linea].id+'","item_id":"'+detalle[linea].item_id+'", "booked_quantity":"'+cantidad+'","reference":"","unit_cost":"'+costo+'"}'
+							lineas++
+
 					}else{
 
 					if(x>0) stringdet+=","

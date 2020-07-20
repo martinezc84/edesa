@@ -8,14 +8,14 @@ export default class FilaInsumo extends Component {
 		
 	}
 	componentDidMount() {
-		let {  id, guardarcantidad } = this.props
-		this.setState({guardarcantidad:guardarcantidad, id:id})
+		let {  id, guardarcantidad, guardarconvertion,  } = this.props
+		this.setState({guardarcantidad:guardarcantidad, guardarconvertion:guardarconvertion, id:id})
 	}
 
 
 	shouldComponentUpdate(np) {
 		//return true;
-		if(np.unico !== this.props.unico || np.item_id !== this.props.item_id || np.cantidad !== this.props.cantidad || np.items !== this.props.items  ){
+		if(np.unico !== this.props.unico || np.item_id !== this.props.item_id || np.cantidad !== this.props.cantidad || np.items !== this.props.items|| np.convertion !== this.props.convertion  ){
 			return true;
 		}else{
 			return false;
@@ -32,10 +32,21 @@ export default class FilaInsumo extends Component {
 		  [name]: value,
 		})
 	  }
+
+	  handleInputConvertion = event => {
+		const target = event.target
+		const value = target.value
+		const name = target.name		
+		console.log(value)
+		this.props.guardarconvertion(this.state.id,value)
+		this.setState({
+		  [name]: value,
+		})
+	  }
 	
 
 	render() {
-		let {  items, item_id, selectitem, id, unico, esunico, cantidad, view, buscaritem } = this.props;
+		let {  items, item_id, selectitem, id, unico, esunico, cantidad, view, buscaritem, convertion } = this.props;
 		let insumo=null
 		
 			item_id = parseInt(item_id)
@@ -92,8 +103,20 @@ export default class FilaInsumo extends Component {
 			value={cantidad}
 			onChange={this.handleInputChange}
 			className="inputform"
-			
+			width="20px"
 		  />):('')}
+		  {cantidad!==null?(
+			<label>Tasa de conversión<input
+			type="text"
+			name="convertion"
+			value={convertion}
+			onChange={this.handleInputConvertion}
+			className="inputform"
+			
+			width="20px"
+			
+			
+		  /></label>):('')}
 			
 			
 			</Table.Cell>

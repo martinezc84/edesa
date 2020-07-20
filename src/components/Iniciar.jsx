@@ -101,7 +101,7 @@ export default class Iniciar extends Component {
 						detalle[linea].generar=false						
 							//console.log("recurso variable")						
 							for(let insumo in formula.insumos){
-								recurso = {id:ids, lote:"", item_id:formula.insumos[insumo].item_id,  producto:formula.insumos[insumo].name, cantidad:(detalle[linea].cantidad*formula.insumos[insumo].cantidad)}
+								recurso = {id:ids, lote:"", convertion:formula.insumos[insumo].convertion, item_id:formula.insumos[insumo].item_id,  producto:formula.insumos[insumo].name, cantidad:(detalle[linea].cantidad*formula.insumos[insumo].cantidad)}
 								recursos.push(recurso)
 								ids++
 							}
@@ -343,7 +343,13 @@ async empleados(){
 
 								for(let insumo in formula.insumos){
 									if(x>0) stringdet+=","
-									stringdet+='"'+x+'":{"item_id":"'+formula.insumos[insumo].item_id+'", "booked_quantity":"'+(detalle[linea].cantidad*formula.insumos[insumo].cantidad)+'"}'
+
+									let cantidad = detalle[linea].cantidad*formula.insumos[insumo].cantidad
+									if(formula.insumos[insumo].convertion>0){
+										cantidad = cantidad * formula.insumos[insumo].convertion
+									}
+
+									stringdet+='"'+x+'":{"item_id":"'+formula.insumos[insumo].item_id+'", "booked_quantity":"'+(cantidad)+'"}'
 									let item = {item_id:formula.insumos[insumo].item_id,cantidad:(detalle[linea].cantidad*formula.insumos[insumo].cantidad),orden_id:this.state.orden.id, nombre:formula.insumos[insumo].name}
 									utilizados.push(item)
 									z++
@@ -364,7 +370,12 @@ async empleados(){
 							}else{
 								lot_id = ""
 							}
-									stringdet+='"'+x+'":{"item_id":"'+recursos[linea].item_id+'", "booked_quantity":"'+recursos[linea].cantidad+'", "lot_id":"'+lot_id+'"}'
+									
+									let cantidad = recursos[linea].cantidad
+									if(recursos[linea].convertion>0){
+										cantidad = cantidad * recursos[linea].convertion
+									}
+									stringdet+='"'+x+'":{"item_id":"'+recursos[linea].item_id+'", "booked_quantity":"'+cantidad+'", "lot_id":"'+lot_id+'"}'
 									let item = {id:z,item_id:recursos[linea].item_id,cantidad:(recursos[linea].cantidad),orden_id:this.state.orden.id, nombre:recursos[linea].producto}
 									utilizados.push(item)
 									x++
